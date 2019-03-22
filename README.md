@@ -1,5 +1,6 @@
 # CMPE273_GroupProject
 CMPE273_GroupProject
+
 Hi Guys,
 Some rules for GIT commit.
 1) No one will commit directly on the master branch.
