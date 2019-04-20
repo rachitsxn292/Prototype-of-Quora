@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 var cors = require('cors');
 const userRoutes = require('./api/routes/user');
+const profileRoutes = require('./api/routes/profile');
 
 var passport = require("passport");
 var passportJWT = require("passport-jwt");
@@ -25,23 +26,20 @@ app.use(bodyParser.json());
 //use cors to allow cross origin resource sharing
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
-
 app.use(passport.initialize());
-
-
 
 var passport = require("passport");
 
-
 app.post("/secret", passport.authenticate('jwt', { session : false }), function(req, res){
 
-    console.log("success",req.body.data);
+    console.log("success",req.body);
     
-    res.json({'message': "Success"});
+    res.json({'message': "Success","success":req.body.email});
   });
 
 
 app.use('/user', userRoutes);
+app.use('/profile', passport.authenticate('jwt', { session : false }), profileRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Api not found');
