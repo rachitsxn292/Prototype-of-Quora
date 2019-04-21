@@ -1,0 +1,38 @@
+{
+  "name": "quora-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bcrypt": "^3.0.5",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.4.20",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "react": "^16.8.6",
+    "react-cookie": "*",
+    "react-cookies": "*",
+    "react-dom": "^16.8.6",
+    "react-draggable": "^3.2.1",
+    "react-pdf": "^4.0.5",
+    "react-redux": "^6.0.1",
+    "react-router": "*",
+    "react-router-dom": "*",
+    "react-scripts": "2.1.8"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
