@@ -34,9 +34,7 @@ class Main extends Component {
             <i class="fa fa-bars"></i>
           </button>
 
-         <a href="home"> <h2  class="text-danger fontQuora">Quora
-
-          </h2> </a>
+          <a href="home"> <h2 class="text-danger fontQuora">Quora</h2> </a>
 
           <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
@@ -96,14 +94,14 @@ class Main extends Component {
           </ul>
 
         </nav>
-mmm
+
         <div class=" top30 ">
           <div class=" column1 leftItems">
             <div class="card" >
               <div class="card-header">
-                <i class="fas fa-external-link-square-alt"  href="question"></i>
+                <i class="fas fa-external-link-square-alt" href="question"></i>
                 Feed
-  </div>
+              </div>
               <ul class=" small list-group list-group-flush">
                 <li class="list-group-item">Food</li>
                 <li class="list-group-item">Programming</li>
@@ -112,33 +110,33 @@ mmm
             </div>
           </div>
           <div class=" column2">
-          <div class="container-fluid">
+            <div class="container-fluid">
 
-<p name="divisha"></p>
-<BrowserRouter>
-<Switch>
-<Route path="/notifications" component={Notifications} />
+              <p name="divisha"></p>
+              <BrowserRouter>
+                <Switch>
+                  <Route path="/notifications" component={Notifications} />
 
-<Route path="/question" component={Question} />
-<Route path="/inbox" component={Inbox} />
-<Route path="/account" component={Account} />
-<Route path="/profile" component={Profile} />
-<Route path="/dashboard" component={Dashboard} />
-<Route path="/answered" component={Answered} />
-<Route path="/questionsasked" component={QuestionsAsked} />
-<Route path="/followers" component={Followers} />
-<Route path="/following" component={Following} />
-<Route path="/home" component={Feed} />
-<Route path="/" component={Feed} />
-<Route path="/feed" component={Feed} />
-</Switch>
-</BrowserRouter>
-</div>
+                  <Route path="/question" component={Question} />
+                  <Route path="/inbox" component={Inbox} />
+                  <Route path="/account" component={Account} />
+                  <Route path="/profile" component={Profile} />
+                  <Route path="/dashboard" component={Dashboard} />
+                  <Route path="/answered" component={Answered} />
+                  <Route path="/questionsasked" component={QuestionsAsked} />
+                  <Route path="/followers" component={Followers} />
+                  <Route path="/following" component={Following} />
+                  <Route path="/home" component={Feed} />
+                  <Route path="/" component={Feed} />
+                  <Route path="/feed" component={Feed} />
+                </Switch>
+              </BrowserRouter>
+            </div>
 
           </div>
           <div class=" column3 rightItems">
             <div class="card" >
-              <div class="card-header"  href="feed" >
+              <div class="card-header" href="feed" >
                 <i class="fas fa-external-link-square-alt"></i>
 
                 Feed
@@ -149,8 +147,8 @@ mmm
                 <li class="list-group-item">Global News</li>
               </ul>
             </div> </div>
-            </div>
-         
+        </div>
+
       </div>)
   }
 
