@@ -34,3 +34,88 @@
 a {
   text-decoration: none !important;
 }
+
+
+
+
+
+
+
+body{
+	margin: 0;
+	padding: 0;
+	background: #fff;
+
+}
+
+.body{
+	position: absolute;
+	top: -20px;
+	left: -20px;
+	right: -40px;
+	bottom: -40px;
+	width: auto;
+	height: auto;
+	background-image: url("bg.png");
+	background-size: cover;
+	
+	z-index: 2;
+}
+
+
+
+
+
+
+
+.panel{
+	position: absolute;
+	left: calc(35% - 50px);
+	height: 400px;
+	width: 700px;
+	padding: 10px;
+	z-index: 3;
+	background-color:rgb(255, 255, 255)
+}
+.logo{
+	position: absolute;
+	
+	left: calc(37% - 50px);
+	height: 150px;
+	width: 350px;
+	padding: 10px;
+	z-index: 3;
+	
+}
+.logotext{
+	position: absolute;
+	top: calc(43% - 75px);
+	left: calc(20% - 50px);
+	
+	width: 600px;
+	
+	z-index: 3;
+	
+}
+.google{
+	position: absolute;
+	top: calc(65% - 75px);
+	left: calc(10% - 50px);
+	height: 150px;
+	width: 300px;
+	padding: 10px;
+	z-index: 3;
+	
+}
+
+.login{
+	position: absolute;
+	top: calc(55% - 75px);
+	right: calc(15% - 100px);
+	height: 150px;
+	width: 350px;
+	padding: 10px;
+	z-index: 3;
+
+}
+

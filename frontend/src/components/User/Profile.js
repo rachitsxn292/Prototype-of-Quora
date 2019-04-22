@@ -37,7 +37,9 @@ class Profile extends Component {
             <div>
                 {redirectVar}
                 <h3>Profile</h3>
-
+                <img src={localStorage.image} />
+                <p>{localStorage.fname},{localStorage.lname}</p>
+                <p>{localStorage.email}</p>
             </div>
            
         )

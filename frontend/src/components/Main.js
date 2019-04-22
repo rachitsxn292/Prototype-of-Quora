@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
 import Question from './Question/Question';
 import Inbox from './Inbox/Inbox';
 import Feed from './Feed/Feed';
 import Notifications from './Notifications/Notifications';
 import Profile from './User/Profile';
 import Account from './User/Account';
-
 import Dashboard from './User/Dashboard';
-
 import Answered from './User/Answered';
-
 import Followers from './User/Followers';
 import QuestionsAsked from './User/QuestionsAsked';
 import Following from './User/Following';
+import Login from './Login/Login';
 
 class Main extends Component {
 
@@ -85,7 +82,7 @@ class Main extends Component {
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <li class="nav-item dropdown no-arrow">
-              <a class="nav-link dropdown-toggle" href="account" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="login" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">User Name here </span>
                 {/* <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"/> */}
               </a>
@@ -112,11 +109,11 @@ class Main extends Component {
           <div class=" column2">
             <div class="container-fluid">
 
-              <p name="divisha"></p>
+              
               <BrowserRouter>
                 <Switch>
+                  
                   <Route path="/notifications" component={Notifications} />
-
                   <Route path="/question" component={Question} />
                   <Route path="/inbox" component={Inbox} />
                   <Route path="/account" component={Account} />
@@ -127,8 +124,9 @@ class Main extends Component {
                   <Route path="/followers" component={Followers} />
                   <Route path="/following" component={Following} />
                   <Route path="/home" component={Feed} />
-                  <Route path="/" component={Feed} />
                   <Route path="/feed" component={Feed} />
+                  <Route path="/login" component={Login} />
+
                 </Switch>
               </BrowserRouter>
             </div>
