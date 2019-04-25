@@ -1,40 +1,29 @@
 {
-  "name": "quora-frontend",
+  "name": "quora",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "bcrypt": "^3.0.5",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.4.20",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "react": "^16.8.6",
-    "react-cookie": "*",
-    "react-cookies": "*",
-    "react-dom": "^16.8.6",
-    "react-draggable": "^3.3.0",
-    "react-facebook-login": "^4.1.1",
+    "match-sorter": "^2.3.0",
+    "react": "^16.5.0",
+    "react-cookie": "^3.0.4",
+    "react-cookies": "^0.1.0",
+    "react-dom": "^16.5.0",
+    "react-draggable": "^3.2.1",
     "react-google-login": "^5.0.4",
-    "react-pdf": "^4.0.5",
+    "react-pdf": "^4.0.4",
     "react-redux": "^6.0.1",
-    "react-router": "*",
-    "react-router-dom": "*",
-    "react-scripts": "2.1.8"
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "^1.1.5",
+    "react-table": "^6.9.2",
+    "redux": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "proxy": "http://localhost:3001"
 }

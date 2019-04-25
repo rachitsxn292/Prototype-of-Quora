@@ -69,12 +69,13 @@ body{
 
 
 .panel{
-	position: absolute;
-	left: calc(35% - 50px);
+  position: absolute;
+  top: calc(30% - 75px);
+	left: calc(31% - 50px);
 	height: 400px;
 	width: 700px;
 	padding: 10px;
-	z-index: 3;
+	z-index: 5;
 	background-color:rgb(255, 255, 255)
 }
 .logo{
@@ -84,7 +85,7 @@ body{
 	height: 150px;
 	width: 350px;
 	padding: 10px;
-	z-index: 3;
+	z-index: 5;
 	
 }
 .logotext{
@@ -94,7 +95,7 @@ body{
 	
 	width: 600px;
 	
-	z-index: 3;
+	z-index: 5;
 	
 }
 .google{
@@ -104,7 +105,7 @@ body{
 	height: 150px;
 	width: 300px;
 	padding: 10px;
-	z-index: 3;
+	z-index: 5;
 	
 }
 
@@ -115,7 +116,7 @@ body{
 	height: 150px;
 	width: 350px;
 	padding: 10px;
-	z-index: 3;
+	z-index: 5;
 
 }
 

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router';
 import GoogleLogin from 'react-google-login';
 import url from '../Url/Url';
+import cookie from 'react-cookies';
 
 //you wanna copy this file for componenets
 class Login extends Component {
@@ -11,7 +12,7 @@ class Login extends Component {
         super();
 
         this.state = {
-            authFlag:false,
+            
             status:"",
             username:"",
             password:""
@@ -38,7 +39,10 @@ class Login extends Component {
         })
     }
     //submit Login handler to send a request to the node backend
+
+
     submitLogin = (e) => {
+        
         console.log("submit login called")
         var headers = new Headers();
         //prevent page from refresh
@@ -63,12 +67,12 @@ class Login extends Component {
                    
                     console.log(response.data);
                     this.setState({
-                        authFlag: true,
+                        
                         status: response.data.message,
                     })
                 } else {
                     this.setState({
-                        authFlag: false,
+                        
                         status: response.data.message
                     })
                 }
@@ -76,6 +80,7 @@ class Login extends Component {
     }
 
     responseGoogle = (response) => {
+        
         console.log(response);
         if(response.error){
             alert(response.error);
@@ -83,8 +88,8 @@ class Login extends Component {
         else{
             const data = {
                 email:response.profileObj.email,
-                fname: response.profileObj.familyName,
-                lname:response.profileObj.givenName,
+                lname: response.profileObj.familyName,
+                fname:response.profileObj.givenName,
                 image:response.profileObj.imageUrl
             };
             console.log("data",data);
@@ -101,16 +106,16 @@ class Login extends Component {
                         localStorage.setItem('image', response.data.image);
     
                         this.setState({
-                            authFlag: true,
+                           
                             status: response.data.message,
                         })
                     }
                     else {
-                        console.log("Status Code : ", response.status);
-                        this.setState({
-    
-                            
-                        })
+                       this.setState({
+                        
+                        status: response.data.message
+                    })
+                        
                     }
     
     
@@ -130,8 +135,13 @@ class Login extends Component {
 
     render() {
         let redirectVar = null;
-        if (this.state.authFlag) { 
-            redirectVar = <Redirect to="/account" /> 
+
+        if (cookie.load('cookie')) {
+            console.log("cookie is defined");
+            redirectVar = <Redirect to="/home" />
+            
+            
+
         }
 
        

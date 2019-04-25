@@ -24,10 +24,10 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/google', (req, res, next) => {
-    Profile.find({ email: req.body.email })
+    Profile.findOne({ email: req.body.email })
         .exec()
         .then(docs => {
-            if (docs) {
+            if (!docs) {
                 const profile = new Profile({
                     _id: new mongoose.Types.ObjectId(),
                     email: req.body.email,
@@ -110,71 +110,89 @@ router.post('/google', (req, res, next) => {
 router.post('/', (req, res, next) => {
     var cipher = crypto.createCipher('aes-256-ecb', 'password');
     var mystr = cipher.update(req.body.password, 'utf8', 'hex') + cipher.final('hex');
-    const user = new User({
-        _id: new mongoose.Types.ObjectId(),
-        email: req.body.email,
-        fname: req.body.fname,
-        lname: req.body.lname,
-        password: mystr,
+    User.findOne({ email: req.body.email })
+        .exec()
+        .then(doc => {
+            console.log("From database", doc);
+            if (doc) {
+                res.status(200).json({ message: "User Already Exists" });
+            }
+            else {
+                const user = new User({
+                    _id: new mongoose.Types.ObjectId(),
+                    email: req.body.email,
+                    fname: req.body.fname,
+                    lname: req.body.lname,
+                    password: mystr,
 
-    });
-    user
-        .save()
-        .then(result => {
-            console.log(result);
-
-            Profile.find({ email: req.body.email })
-                .exec()
-                .then(docs => {
-                    if (docs) {
-                        const profile = new Profile({
-                            _id: new mongoose.Types.ObjectId(),
-                            email: req.body.email,
-                            fname: req.body.fname,
-                            lname: req.body.lname,
-                            image: "",
-                            mobile: "",
-                            about: "",
-                            city: "",
-                            country: "",
-                            company: {
-                                name: "",
-                                position: "",
-                                start: "",
-                                end: ""
-                            },
-                            career: "",
-                            hometown: "",
-                            languages: "",
-                            gender: "",
-                            profilecredential: "",
-                            education: {
-                                school: "",
-                                start: "",
-                                end: "",
-                                degree: ""
-                            }
-
-                        });
-                        profile
-                            .save()
-                            .then(result1 => {
-                                console.log(result1);
-                                res.status(200).json({message:"User Created Successfully"});
-                            })
-
-                            .catch(err => console.log(err));
-                            
-                    }
-                    else {
-                        res.status(200).json({message:"User Created Successfully"});
-
-                    }
                 });
+                user
+                    .save()
+                    .then(result => {
+                        console.log(result);
+
+                        Profile.findOne({ email: req.body.email })
+                            .exec()
+                            .then(docs => {
+                                if (!docs) {
+                                    const profile = new Profile({
+                                        _id: new mongoose.Types.ObjectId(),
+                                        email: req.body.email,
+                                        fname: req.body.fname,
+                                        lname: req.body.lname,
+                                        image: "",
+                                        mobile: "",
+                                        about: "",
+                                        city: "",
+                                        country: "",
+                                        company: {
+                                            name: "",
+                                            position: "",
+                                            start: "",
+                                            end: ""
+                                        },
+                                        career: "",
+                                        hometown: "",
+                                        languages: "",
+                                        gender: "",
+                                        profilecredential: "",
+                                        education: {
+                                            school: "",
+                                            start: "",
+                                            end: "",
+                                            degree: ""
+                                        }
+
+                                    });
+                                    profile
+                                        .save()
+                                        .then(result1 => {
+                                            console.log(result1);
+                                            res.status(200).json({ message: "User Created Successfully" });
+                                        })
+
+                                        .catch(err => console.log(err));
+
+                                }
+                                else {
+                                    res.status(200).json({ message: "User Created Successfully" });
+
+                                }
+                            });
 
 
 
-        });
+                    });
+
+            }
+
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+
+
 });
 
 
@@ -200,47 +218,47 @@ router.get('/:userId', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
-    console.log("req.body",req.body)
+    console.log("req.body", req.body)
     var cipher = crypto.createCipher('aes-256-ecb', 'password');
     var mystr = cipher.update(req.body.password, 'utf8', 'hex') + cipher.final('hex');
 
     User.findOne({ email: req.body.email })
         .exec()
         .then(doc => {
-            if(doc){
+            if (doc) {
                 console.log("From database", doc);
-            Profile.findOne({ email: req.body.email })
-                .exec()
-                .then(result => {
-                    if (doc.password === mystr && doc.role === req.body.role) {
+                Profile.findOne({ email: req.body.email })
+                    .exec()
+                    .then(result => {
+                        if (doc.password === mystr && doc.role === req.body.role) {
 
-                        res.cookie('cookie', 'cookie', { maxAge: 900000, httpOnly: false, path: '/' });
+                            res.cookie('cookie', 'cookie', { maxAge: 900000, httpOnly: false, path: '/' });
 
-                        const body = { user: doc.email };
-                        const token = jwt.sign({ user: body }, 'password');
-                        res.status(200).json({
-                            image: result.image,
-                            email: doc.email,
-                            fname: doc.fname,
-                            lname: doc.lname,
-                            jwt: 'Bearer ' + token,
-                        });
-                    }
-                    else {
-                        res.status(202).json({ message: "Invalid Credentials" });
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                    res.status(500).json({ error: err });
-                })
-
-
+                            const body = { user: doc.email };
+                            const token = jwt.sign({ user: body }, 'password');
+                            res.status(200).json({
+                                image: result.image,
+                                email: doc.email,
+                                fname: doc.fname,
+                                lname: doc.lname,
+                                jwt: 'Bearer ' + token,
+                            });
+                        }
+                        else {
+                            res.status(202).json({ message: "Invalid Credentials" });
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({ error: err });
+                    })
 
 
-        
+
+
+
             }
-            else{
+            else {
                 res.status(202).json({ message: "Invalid User" });
             }
         })
