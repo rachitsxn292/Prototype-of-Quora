@@ -42,6 +42,28 @@ router.get('/email', (req, res, next)=>{
         
 });
 
+
+router.get('/id', (req, res, next)=>{
+    const id = req.query.id;
+    Profile.findOne({ _id: id })
+        .exec()
+        .then(doc => {
+        console.log("From database",doc);
+        if (doc){
+            res.status(200).json(doc);
+        }
+        else {
+            res.status(404).json({message:"not a valid ID"});
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({error:err});
+    })
+        
+});
+
 router.patch("/", (req, res, next) => {
     
     
