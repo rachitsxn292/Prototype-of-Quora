@@ -11,7 +11,7 @@ import Account from './User/Account';
 import Dashboard from './User/Dashboard';
 
 import Answered from './User/Answered';
-
+import Topic from './Topic/Topic';
 import Followers from './User/Followers';
 import QuestionsAsked from './User/QuestionsAsked';
 import Following from './User/Following';
@@ -106,6 +106,7 @@ class Main extends Component {
                 <li class="list-group-item">Food</li>
                 <li class="list-group-item">Programming</li>
                 <li class="list-group-item">Global News</li>
+                <li class="list-group-item"> <a href="topic" > New Topic  </a></li>
               </ul>
             </div>
           </div>
@@ -123,6 +124,8 @@ class Main extends Component {
                   <Route path="/profile" component={Profile} />
                   <Route path="/dashboard" component={Dashboard} />
                   <Route path="/answered" component={Answered} />
+                  <Route path="/topic" component={Topic} />
+
                   <Route path="/questionsasked" component={QuestionsAsked} />
                   <Route path="/followers" component={Followers} />
                   <Route path="/following" component={Following} />
