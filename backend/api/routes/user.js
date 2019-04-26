@@ -34,7 +34,7 @@ router.post('/', (req, res, next) => {
         fname: req.body.fname,
         lname: req.body.lname,
         password: mystr,
-        
+
     });
     user
         .save()
@@ -110,7 +110,7 @@ router.post('/login', (req, res, next) => {
                 res.status(200).json({
                     email: doc.email,
                     name: doc.name,
-                    jwt: 'Bearer '+token,
+                    jwt: 'Bearer ' + token,
                 });
             }
             else {
