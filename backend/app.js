@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 var cors = require('cors');
 const userRoutes = require('./api/routes/user');
 const profileRoutes = require('./api/routes/profile');
+const searchRoutes = require('./api/routes/search');
 
 var passport = require("passport");
 var passportJWT = require("passport-jwt");
@@ -40,6 +41,7 @@ app.post("/secret", passport.authenticate('jwt', { session : false }), function(
 
 app.use('/user', userRoutes);
 app.use('/profile', passport.authenticate('jwt', { session : false }), profileRoutes);
+app.use('/search', searchRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Api not found');
