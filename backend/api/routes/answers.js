@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const Answers = require('../models/answers');
 const Comments = require('../models/comments');
 const Questions = require('../models/question');
+var multer = require('multer');
+const path = require("path");
 
 //to get all answers for a particular question
 router.get('/', (req, res) => {
@@ -21,34 +23,55 @@ router.get('/', (req, res) => {
     });
 });
 
+const storage = multer.diskStorage({
+    destination: "../frontend/public/uploads",
+    filename: function (req, file, cb) {
+        cb(null, "QUORA" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 999999999999999999999999},
+}).single("myImage");
 
 //to create a new answer for a particular question
 router.post('/', (req, res) => {
-    const answer = new Answers({
-        _id: new mongoose.Types.ObjectId(),
-        questionID: req.body._id,
-        owner: req.body.email,
-        answer: req.body.answer,
-        isAnonymous: req.body.anonymousStatus,
-        image: req.body.imgURL,
-        upVote: 0,
-        downVote: 0
-    });
+    upload(req, res, (err) => {
+        console.log("Request ---", req.body);
+        console.log("Request file ---", JSON.stringify(req.file));  //Here you get file.
+        var filepath = req.file;
+        var filepath = filepath.filename;
 
-    if(req.body.answer){
-        answer.save()
-          .then(result => {
-          console.log(result);
-          res.status(200).json({
-              message: "Successfully Inserted!"
-          })
-    }).catch(err=>{
-        res.status(204).json({
-            message: "Unable to add your answer"
-        })
+        const answer = new Answers({
+            _id: new mongoose.Types.ObjectId(),
+            questionID: req.body._id,
+            owner: req.body.email,
+            answer: req.body.answer,
+            isAnonymous: req.body.anonymousStatus,
+            image: filepath,
+            upVote: 0,
+            downVote: 0
+        });
+
+        if(req.body.answer){
+            answer.save()
+            .then(result => {
+            console.log(result);
+            res.status(200).json({
+                message: "Successfully Inserted!"
+            })
+        }).catch(err=>{
+            res.status(204).json({
+                message: "Unable to add your answer"
+            })
+        });
+        }
+    
     });
-    }
 });
+
+
 
 
 //to edit an existing answer 

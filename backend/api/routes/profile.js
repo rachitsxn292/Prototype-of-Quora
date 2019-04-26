@@ -96,7 +96,7 @@ router.patch("/", (req, res, next) => {
 const storage = multer.diskStorage({
     destination: "../frontend/public/uploads",
     filename: function (req, file, cb) {
-        cb(null, "CANVAS" + Date.now() + path.extname(file.originalname));
+        cb(null, "QUORA" + Date.now() + path.extname(file.originalname));
     }
 });
 
