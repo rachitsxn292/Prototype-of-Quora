@@ -196,6 +196,17 @@ router.post('/', (req, res, next) => {
 });
 
 
+router.get('/search/:search', (req, res, next) => {
+    const search= req.params.search;
+    Profile.find( { 'fname' : { '$regex' : search, '$options' : 'i' } } )
+    .exec()
+        .then(doc => {
+            res.status(200).json(doc);
+        })
+
+});
+
+
 router.get('/:userId', (req, res, next) => {
     const email = req.params.userId;
     User.findOne({ email: email })
