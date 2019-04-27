@@ -23,6 +23,23 @@ router.get('/', (req, res) => {
     });
 });
 
+
+//to get one answers for a particular question to be displayed on homepage
+router.get('/one', (req, res) => {
+    const id = req.query._id;
+    Answers.findOne({questionID: id})
+           .exec()
+           .then(docs => {
+                console.log(docs);
+                res.status(200).json(docs);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
+});
+
 const storage = multer.diskStorage({
     destination: "../frontend/public/uploads",
     filename: function (req, file, cb) {

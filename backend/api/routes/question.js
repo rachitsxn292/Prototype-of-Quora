@@ -2,12 +2,43 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Question = require('../models/question');
-const Follower=require('../models/follower');
+const Follower = require('../models/follower');
 // var jwt = require('jsonwebtoken');
 // var crypto = require('crypto');
 
+//5 questions to display when user is not logged in
+router.get('/noLogQues', (req, res) => {
+    var n = Question.count({});
+    var r = Math.floor(Math.random() * n);
+    Question.find({}).limit(5).skip(r).exec().then(docs=>{
+        console.log(docs);
+        res.status(200).json(docs);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    })
+})
 
- //For ComponentDidMount which will show all question prepopulated for particular user
+
+//questions to display when user is logged in using pagination
+router.get('/logQues', (req, res) => {
+    let limit = Number(req.query.limit);
+    let skip = limit*Number(req.query.t);
+    Question.find({}).limit(limit).skip(skip).exec().then(docs=>{
+        console.log(docs);
+        res.status(200).json(docs);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    })
+})
+
+
+//For ComponentDidMount which will show all question prepopulated for particular user
 router.get('/', (req, res) => {
     var email=req.query.email;
     var query={owner:email};
