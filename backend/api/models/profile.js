@@ -10,23 +10,20 @@ const profileSchema = mongoose.Schema({
     about:String,
     city:String,
     country:String,
-    company:{
-        name:String,
-        position:String,
-        start:String,
-        end:String
-    },
+    companyname:String,
+    companyposition:String,
+    companystart:String,
+    companyend:String,
     career:String,
     hometown:String,
     languages:String,
     gender:String,
     profilecredential:String,
-    education :{
-        school :String,
-        start:String,
-        end:String,
-        degree:String
-    }
+    educationschool :String,
+    educationstart:String,
+    educationend:String,
+    educationdegree:String
+    
     
    });
 
