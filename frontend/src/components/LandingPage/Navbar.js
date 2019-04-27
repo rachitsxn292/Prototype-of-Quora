@@ -16,12 +16,32 @@ class Navbar extends Component {
             role: "",
             search: "",
             profile: [],
-            user: []
+            user: [],
+            question:"",
 
         }
         this.handleLogout = this.handleLogout.bind(this);
         this.searchChangeHandler = this.searchChangeHandler.bind(this);
     }
+
+    questionAdd = (e) => {
+        this.setState({
+            question:e.target.value
+        })
+    };
+
+    answerSubmit = (e) => {
+        let owner = localStorage.email;
+        axios.post(url.url+'questions/create', {question:this.state.question, owner})
+        .then(response=>{
+            if(response.data)
+            {
+                alert("Question Submitted");
+            }
+        })
+    };
+    
+
     searchChangeHandler = (e) => {
 
         const value = e.target.value;
@@ -86,13 +106,13 @@ class Navbar extends Component {
 
                             <a class="dropdown-item" href="#">Profile</a>
                             <a class="dropdown-item" href="#">Messages</a>
-                            <a class="dropdown-item" href="#">Your Content</a>
+                            <a class="dropdown-item" href="#"><Link to='/viewquestion'>Your Content</Link></a>
                             
                             <Link to="/" onClick={this.handleLogout} class="dropdown-item">Logout</Link>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><button class="btn btn-danger" type="submit">Add Question or Link</button></a>
+                        <a class="nav-link" href="#"><button class="btn btn-danger" data-toggle="modal" data-target="#questionModal" type="submit">Add Question or Link</button></a>
                     </li>
                 </ul>
             );
@@ -178,9 +198,26 @@ class Navbar extends Component {
 
                     </div>
                 </nav>
-
-
-
+                    <div class="modal" id="questionModal">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><strong>Start your question with "What", "How", "Why", etc.</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                    
+                    
+                            <div class="modal-body">        
+                                <div>
+                                    <textarea type="text" class="questionAdd" value={this.state.question} onChange={this.questionAdd.bind(this)} placeholder="Optional: include a link that gives context" />
+                                </div>
+                            </div>
+                    
+                    
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" onClick={this.answerSubmit.bind(this)} >Submit</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                
+                            </div>
+                    </div>
             </div>
         )
 

@@ -9,8 +9,10 @@ const Follower=require('../models/follower');
 
  //For ComponentDidMount which will show all question prepopulated for particular user
 router.get('/', (req, res) => {
+    
     var email=req.query.email;
     var query={owner:email};
+    console.log("Your Email is ",email);
     Question.find(query)
         .exec()
         .then(docs => {

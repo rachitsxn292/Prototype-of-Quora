@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Route} from 'react-router-dom';
 import Login from './Login/Login';
 import Home from './Home/Home';
+import ViewQuestions from '../components/ViewQuestions/ViewQuestions';
 
 
 
@@ -17,6 +18,7 @@ class Main extends Component {
                 <Route path="/" component={Navbar}/>
                 <Route path="/login" component={Login}/>
                 <Route path="/home" component={Home}/>
+                <Route path="/viewquestion" component={ViewQuestions}/>
                 
                
             </div>
