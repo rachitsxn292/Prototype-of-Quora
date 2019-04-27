@@ -69,29 +69,35 @@ class Home extends Component {
                             </h4>
                             <div class="card-body">
                                 <p><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /> {localStorage.fname} {localStorage.lname}, <small>Answered April 4</small></p>
-                                <p><small><a class="nav-link" href="#" onClick={()=>{
+                                <p><a class="nav-link" href="#" onClick={()=>{
                                     this.setState({
                                        answerBox: <div> 
-                                                        <p><small><img class="img-profile rounded-circle" src={localStorage.image} height="30" width="30" /> {localStorage.fname} {localStorage.lname}</small></p>
-                                                        <nav class="navbar navbar-expand-sm bg-light navbar-light">
-                                                            {/* <div class="container-fluid">    */}
-                                                                <ul class="navbar-nav">
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link" href="#"><button data-toggle="modal" data-target="#myModal"><i class='far fa-image' style={{fontSize: "32px"}}></i></button></a> 
-                                                                    </li>
-                                                                    <li class="nav-item">&nbsp;&nbsp;&nbsp;&nbsp;
-                                                                        <select name="anonymousStatus" onChange={this.anonymousSelect} value={this.state.value} style={{height: "35px"}}>
+                                                        <div class="row">
+
+                                                                <div class="col-md-2">
+                                                                
+                                                                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal"><i class='far fa-image' style={{fontSize: "25px"}}></i></button>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <select name="anonymousStatus" onChange={this.anonymousSelect} value={this.state.value}  class="form-control">
                                                                             <option value="true">Anonymous</option>
                                                                             <option value="false">Not Anonymous</option>
                                                                         </select>
-                                                                    </li>    
-                                                            </ul>
-                                                        </nav>
+                                                                        </div>
+                                                        </div> 
+                                                        <br/>
                                                         <textarea rows="10" cols="83" placeholder="Write your answer" required></textarea>
-                                                        <a href="#"><button class="btn btn-sm btn-primary" type="submit">Submit</button></a>
+                                                        <button class="btn btn-sm btn-primary" type="submit">Submit</button>&nbsp;
+                                                        <button class="btn btn-sm btn-primary" type="" onClick={
+                                                            ()=>{
+                                                                this.setState({
+                                                                    answerBox:""
+                                                                })
+                                                            }
+                                                        }>Cancel</button>
                                                   </div> 
                                     })
-                                }}><i class='far fa-edit'></i> Answer</a></small></p>
+                                }}><i class='far fa-edit'></i> Answer</a></p>
                                 {this.state.answerBox}
                                 <br/>
                                 <p>

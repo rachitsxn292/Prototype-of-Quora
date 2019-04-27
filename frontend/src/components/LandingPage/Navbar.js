@@ -16,7 +16,8 @@ class Navbar extends Component {
             role: "",
             search: "",
             profile: [],
-            user: []
+            topic: [],
+            question: []
 
         }
         this.handleLogout = this.handleLogout.bind(this);
@@ -50,11 +51,21 @@ class Navbar extends Component {
 
             });
 
-        axios.get(url.url + 'search/user', options)
+        axios.get(url.url + 'search/topic', options)
             .then((response) => {
                 //update the state with the response data
                 this.setState({
-                    user: response.data.user,
+                    topic: response.data.topic,
+
+                });
+
+
+            });
+        axios.get(url.url + 'search/question', options)
+            .then((response) => {
+                //update the state with the response data
+                this.setState({
+                    question: response.data.question,
 
                 });
 
@@ -131,15 +142,15 @@ class Navbar extends Component {
 
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='far fa-file-alt'></i> Home</a>
+                                <a class="nav-link" href="#"><i class='far fa-file-alt' style={{fontSize: "25px"}}></i> Home</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='far fa-edit'></i> Answers</a>
+                                <a class="nav-link" href="#"><i class='far fa-edit' style={{fontSize: "25px"}}></i> Answers</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='fas fa-bell'></i> Notifications</a>
+                                <a class="nav-link" href="#"><i class='fas fa-bell' style={{fontSize: "25px"}}></i> Notifications</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -151,14 +162,33 @@ class Navbar extends Component {
                                     
                                     {this.state.profile.map(res => {
                                         return (
-                                            <div id="empty" class="dropdown-header"><small>Profile : </small><Link to="/" class="dropdown-item">{res.fname}, {res.lname}</Link></div>
+                                            <div id="empty" class="dropdown-header"><small>Profile : </small><Link to="/profiledisplay" class="dropdown-item" onClick={
+                                                ()=>{
+                                                    localStorage.setItem('profiledisplay', res._id);
+                                                }
+                                            }>{res.fname}, {res.lname}</Link></div>
                                         )
                                     })
                                     }
-                                    <div id="empty" class="dropdown-header"><hr/></div>
-                                    {this.state.user.map(res => {
+                                    
+                                    {this.state.topic.map(res => {
                                         return (
-                                            <div id="empty" class="dropdown-header"><small>User : </small> <Link to="/" class="dropdown-item">{res.email}</Link></div>
+                                            <div id="empty" class="dropdown-header"><small>Topic : </small> <Link to="/topicdisplay" class="dropdown-item" onClick={
+                                                ()=>{
+                                                    localStorage.setItem('topicdisplay', res._id);
+                                                }
+                                            }>{res.topic}</Link></div>
+                                        )
+                                    })
+                                    }
+                                    
+                                    {this.state.question.map(res => {
+                                        return (
+                                            <div id="empty" class="dropdown-header"><small>Question : </small> <Link to="/questiondisplay" class="dropdown-item" onClick={
+                                                ()=>{
+                                                    localStorage.setItem('questiondisplay', res._id);
+                                                }
+                                            }><p class="plimit">{res.question}</p></Link></div>
                                         )
                                     })
                                     }
