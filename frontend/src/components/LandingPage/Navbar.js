@@ -69,6 +69,7 @@ class Navbar extends Component {
     //handle logout to destroy the cookie
     handleLogout = () => {
         cookie.remove('cookie', { path: '/' })
+        localStorage.removeItem('google');
         this.props.onLogout();
     }
     render() {
@@ -84,7 +85,7 @@ class Navbar extends Component {
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /></a>
                         <div class="dropdown-menu">
 
-                            <a class="dropdown-item" href="#">Profile</a>
+                            <Link to="/profile" class="dropdown-item">Profile</Link>
                             <a class="dropdown-item" href="#">Messages</a>
                             <a class="dropdown-item" href="#">Your Content</a>
                             

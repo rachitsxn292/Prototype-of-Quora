@@ -40,7 +40,8 @@ app.post("/secret", passport.authenticate('jwt', { session : false }), function(
 
 
 app.use('/user', userRoutes);
-app.use('/profile', passport.authenticate('jwt', { session : false }), profileRoutes);
+app.use('/profile', profileRoutes);
+//app.use('/profile', passport.authenticate('jwt', { session : false }), profileRoutes);
 app.use('/search', searchRoutes);
 
 app.use((req, res, next) => {

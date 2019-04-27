@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import GoogleLogin from 'react-google-login';
 import url from '../Url/Url';
 import cookie from 'react-cookies';
+import { Link } from 'react-router-dom';
 
 //you wanna copy this file for componenets
 class Login extends Component {
@@ -63,7 +64,8 @@ class Login extends Component {
                         localStorage.setItem('fname', response.data.fname);
                         localStorage.setItem('lname', response.data.lname);
                         localStorage.setItem('jwt', response.data.jwt);
-                        localStorage.setItem('image', response.data.image);
+                        let image = url.path+'uploads/'+response.data.image;
+                        localStorage.setItem('image', image);
                    
                     console.log(response.data);
                     this.setState({
@@ -104,6 +106,7 @@ class Login extends Component {
                         localStorage.setItem('lname', response.data.lname);
                         localStorage.setItem('jwt', response.data.jwt);
                         localStorage.setItem('image', response.data.image);
+                        localStorage.setItem('google', true);
     
                         this.setState({
                            
@@ -172,7 +175,7 @@ class Login extends Component {
                             cookiePolicy={'single_host_origin'}
                         />
                         <br/><br/>
-                        <small><a href="">Sign Up With Email.</a> By signing up you indicate that you have read and agree to Quora's Terms of Service and Privacy Policy.</small>
+                        <small><Link to="/signup">Sign Up With Email.</Link> By signing up you indicate that you have read and agree to Quora's Terms of Service and Privacy Policy.</small>
                     </div>
                     <div class="login">
                   <p> <b>Login</b></p>
