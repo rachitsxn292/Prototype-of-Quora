@@ -38,24 +38,20 @@ router.post('/google', (req, res, next) => {
                     about: "",
                     city: "",
                     country: "",
-                    company: {
-                        name: "",
-                        position: "",
-                        start: "",
-                        end: ""
-                    },
+                    companyname: "",
+                    companyposition: "",
+                    companystart: "",
+                    companyend: "",
+                                    
                     career: "",
                     hometown: "",
                     languages: "",
                     gender: "",
                     profilecredential: "",
-                    education: {
-                        school: "",
-                        start: "",
-                        end: "",
-                        degree: ""
-                    }
-
+                    educationschool: "",
+                    educationstart: "",
+                    educationend: "",
+                    educationdegree: ""
                 });
                 profile
                     .save()
@@ -145,23 +141,21 @@ router.post('/', (req, res, next) => {
                                         about: "",
                                         city: "",
                                         country: "",
-                                        company: {
-                                            name: "",
-                                            position: "",
-                                            start: "",
-                                            end: ""
-                                        },
+                                        companyname: "",
+                                        companyposition: "",
+                                        companystart: "",
+                                        companyend: "",
+                                    
                                         career: "",
                                         hometown: "",
                                         languages: "",
                                         gender: "",
                                         profilecredential: "",
-                                        education: {
-                                            school: "",
-                                            start: "",
-                                            end: "",
-                                            degree: ""
-                                        }
+                                        educationschool: "",
+                                        educationstart: "",
+                                        educationend: "",
+                                        educationdegree: ""
+                                        
 
                                     });
                                     profile
