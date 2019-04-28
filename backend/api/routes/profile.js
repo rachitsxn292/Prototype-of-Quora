@@ -80,7 +80,7 @@ router.patch("/", (req, res, next) => {
         .then(result => {
             console.log(result);
             res.status(200).json({
-                message:"Update Was Successfull"
+                message:"Update Was Successful"
             });
         })
         .catch(err => {
