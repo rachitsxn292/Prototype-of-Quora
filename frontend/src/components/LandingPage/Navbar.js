@@ -95,8 +95,9 @@ class Navbar extends Component {
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /></a>
                         <div class="dropdown-menu">
 
-                            <Link to="/profile" class="dropdown-item">Profile</Link>
-                            <a class="dropdown-item" href="#">Messages</a>
+                            <a class="dropdown-item" href="#">Profile</a>
+                            {/* <a class="dropdown-item" href="#">Messages</a> */}
+                            <Link to="/messages" class="dropdown-item">Messages</Link>
                             <a class="dropdown-item" href="#">Your Content</a>
                             
                             <Link to="/" onClick={this.handleLogout} class="dropdown-item">Logout</Link>

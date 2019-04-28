@@ -53,7 +53,6 @@ class Home extends Component {
         // })
         return (
             <div class="container">
-            
                 <br />
                 <div class="row">
 

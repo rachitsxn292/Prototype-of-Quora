@@ -11,7 +11,7 @@ const Messages = require('../models/messages');
 
 //sending messages
  router.post('/', (req, res) => {
-     const {to, from, content, date} = req.body;
+     const {to, from, content} = req.body;
      const data = new Messages({
          _id: new mongoose.Types.ObjectId(),
          to: to,

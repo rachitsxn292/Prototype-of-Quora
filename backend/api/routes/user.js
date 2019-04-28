@@ -34,6 +34,7 @@ router.post('/google', (req, res, next) => {
                     fname: req.body.fname,
                     lname: req.body.lname,
                     image: req.body.image,
+                    mobile: "",
                     about: "",
                     city: "",
                     country: "",
@@ -41,13 +42,16 @@ router.post('/google', (req, res, next) => {
                     companyposition: "",
                     companystart: "",
                     companyend: "",
+                                    
+                    career: "",
+                    hometown: "",
+                    languages: "",
+                    gender: "",
                     profilecredential: "",
                     educationschool: "",
                     educationstart: "",
                     educationend: "",
-                    educationdegree: "",
-                    state:"",
-                    zipcode:""
+                    educationdegree: ""
                 });
                 profile
                     .save()
@@ -133,6 +137,7 @@ router.post('/', (req, res, next) => {
                                         fname: req.body.fname,
                                         lname: req.body.lname,
                                         image: "",
+                                        mobile: "",
                                         about: "",
                                         city: "",
                                         country: "",
@@ -140,13 +145,16 @@ router.post('/', (req, res, next) => {
                                         companyposition: "",
                                         companystart: "",
                                         companyend: "",
+                                    
+                                        career: "",
+                                        hometown: "",
+                                        languages: "",
+                                        gender: "",
                                         profilecredential: "",
                                         educationschool: "",
                                         educationstart: "",
                                         educationend: "",
-                                        educationdegree: "",
-                                        state:"",
-                                        zipcode:""
+                                        educationdegree: ""
                                         
 
                                     });
