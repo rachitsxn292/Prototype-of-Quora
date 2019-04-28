@@ -4,6 +4,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
+import url from '../Url/Url';
 
 class Home extends Component {
     constructor() {
@@ -16,7 +17,8 @@ class Home extends Component {
             questions: [],
             answerBox:'',
             anonymousStatus: false,
-            anonymous: 'Not Anonymous'
+            anonymous: 'Not Anonymous',
+            topics: []
         }
         this.anonymousSelect = this.anonymousSelect.bind(this);
     
@@ -32,13 +34,25 @@ class Home extends Component {
 
     }
 
-    // componentDidMount(){
-    //     axios.get('http://localhost:3001/questions', {params: {email: localStorage.getItem('email')}}).then(result=>{
-    //         this.setState({
-    //             questions: this.state.questions.concat(result.data)
-    //         })
-    //     });
-    // }
+    loadTopics()
+    {
+        //loads topics to show on left side of home screen
+        axios.get(url.url+'topics'
+                  )
+          .then((response) => {
+            //update the state with the response data
+            this.setState({
+              topics: response.data
+            });
+          });
+    }
+
+    componentDidMount() {
+
+        this.loadTopics();
+            
+              }
+        
 
     render() {
         //if not logged in go to login page
@@ -46,19 +60,26 @@ class Home extends Component {
         if (!cookie.load('cookie')) {
             redirectVar = <Redirect to="/login" />
         }
+         
 
+        let topics = this.state.topics.map(topic => {
+            return (
+                <p><Link to ="/topic"><img class="img-profile rounded" src={"/uploads/topic/"+topic.picture} height="25" width="25" /><small> {topic.topic}</small></Link></p>
+            )})
         // var display = this.state.data.map(answerPar => {
             
 
         // })
         return (
+            
             <div class="container">
             
                 <br />
                 <div class="row">
 
                     <div class="col-md-2">
-                    <p><a href=""><img class="img-profile rounded" src="warfare.jpg" height="25" width="25" /><small> Warfare</small></a></p>
+                    {topics}
+                    <p><Link to ="/topic"><small>  Add new Topic</small></Link></p>
                     </div>
 
                     <div class="col-md-8">

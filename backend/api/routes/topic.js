@@ -7,7 +7,6 @@ const path = require("path");
 
 
 router.get('/', (req, res, next) => {
-
     Topic.find()
         .exec()
         .then(docs => {
@@ -22,42 +21,64 @@ router.get('/', (req, res, next) => {
 
 });
 
+
+
+const storage = multer.diskStorage({
+    destination: "../frontend/public/uploads/topic",
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 999999999999999999999999 },
+}).single("myImage");
+
 router.post('/', (req, res, next) => {
-    const param = req.body.param;
 
-    //var object = new Topic({ _id: new mongoose.Types.ObjectId(), topic: param });
-    // object
-    //     .save()
-    //     .then(result => {
-    //         console.log(result);
-    //     }).catch(err => console.log(err));
+    upload(req, res, (err) => {
+        const param = req.body.param;
+        var picName = req.file.originalname;
+        if(req.file.originalname == null || req.file.originalname == "")
+        {
+            picName = "default.jpg"; //if no pic was uploaded display default
+        }
+        var data =  { topic: param, picture: picName};
+        var query = { topic: param },
+            options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-    //     res.writeHead(200, {
-    //         'Content-Type': 'text/plain'
-    //     });
-    //     res.end("Topic Created");
+        //console.log("Request file ---", JSON.stringify(req.file));  //Here you get file.
+        var filepath = req.file;   
+        var filepath = filepath.filename;
 
-    var query = {topic: param},
-        update = { topic: param },
-        options = { upsert: true, new: true, setDefaultsOnInsert: true };
-
-    // //first you wanna check if topic exists, only then update
-    Topic.findOneAndUpdate(query, update, options, function (error, result) {
-
-        console.log(result);
-
-        res.writeHead(200, {
-            'Content-Type': 'text/plain'
+        // //first you wanna check if topic exists, then create else update
+        Topic.findOneAndUpdate(query,    {  $set : data}, options, function (error, result) {
+                console.log("resiult", error)
+           console.log("inside")
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            });
+            res.end("Topic Created");
         });
-        res.end("Topic Created");
-    });
 
+    }); //upload end
 });
 
 
 
 
+//var object = new Topic({ _id: new mongoose.Types.ObjectId(), topic: param });
+// object
+//     .save()
+//     .then(result => {
+//         console.log(result);
+//     }).catch(err => console.log(err));
 
+//     res.writeHead(200, {
+//         'Content-Type': 'text/plain'
+//     });
+//     res.end("Topic Created");
 
 
 module.exports = router;

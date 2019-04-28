@@ -5,7 +5,7 @@ import Home from './Home/Home';
 import QuestionDisplay from './QuestionDisplay/QuestionDisplay';
 import TopicDisplay from './TopicDisplay/TopicDisplay';
 import ProfileDisplay from './ProfileDisplay/ProfileDisplay';
-
+import Topic from './TopicDisplay/Topic';
 
 
 
@@ -23,7 +23,8 @@ class Main extends Component {
                 <Route path="/questiondisplay" component={QuestionDisplay}/>
                 <Route path="/topicdisplay" component={TopicDisplay}/>
                 <Route path="/profiledisplay" component={ProfileDisplay}/>
-                
+                <Route path="/topic" component={Topic}/>
+
                
             </div>
          
