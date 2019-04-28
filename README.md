@@ -1,4 +1,13 @@
 # CMPE273_GroupProject
+# Rule of Git Master Branch Merger
+We will have to form a rule for the Integration from now onward:
+Step 1.  Anyone Person (volunteer) Will Clone the latest Version from Git and will perform Integration the Backend Codes of Everyone. to the Master Branch without touching the front end. 
+Please Note:  All should complete the Backend code to be deployed before the Integration. (Post integration Changes will be moved in next batch).
+Step 2. Anyone Person (volunteer) Will Clone the latest Version from Git and will perform Integration the Frontend Codes of Everyone. to the Master Branch without touching the Backend. 
+
+Step 1 and Step 2 Person responsible will also make sure to run the Application before Master Branch pull request creation.
+
+
 CMPE273_GroupProject
 
 Hi Guys,
