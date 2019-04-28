@@ -5,7 +5,8 @@ const User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 const Profile = require('../models/profile');
-
+const Question = require('../models/question');
+const Topic = require('../models/topic');
 
 router.get('/profile', (req, res, next) => {
     const search = req.query.search;
@@ -46,6 +47,48 @@ router.get('/user', (req, res, next) => {
     }
     else{
         res.status(200).json({ user: []});
+    }
+
+});
+
+router.get('/question', (req, res, next) => {
+    const search = req.query.search;
+    if(search){
+    Question.find({ 'question': { '$regex': search, '$options': 'i' } })
+        .exec()
+        .then(question => {
+
+            res.status(200).json({ question: question });
+
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+    }
+    else{
+        res.status(200).json({ question: []});
+    }
+
+});
+
+router.get('/topic', (req, res, next) => {
+    const search = req.query.search;
+    if(search){
+        Topic.find({ 'topic': { '$regex': search, '$options': 'i' } })
+        .exec()
+        .then(topic => {
+
+            res.status(200).json({ topic: topic });
+
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+    }
+    else{
+        res.status(200).json({ topic: []});
     }
 
 });

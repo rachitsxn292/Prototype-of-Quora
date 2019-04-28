@@ -2,8 +2,17 @@ import React, {Component} from 'react';
 import {Route} from 'react-router-dom';
 import Login from './Login/Login';
 import Home from './Home/Home';
+
 import SignUp from './SignUp/SignUp';
 import Profile from './Profile/Profile';
+import QuestionDisplay from './QuestionDisplay/QuestionDisplay';
+import TopicDisplay from './TopicDisplay/TopicDisplay';
+import ProfileDisplay from './ProfileDisplay/ProfileDisplay';
+
+
+
+
+
 import Navbar from './LandingPage/Navbar';
 
 //Create a Main Component
@@ -16,8 +25,14 @@ class Main extends Component {
                 <Route path="/" component={Navbar}/>
                 <Route path="/login" component={Login}/>
                 <Route path="/home" component={Home}/>
+
                 <Route path="/signup" component={SignUp}/>
                 <Route path="/profile" component={Profile}/>
+
+                <Route path="/questiondisplay" component={QuestionDisplay}/>
+                <Route path="/topicdisplay" component={TopicDisplay}/>
+                <Route path="/profiledisplay" component={ProfileDisplay}/>
+
                 
                
             </div>
