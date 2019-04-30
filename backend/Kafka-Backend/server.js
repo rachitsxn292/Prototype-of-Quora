@@ -1,5 +1,5 @@
 var connection = require('./kafka/Connection');
-
+var quora = require('./services/quora');
 
 
 function handleTopicRequest(topic_name, function_name){
@@ -34,3 +34,4 @@ function handleTopicRequest(topic_name, function_name){
 }
 
 
+handleTopicRequest("quora", quora);

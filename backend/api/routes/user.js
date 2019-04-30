@@ -5,8 +5,33 @@ const User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 const Profile = require('../models/profile');
+var kafka = require('../kafka/client');
+
+router.get('/kafkaloadbalancer', (req, res, next)=>{
+    kafka.make_request("quora", req, function(err, result){
+        if(err){
+            console.log("Error in adding question.", err);
+        }
+        if (result){
+            console.log("from Kafka",result);
+            res.status(200).json(result);
+        }
+        else {
+            res.status(404).json({message:"not a valid Profile"});
+        }
+    });
+        
+});
 
 
+
+router.get('/loadbalancer', (req, res, next) => {
+    
+            res.status(200).json({loadbalancer:"Tested"});
+            console.log("load balancer tested successfully");
+        
+
+});
 router.get('/', (req, res, next) => {
     User.find()
         .exec()
