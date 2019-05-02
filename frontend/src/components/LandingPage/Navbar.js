@@ -17,12 +17,52 @@ class Navbar extends Component {
             search: "",
             profile: [],
             topic: [],
-            question: []
+            question: [],
+            questions: "",
+            topics: [],
+            topicselect: ''
 
         }
+        this.onSelect = this.onSelect.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.searchChangeHandler = this.searchChangeHandler.bind(this);
     }
+
+    questionAdd = (e) => {
+        this.setState({
+            questions: e.target.value
+        })
+    };
+
+    onSelect = (e) => {
+        this.setState({
+            topicselect: e.target.value
+        })
+    };
+
+    answerSubmit = (e) => {
+        let owner = localStorage.email;
+        let firstname = localStorage.fname;
+        let lastname = localStorage.lname;
+        let userimage = localStorage.image;
+        axios.post(url.url + 'questions/create', { topicselect: this.state.topicselect, question: this.state.questions, owner, firstname, lastname, userimage })
+            .then(response => {
+                if (response.data) {
+                    alert("Question Submitted");
+                }
+            })
+    };
+
+    componentDidMount() {
+        axios.get(url.url + 'questions/topics')
+            .then((response) => {
+                console.log(response.data);
+                this.setState({
+                    topics: this.state.topics.concat(response.data)
+                });
+            });
+    }
+
     searchChangeHandler = (e) => {
 
         const value = e.target.value;
@@ -97,13 +137,13 @@ class Navbar extends Component {
 
                             <Link to="/profile" class="dropdown-item">Profile</Link>
                             <a class="dropdown-item" href="#">Messages</a>
-                            <a class="dropdown-item" href="#">Your Content</a>
-                            
+                            <a class="dropdown-item" href="#"><Link to='/viewquestion'>Your Content</Link></a>
+
                             <Link to="/" onClick={this.handleLogout} class="dropdown-item">Logout</Link>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><button class="btn btn-danger" type="submit">Add Question or Link</button></a>
+                        <a class="nav-link" href="#"><button class="btn btn-danger" data-toggle="modal" data-target="#questionModal" type="submit">Add Question or Link</button></a>
                     </li>
                 </ul>
             );
@@ -125,8 +165,11 @@ class Navbar extends Component {
             console.log("in Navbar redirectVar")
             redirectVar = <Redirect to="/home" />
         }
-
-
+        let details = this.state.topics.map(topicc => {
+            return (
+                <option value={topicc.topic}>{topicc.topic}</option>
+            )
+        })
 
 
 
@@ -142,15 +185,15 @@ class Navbar extends Component {
 
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='far fa-file-alt' style={{fontSize: "25px"}}></i> Home</a>
+                                <a class="nav-link" href="#"><i class='far fa-file-alt' style={{ fontSize: "25px" }}></i> Home</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='far fa-edit' style={{fontSize: "25px"}}></i> Answers</a>
+                                <a class="nav-link" href="#"><i class='far fa-edit' style={{ fontSize: "25px" }}></i> Answers</a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='fas fa-bell' style={{fontSize: "25px"}}></i> Notifications</a>
+                                <a class="nav-link" href="#"><i class='fas fa-bell' style={{ fontSize: "25px" }}></i> Notifications</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -159,51 +202,72 @@ class Navbar extends Component {
 
                                 <div class="dropdown-menu">
                                     <input class="form-control mr-sm-2" type="search" placeholder="Search Quora" onChange={this.searchChangeHandler} />
-                                    
+
                                     {this.state.profile.map(res => {
                                         return (
                                             <div id="empty" class="dropdown-header"><small>Profile : </small><Link to="/profiledisplay" class="dropdown-item" onClick={
-                                                ()=>{
+                                                () => {
                                                     localStorage.setItem('profiledisplay', res._id);
                                                 }
                                             }>{res.fname}, {res.lname}</Link></div>
                                         )
                                     })
                                     }
-                                    
+
                                     {this.state.topic.map(res => {
                                         return (
                                             <div id="empty" class="dropdown-header"><small>Topic : </small> <Link to="/topicdisplay" class="dropdown-item" onClick={
-                                                ()=>{
+                                                () => {
                                                     localStorage.setItem('topicdisplay', res._id);
                                                 }
                                             }>{res.topic}</Link></div>
                                         )
                                     })
                                     }
-                                    
+
                                     {this.state.question.map(res => {
                                         return (
                                             <div id="empty" class="dropdown-header"><small>Question : </small> <Link to="/questiondisplay" class="dropdown-item" onClick={
-                                                ()=>{
+                                                () => {
                                                     localStorage.setItem('questiondisplay', res._id);
                                                 }
                                             }><p class="plimit">{res.question}</p></Link></div>
                                         )
                                     })
                                     }
-                                    <div id="empty" class="dropdown-header"><hr/></div>
+                                    <div id="empty" class="dropdown-header"><hr /></div>
                                     <div id="empty" class="dropdown-header">Quora Search <a href=""> Terms and Conditions.</a></div>
                                 </div>
                             </li>
-
-
-
 
                         </ul>
 
 
                         {navLogin}
+                        <div class="modal" id="questionModal">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><strong>Start your question with "What", "How", "Why", etc.</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+
+                            <div class="modal-body">
+                                <div>
+                                    <textarea type="text" class="questionAdd" value={this.state.questions} onChange={this.questionAdd.bind(this)} placeholder="Optional: include a link that gives context" />
+                                </div>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <select name="topics" onChange={this.onSelect} value={this.state.value} class="form-control">
+                                    {details}
+                                </select>
+                                <button type="button" class="btn btn-danger" onClick={this.answerSubmit.bind(this)} >Submit</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+
 
 
                     </div>
