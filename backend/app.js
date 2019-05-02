@@ -29,7 +29,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
 //use cors to allow cross origin resource sharing
-app.use(cors({ origin: 'http://ec2-13-56-140-36.us-west-1.compute.amazonaws.com:3000', credentials: true }));
+//app.use(cors({ origin: 'http://ec2-13-56-140-36.us-west-1.compute.amazonaws.com:3000', credentials: true }));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 app.use(passport.initialize());
 
