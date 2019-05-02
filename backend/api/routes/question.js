@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Question = require('../models/question');
 const Follower = require('../models/follower');
+const Topics =require('../models/topic');
 // var jwt = require('jsonwebtoken');
 // var crypto = require('crypto');
 
@@ -57,19 +58,59 @@ router.get('/', (req, res) => {
 
 });
 
+// for search questions
+router.get('/search', (req, res) => {
+    var email=req.query.email;
+    var query={_id:email};
+    console.log("Your Question Id is ",email);
+    Question.find(query)
+        .exec()
+        .then(docs => {
+            console.log(docs);
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
 
+});
+
+//For getting Items for dropdown list fof topics
+router.get('/topics', (req, res) => {
+    Topics.find()
+        .exec()
+        .then(docs => {
+            console.log("Topics",docs);
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
+
+});
 
 //For Creation of Questions
 router.post('/create',(req,res)=>{
     var question=req.body.question;
     var owner=req.body.owner;
-    var topic=req.body.topic;
-    
+    var topic=req.body.topicselect;
+    var firstname=req.body.firstname;
+    var lastname=req.body.lastname;
+    var userimage=req.body.userimage;
     const entry = new Question({
         _id: new mongoose.Types.ObjectId(),
         question: req.body.question,
         owner:req.body.owner,
-        topic: req.body.topic,
+        topic: req.body.topicselect,
+        firstname:req.body.firstname,
+        lastname:req.body.lastname,
+        userimage:req.body.userimage,
     })
       if(req.body.question)  // Condition that checks Empty Question does not get's entered
       {
@@ -90,11 +131,10 @@ router.post('/create',(req,res)=>{
 //For question Edit
 router.post('/edit',(req,res)=>{
     var question=req.body.question;
-    // var owner=req.body.owner;
-    var topic=req.body.topic;
- 
-    var query={$set: {question:question,topic:topic}};
-    Question.update({_id:req.body._id},query).exec()
+    var id=req.body.qid;
+    console.log("Question Id", id, question);
+    var query={$set: {question:req.body.question}};
+    Question.update({_id:req.body.qid},query).exec()
     .then(docs => {
         console.log("Question Updated",docs);
         res.status(200).json({

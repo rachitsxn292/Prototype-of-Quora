@@ -8,6 +8,7 @@ import ProfileDisplay from './ProfileDisplay/ProfileDisplay';
 import SignUp from './SignUp/SignUp';
 import Profile from './Profile/Profile';
 import Topic from './TopicDisplay/Topic';
+import ViewQuestions from './ViewQuestions/ViewQuestions';
 
 
 
@@ -29,6 +30,7 @@ class Main extends Component {
                 <Route path="/signup" component={SignUp}/>
                 <Route path="/profile" component={Profile}/>
                 <Route path="/topic" component={Topic}/>
+                <Route path="/viewquestion" component={ViewQuestions}/>
                 
                
             </div>
