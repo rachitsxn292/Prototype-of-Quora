@@ -157,7 +157,7 @@ router.post('/', (req, res, next) => {
                                         email: req.body.email,
                                         fname: req.body.fname,
                                         lname: req.body.lname,
-                                        image: "",
+                                        image: "http://localhost:3000/uploads/dummy.png",
                                         about: "",
                                         city: "",
                                         country: "",

@@ -64,8 +64,7 @@ class Login extends Component {
                         localStorage.setItem('fname', response.data.fname);
                         localStorage.setItem('lname', response.data.lname);
                         localStorage.setItem('jwt', response.data.jwt);
-                        let image = url.path+'uploads/'+response.data.image;
-                        localStorage.setItem('image', image);
+                        localStorage.setItem('image', response.data.image);
                    
                     console.log(response.data);
                     this.setState({

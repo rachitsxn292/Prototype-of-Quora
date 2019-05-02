@@ -112,7 +112,7 @@ router.post('/imgupload', (req, res, next) => {
         console.log("Request ---", req.body);
         console.log("Request file ---", JSON.stringify(req.file));  //Here you get file.
         var filepath = req.file;
-        var filepath = filepath.filename;
+        var filepath = "http://localhost:3000/uploads/"+filepath.filename;
         var email = req.body.email;
 
         Profile.update({email : email}, { $set: {image : filepath}})

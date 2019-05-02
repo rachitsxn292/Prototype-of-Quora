@@ -241,7 +241,7 @@ class Profile extends Component {
       .post(url.url + "profile/imgupload", formData, config)
       .then(response => {
         alert("The file is successfully uploaded");
-        let image = url.path + 'uploads/' + response.data.message;
+        let image = response.data.message;
         localStorage.setItem('image', image);
         this.setState({
           file_status: response.data.message
