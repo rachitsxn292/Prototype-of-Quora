@@ -7,7 +7,7 @@ import url from '../Url/Url';
 import cookie from 'react-cookies';
 import { Link } from 'react-router-dom';
 
-class Editprofile extends Component {
+class EditProfile extends Component {
   constructor() {
     super();
 
@@ -547,4 +547,4 @@ var compDetails =
 
 
 //export this Component
-export default Editprofile;
+export default EditProfile;

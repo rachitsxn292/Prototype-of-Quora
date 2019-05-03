@@ -11,7 +11,7 @@ const Topic = require('../models/topic');
 router.get('/profile', (req, res, next) => {
     const search = req.query.search;
     if(search){
-        Profile.find({ 'fname': { '$regex': search, '$options': 'i' } })
+        Profile.find({ 'fname': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(profile => {
             console.log({ profile: profile })
@@ -33,7 +33,7 @@ router.get('/profile', (req, res, next) => {
 router.get('/user', (req, res, next) => {
     const search = req.query.search;
     if(search){
-    User.find({ 'email': { '$regex': search, '$options': 'i' } })
+    User.find({ 'email': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(user => {
 
@@ -54,7 +54,7 @@ router.get('/user', (req, res, next) => {
 router.get('/question', (req, res, next) => {
     const search = req.query.search;
     if(search){
-    Question.find({ 'question': { '$regex': search, '$options': 'i' } })
+    Question.find({ 'question': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(question => {
 
@@ -75,7 +75,7 @@ router.get('/question', (req, res, next) => {
 router.get('/topic', (req, res, next) => {
     const search = req.query.search;
     if(search){
-        Topic.find({ 'topic': { '$regex': search, '$options': 'i' } })
+        Topic.find({ 'topic': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(topic => {
 
