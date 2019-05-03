@@ -19,7 +19,9 @@ const profileSchema = mongoose.Schema({
     educationend:String,
     educationdegree:String,
     state:String,
-    zipcode:String
+    zipcode:String,
+    education:Array,
+    company:Array
     
     
    });

@@ -136,5 +136,27 @@ router.post('/imgupload', (req, res, next) => {
    
 });
 
+router.get('/education', (req, res, next)=>{
+    const email = req.query.email;
+    Profile.findOne({ email: email }, {"education" : 1, "company": 1})
+        .exec()
+        .then(doc => {
+        console.log("From database",doc);
+        if (doc){
+            res.status(200).json(doc);
+        }
+        else {
+            res.status(404).json({message:"not a valid Email ID"});
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({error:err});
+    })
+        
+});
+
+
 
 module.exports = router;

@@ -72,7 +72,9 @@ router.post('/google', (req, res, next) => {
                     educationend: "",
                     educationdegree: "",
                     state:"",
-                    zipcode:""
+                    zipcode:"",
+                    company:[],
+                    education:[],
                 });
                 profile
                     .save()
@@ -171,7 +173,9 @@ router.post('/', (req, res, next) => {
                                         educationend: "",
                                         educationdegree: "",
                                         state:"",
-                                        zipcode:""
+                                        zipcode:"",
+                                        company:[],
+                                        education:[],
                                         
 
                                     });
@@ -289,6 +293,92 @@ router.post('/login', (req, res, next) => {
             res.status(500).json({ error: err });
         })
 
+});
+/* Create 10000 user route */
+router.post('/all', (req, res, next) => {
+    
+    console.log("req.body",req.body);
+    for (const body of req.body){
+    User.findOne({ email: body.email })
+        .exec()
+        .then(doc => {
+            console.log("From database", doc);
+            if (doc) {
+                res.status(200).json({ message: "User Already Exists" });
+            }
+            else {
+                var cipher = crypto.createCipher('aes-256-ecb', 'password');
+    var mystr = cipher.update(body.password, 'utf8', 'hex') + cipher.final('hex');
+                const user = new User({
+                    _id: new mongoose.Types.ObjectId(),
+                    email: body.email,
+                    fname: body.fname,
+                    lname: body.lname,
+                    password: mystr,
+
+                });
+                user
+                    .save()
+                    .then(result => {
+                        console.log(result);
+
+                        Profile.findOne({ email: body.email })
+                            .exec()
+                            .then(docs => {
+                                if (!docs) {
+                                    const profile = new Profile({
+                                        _id: new mongoose.Types.ObjectId(),
+                                        email: body.email,
+                                        fname: body.fname,
+                                        lname: body.lname,
+                                        image: "http://localhost:3000/uploads/dummy.png",
+                                        about: "",
+                                        city: "",
+                                        country: "",
+                                        companyname: "",
+                                        companyposition: "",
+                                        companystart: "",
+                                        companyend: "",
+                                        profilecredential: "",
+                                        educationschool: "",
+                                        educationstart: "",
+                                        educationend: "",
+                                        educationdegree: "",
+                                        state:"",
+                                        zipcode:"",
+                                        company:[],
+                                        education:[],
+                                        
+
+                                    });
+                                    profile
+                                        .save()
+                                        .then(result1 => {
+                                            console.log(result1);
+                                            res.status(200).json({ message: "User Created Successfully" });
+                                        })
+
+                                        .catch(err => console.log(err));
+
+                                }
+                                else {
+                                    res.status(200).json({ message: "User Created Successfully" });
+
+                                }
+                            });
+
+
+
+                    });
+
+            }
+
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+    }
 });
 
 module.exports = router;
