@@ -6,6 +6,7 @@ import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import url from "../Url/Url";
 import * as state from "./state";
+import Editprofile from "./EditProfile";
 import { Link } from 'react-router-dom';
 
 class Profile extends Component {
@@ -25,7 +26,7 @@ class Profile extends Component {
       status: "",
       about: "",
       city: "",
-      company: "",
+      companyname: "",
       school: "",
       fname: "",
       lname: "",
@@ -37,7 +38,10 @@ class Profile extends Component {
       educationstart: "",
       educationend: "",
       state: "",
-      zipcode: ""
+      zipcode: "",
+      edu:[],
+      comp:[]
+
     };
     //Bind the handlers to this class
 
@@ -73,6 +77,7 @@ class Profile extends Component {
     );
     this.updateAboutButton = this.updateAboutButton.bind(this);
     this.updateEducationButton = this.updateEducationButton.bind(this);
+    this.getProfile = this.getProfile.bind(this);
   }
 
   componentWillMount() {
@@ -95,7 +100,8 @@ class Profile extends Component {
     // });
   }
   //get the books data from backend
-  componentDidMount() {
+  getProfile()
+  {
     var headers = new Headers();
     const params = {
       email: localStorage.email
@@ -119,10 +125,9 @@ class Profile extends Component {
           about: item.about,
           city: item.city,
           country: item.country,
-          company: item.company,
           school: item.educationschool,
           profileCredential: item.profilecredential,
-          comapany: item.companyname,
+          company: item.companyname,
           position: item.companyposition,
           startyear: item.companystart,
           endyear: item.companyend,
@@ -130,10 +135,27 @@ class Profile extends Component {
           educationdegree: item.educationdegree,
           educationend: item.educationend,
           state: item.state,
-          zipcode: item.zipcode
+          zipcode: item.zipcode,
+          edu:item.education,
+          comp:item.company,
+  
+          
         });
+
       });
+      if (this.state.edu)
+      {
+      var edu=[...this.state.edu];
+      console.log("education",edu);}
+      if (this.state.comp)
+      {
+      var comp=[...this.state.comp];
+      console.log("company start",comp);}
+      
     });
+  }
+  componentDidMount() {
+     this.getProfile();
   }
 
   stateChangeHandler = e => {
@@ -204,7 +226,7 @@ class Profile extends Component {
 
   companyChangeHandler = e => {
     this.setState({
-      company: e.target.value
+      companyname: e.target.value
     });
   };
 
@@ -242,7 +264,7 @@ class Profile extends Component {
       .post(url.url + "profile/imgupload", formData, config)
       .then(response => {
         alert("The file is successfully uploaded");
-        let image = response.data.message;
+        let image =  response.data.message;
         localStorage.setItem('image', image);
         this.setState({
           file_status: response.data.message
@@ -373,32 +395,39 @@ class Profile extends Component {
     //prevent page from refresh
     e.preventDefault();
 
+    if (!(this.state.companyname || this.state.position || this.state.startyear || this.state.endyear))
+    {alert(
+      "Please enter a valid value"
+    );}
+    else{
+
+    const obj = {
+      companyname: this.state.companyname,
+      companyposition: this.state.position,
+      companystart: this.state.startyear,
+      companyend: this.state.endyear
+    };
+
+    const exp = this.state.comp.slice();
+    exp.push(obj);
+
     const data = [
       { propName: "email", value: localStorage.email },
-      { propName: "companyname", value: this.state.company },
-      { propName: "companyposition", value: this.state.position },
-      { propName: "companystart", value: this.state.startyear },
-      { propName: "companyend", value: this.state.endyear }
+      { propName: "company", value: exp },
     ];
-
-    const data1 = {
-      company: this.state.company,
-      position: this.state.position,
-      startyear: this.state.startyear,
-      endyear: this.state.endyear
-    };
     //set the with credentials to true
     axios.defaults.withCredentials = true;
     //make a post request with the user data
     axios.patch(url.url + "profile", data).then(response => {
       console.log("Status Code : ", response.status);
       if (response.status === 200) {
-        this.props.onProfileLoad(data1);
+     
 
         this.setState({
           authFlag: true,
           status: response.data.message
         });
+        this.getProfile();
       } else {
         console.log("Status Code : ", response.status);
         this.setState({
@@ -406,6 +435,7 @@ class Profile extends Component {
         });
       }
     });
+  }
   };
 
   updateEducationButton = e => {
@@ -447,6 +477,59 @@ class Profile extends Component {
       }
     });
   };
+
+  addEducation = e => {
+    var headers = new Headers();
+    //prevent page from refresh
+    e.preventDefault();
+    if (!(this.state.school || this.state.educationdegree || this.state.educationstart || this.state.educationend))
+    {alert(
+      "Please enter a valid value"
+    );}
+    else{
+    const obj ={
+      educationschool:this.state.school,
+      educationdegree:this.state.educationdegree,
+      educationstart:this.state.educationstart,
+      educationend:this.state.educationend
+    }
+    const edu = this.state.edu.slice();
+    edu.push(obj);
+
+    const data = [
+      { propName: "email", value: localStorage.email },
+      { propName: "education", value: edu },
+    ];
+
+    const data1 = {
+      school: this.state.school,
+      educationdegree: this.state.educationdegree,
+      educationend: this.state.educationend,
+      educationstart: this.state.educationstart
+    };
+    //set the with credentials to true
+    axios.defaults.withCredentials = true;
+    //make a post request with the user data
+    axios.patch(url.url + "profile", data).then(response => {
+      console.log("Status Code : ", response.status);
+      if (response.status === 200) {
+        this.props.onProfileLoad(data1);
+
+        this.setState({
+          authFlag: true,
+          status: response.data.message
+        });
+        this.getProfile();
+      } else {
+        console.log("Status Code : ", response.status);
+        this.setState({
+          status: response.data
+        });
+      }
+    });
+  }
+  };
+
 
   updateLocationButton = e => {
     var headers = new Headers();
@@ -533,6 +616,30 @@ class Profile extends Component {
     if (this.state.profileCredential) {
       credentialText = "Edit";
     }
+    var experienceText = <p><a href="#employment"><i class="fas fa-briefcase" /> Add Employment credential</a></p>;
+    if ([...this.state.comp])
+    {
+      console.log("company", this.state.comp);
+      var comp=[...this.state.comp];
+      console.log("company", comp);
+      if(comp.length > 0)
+        experienceText =<p><i class="fas fa-briefcase" /> {comp[comp.length - 1].companyposition} at {comp[comp.length - 1].companyname}</p>;
+    }
+    var locationText ="Add Location credential";
+    if(this.state.city || this.state.state)
+    {
+      locationText = <b>{this.state.city} {this.state.state}</b>;
+    }
+
+    var educationText= <p><a href="#education"> <i class="fas fa-graduation-cap" /> Add education credential</a></p>;
+    if ([...this.state.edu])
+    {
+      console.log("education", this.state.edu);
+      var edu=[...this.state.edu];
+      console.log("education", edu);
+      if(edu.length > 0)
+        educationText =<p><i class="fas fa-graduation-cap" /> {edu[edu.length - 1].educationdegree} at {edu[edu.length - 1].educationschool}</p>;
+    }
 
     return (
       <div class="container">
@@ -546,7 +653,7 @@ class Profile extends Component {
               <p>
                 <div id="image" class="modalDialog">
                   <div>
-                    <a href="#close" title="Close" class="close" onClick={() => { this.setState({ status: "" }); }}>X</a>
+                    <a href="#close" title="Close" class="close" onClick={() => { this.setState({ file_status: "" }); }}>X</a>
                     <h4>Add/Update image </h4>
                     <br />
                     <form onSubmit={this.onFormSubmit}>
@@ -564,7 +671,7 @@ class Profile extends Component {
                       <font color="red">{this.state.file_status}</font>
                     </p>
                     <br /><br />
-                    <a href="#close"><button type="reset" onClick={() => { this.setState({ status: "" }); }} class="btn btn-danger">Cancel</button>{" "}</a>{" "}&nbsp;
+                    <a href="#close"><button type="reset" onClick={() => { this.setState({ file_status: "" }); }} class="btn btn-danger">Cancel</button>{" "}</a>{" "}&nbsp;
                       </div>
                 </div>
                 <p>
@@ -650,7 +757,14 @@ class Profile extends Component {
             </div>
             <div class="col-md-3">
               <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <p>Credentials and Highlights</p>
+             
+
+              <div id="edit" class="modalDialog">
+              <Editprofile  edu={this.state.edu} />
+
+              </div>
+              <p>Credentials and Highlights <a href="#edit"><i class="fas fa fa-edit" /> </a></p>
+
                 <hr />
                 <tr />
                 <tr>
@@ -671,7 +785,7 @@ class Profile extends Component {
                         <div class="form-group row">
                           <div class="col-5">Company/Organisation</div>
                           <div class="col-7">
-                            <input onChange={this.companyChangeHandler} type="text" class="form-control" value={this.state.company} placeholder="company/organisation" />
+                            <input onChange={this.companyChangeHandler} type="text" class="form-control" value={this.state.companyname} placeholder="company/organisation" />
                           </div>
                         </div>
                         <br />
@@ -696,7 +810,7 @@ class Profile extends Component {
                         <button onClick={this.updateExperienceButton} class="btn btn-primary">Update</button>
                       </div>
                     </div>
-                    <p><a href="#employment"><i class="fas fa-briefcase" /> Add Employment credential</a></p>
+                    <b>{experienceText}</b>
                   </td>
                 </tr>
                 <tr>
@@ -738,12 +852,10 @@ class Profile extends Component {
                         <br /> <br />
                         <a href="#close"><button type="reset" class="btn btn-danger" onClick={() => { this.setState({ status: "" }); }}>Cancel</button></a>
                         &nbsp;
-                        <button onClick={this.updateEducationButton} class="btn btn-primary">Update</button>
+                        <button onClick={this.addEducation} class="btn btn-primary">Update</button>
                       </div>
                     </div>
-                    <p>
-                      <a href="#education"> <i class="fas fa-graduation-cap" /> Add education credential</a>
-                    </p>
+                    <b>{educationText}</b>
                   </td>
                 </tr>
                 <tr>
@@ -781,7 +893,7 @@ class Profile extends Component {
                         <button onClick={this.updateLocationButton} class="btn btn-primary">Update</button>
                       </div>
                     </div>
-                    <p><a href="#location"><i class="fas fa-map-marker" /> Add Location credential</a></p>
+                    <p><a href="#location"><i class="fas fa-map-marker" /> {locationText}</a></p>
                   </td>
                 </tr>
               </table>
@@ -797,7 +909,6 @@ class Profile extends Component {
               <ul style={{ listStyleType: "none" }} >
                 <li><a onClick={() => { this.setState({ feeds: "Profile" }) }} class="a-hover">Profile</a></li>
                 <li><a onClick={() => { this.setState({ feeds: "Questions" }) }} class="a-hover">Questions</a></li>
-                {/* <li><a href="/questionCard" onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</a></li> */}
                 <li><Link to="/useranswerdisplay" onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</Link></li>
                 <li><a onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</a></li>
                 <li><a onClick={() => { this.setState({ feeds: "Followers" }) }} class="a-hover">Followers</a></li>
