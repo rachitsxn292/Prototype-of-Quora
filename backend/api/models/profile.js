@@ -21,9 +21,12 @@ const profileSchema = mongoose.Schema({
     state:String,
     zipcode:String,
     education:Array,
-    company:Array
-    
-    
+    company:Array,
+    views:{
+        type: Number, 
+        default: 0
+    }
+  
    });
 
 module.exports = mongoose.model('Profile', profileSchema);
