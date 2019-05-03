@@ -9,6 +9,9 @@ import SignUp from './SignUp/SignUp';
 import Profile from './Profile/Profile';
 import Topic from './TopicDisplay/Topic';
 import ViewQuestions from './ViewQuestions/ViewQuestions';
+import Messages from './Messages/Messages';
+import AnswerDisplay from './AnswerDisplay/AnswerDisplay';
+import UserAnswerDisplay from './UserAnswerDisplay/UserAnswerDisplay';
 
 
 
@@ -31,6 +34,9 @@ class Main extends Component {
                 <Route path="/profile" component={Profile}/>
                 <Route path="/topic" component={Topic}/>
                 <Route path="/viewquestion" component={ViewQuestions}/>
+                <Route path='/messages' component={Messages}/>
+				<Route path='/questionCard' component={AnswerDisplay}/>
+                <Route path='/useranswerdisplay' component={UserAnswerDisplay}/>
                 
                
             </div>
