@@ -28,13 +28,13 @@ class QuestionCard extends Component {
             console.log('IS ANAIDIDI', answer.isAnonymous);
             if (answer.isAnonymous === false) {
                 return (
-                    <AnswerCard key={answer._id} id={answer._id} answerDisp={answer.answer} fname={answer.fname} lname={answer.lname} date={answer.posted} upVote={answer.upVote} downVote={answer.downVote} />
+                    <AnswerCard key={answer._id} image={answer.image} id={answer._id} answerDisp={answer.answer} fname={answer.fname} lname={answer.lname} date={answer.posted} upVote={answer.upVote} downVote={answer.downVote} isCommentable={answer.isCommentable} isVotable={answer.isVotable} views={answer.views}/>
                 );
             }
 
             else {
                 return (
-                    <AnswerCard key={answer._id} id={answer._id} answerDisp={answer.answer} fname="Anonymous" lname="" date={answer.posted} upVote={answer.upVote} downVote={answer.downVote} />
+                    <AnswerCard key={answer._id} image="http://www.clker.com/cliparts/l/4/M/i/d/X/turquoise-anonymous-man-md.png" id={answer._id} answerDisp={answer.answer} fname="Anonymous" lname="" date={answer.posted} upVote={answer.upVote} downVote={answer.downVote} isCommentable={answer.isCommentable} isVotable={answer.isVotable} views={answer.views} />
                 );
             }
         })
@@ -43,15 +43,15 @@ class QuestionCard extends Component {
 
         return (
             <div>
-                            <div class="card bg-light text-dark">
-                                <h4 style={{ paddingLeft: '25px', paddingRight: '25px' }} class="card-title">
-                                    <br />
-                                    {localStorage.getItem('question')}
-                                </h4>
-                                {/* {AnswerCard comes here} */}
-                                
-                            </div>
-                            {display}
+                <div class="card bg-light text-dark">
+                    <h4 style={{ paddingLeft: '25px', paddingRight: '25px' }} class="card-title">
+                        <br />
+                        {localStorage.getItem('question')}
+                    </h4>
+                    {/* {AnswerCard comes here} */}
+
+                </div>
+                {display}
             </div>
         );
     }

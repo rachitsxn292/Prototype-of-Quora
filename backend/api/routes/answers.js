@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const Answers = require('../models/answers');
 const Comments = require('../models/comments');
 const Questions = require('../models/question');
+const Votes = require('../models/votes');
+const Bookmarks = require('../models/bookmarks');
 var multer = require('multer');
 const path = require("path");
 
@@ -78,11 +80,14 @@ router.post('/', (req, res) => {
             owner: req.body.email,
             answer: req.body.answer,
             isAnonymous: req.body.anonymousStatus,
+            isCommentable: req.body.commentable,
+            isVotable: req.body.votable,
+            upVote: 0,
+            downVote: 0,
+            views: 0,
             fname: req.body.fname,
             lname: req.body.lname,
-            imageAns: filepath,
-            upVote: 0,
-            downVote: 0
+            image: req.body.image
         });
 
         if (req.body.answer) {
@@ -139,37 +144,86 @@ router.post('/edit', (req, res) => {
 
 //to upvote an answer
 router.post('/upvote', (req, res) => {
-    Answers.update({ _id: req.body._id }, { $inc: { upVote: 1 } })
-        .exec()
-        .then(result => {
-            console.log(result);
+
+    Votes.find({ answerID: req.body._id, owner: req.body.email }).then(result => {
+        if (result.length > 0) {
             res.status(200).json({
-                message: "UpVoted"
-            });
-        }).catch(err => {
-            console.log(err);
-            res.status(204).json({
-                message: "Problem Upvoting"
-            });
-        });
+                flag: false,
+                message: "You are not allowed to vote more than once"
+            })
+        }
+        else {
+            Answers.update({ _id: req.body._id }, { $inc: { upVote: 1, views: 1 } })
+                .exec()
+                .then(result => {
+                    console.log(result);
+                    const vote = new Votes({
+                        _id: new mongoose.Types.ObjectId(),
+                        answerID: req.body._id,
+                        owner: req.body.email,
+                        upVote: true,
+                        downVote: false
+                    });
+
+                    vote.save().then(result => {
+                        console.log(result);
+                        res.status(200).json({
+                            flag: true,
+                            message: "Successfully Upvoted"
+                        })
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
+    }).catch(err => {
+        console.log(err);
+    })
+
+
 });
 
 
 //to downvote an answer
 router.post('/downvote', (req, res) => {
-    Answers.update({ _id: req.body._id }, { $inc: { downVote: 1 } })
-        .exec()
-        .then(result => {
-            console.log(result);
+    Votes.find({ answerID: req.body._id, owner: req.body.email }).then(result => {
+        if (result.length > 0) {
             res.status(200).json({
-                message: "DownVoted"
-            });
-        }).catch(err => {
-            console.log(err);
-            res.status(204).json({
-                message: "Problem Downvoting"
-            });
-        });
+                flag: false,
+                message: "You are not allowed to vote more than once"
+            })
+        }
+        else {
+            Answers.update({ _id: req.body._id }, { $inc: { upVote: 1, views: 1 } })
+                .exec()
+                .then(result => {
+                    console.log(result);
+                    const vote = new mongoose({
+                        _id: new mongoose.Types.ObjectId(),
+                        answerID: req.body._id,
+                        owner: req.body.email,
+                        upVote: false,
+                        downVote: true
+                    });
+
+                    vote.save().then(result => {
+                        console.log(result);
+                        res.status(200).json({
+                            flag: true,
+                            message: "Successfully Downvoted"
+                        })
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                }).catch(err => {
+                    console.log(err);
+                });
+
+
+        }
+    })
 });
 
 
@@ -205,15 +259,15 @@ router.post('/comment', (req, res) => {
 router.get('/comment', (req, res) => {
     const id = req.query._id;
     console.log('COMMENTS', id);
-    Comments.find({answerID: id}).exec().then(docs=>{
+    Comments.find({ answerID: id }).exec().then(docs => {
         console.log.bind('COMMENTS', docs);
-        if(docs.length > 0){
+        if (docs.length > 0) {
             res.status(200).json(docs);
         }
-        else{
-            res.status(200).json({message: "No Comments for this answer"})
+        else {
+            res.status(200).json({ message: "No Comments for this answer" })
         }
-    }).catch(err=>{
+    }).catch(err => {
         res.status(204).json({
             err: err
         })
@@ -260,5 +314,67 @@ router.get('/question', (req, res) => {
         });
     })
 });
+
+
+router.post('/bookmark', (req, res) => {
+    var answerID = req.body._id;
+    var questionID = req.body.questionID;
+    var answer = req.body.answer;
+    var email = req.body.email;
+    Bookmarks.find({ answerID: answerID, owner: email }).then(result => {
+        if (result.length > 0) {
+            Bookmarks.remove({ answerID: answerID, owner: email }).then(resultBook => {
+                res.status(200).json({
+                    bookmarked: false
+                });
+            });
+        }
+        else {
+            const bookmark = new Bookmarks({
+                _id: new mongoose.Types.ObjectId(),
+                questionID: questionID,
+                answerID: answerID,
+                owner: email,
+                answer: answer
+            });
+
+            bookmark.save().then(result => {
+                console.log(result);
+                res.status(200).json({
+                    bookmarked: true
+                })
+            });
+        }
+    })
+})
+
+router.get('/bookmark', (req, res) => {
+    var questionID = req.query.questionID;
+    var email = req.query.email;
+    Bookmarks.find({ questionID: questionID, owner: email }).then(result => {
+        if (result.length > 0) {
+            res.status(200).json(result);
+        }
+        else {
+            res.status(200).json({
+                message: "No Bookmarked answers found"
+            })
+        }
+    })
+})
+
+router.post('/views', (req, res) => {
+    var questionID = req.body.questionID;
+    Answers.update({ questionID: questionID }, { $inc: { views: 1 } }, { multi: true }).then(resultA => {
+        console.log(resultA);
+        Questions.update({ _id: questionID }, { $inc: { views: 1 } }, { multi: true }).then(resultQ => {
+            console.log(resultQ);
+            res.status(200).json({
+                message: 'You view this answer'
+            })
+        })
+    });
+
+})
 
 module.exports = router;

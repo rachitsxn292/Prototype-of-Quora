@@ -12,8 +12,11 @@ const answerSchema = mongoose.Schema({
     lname: String,
     image: String,
     isAnonymous: Boolean,
+    isCommentable: Boolean,
+    isVotable: Boolean,
     upVote: Number,
     downVote: Number,
+    views: Number,
     posted: {type: Date, default: Date.now}
 })
 

@@ -148,28 +148,61 @@ router.post('/edit',(req,res)=>{
 })
 
 //For inserting details of follower who has followed that particular question
-router.post('/follow',(req,res)=>{
-    var questionid=req.body.questionid;
-    var follower=req.body.follower;
+router.post('/follow', (req, res) => {
+    var questionid = req.body.qid;
+    var follower = req.body.follower;
 
     const entry = new Follower({
         _id: new mongoose.Types.ObjectId(),
-        questionid: req.body.questionid,
-        follower:req.body.follower,
-      })
-         entry.save()
-            .then(docs => {
-                    console.log("Details of Follower Insertion",docs);
-                    res.status(200).json({
-                        message:"Sucessfully Inserted"
+        questionid: req.body.qid,
+        follower: req.body.follower,
+    })
+    Follower.find({ questionid: req.body.qid, follower: req.body.follower }).then(result => {
+        if ((result.length===0)) {
+            {
+                entry.save()
+                    .then(docs => {
+                        console.log("Details of Follower Insertion", docs);
+                        res.status(200).json({
+                            success: true,
+                            message: "Sucessfully Followed"
                         })
                     })
-            .catch(err => {console.log(err)
-                    res.status(204).json({
-                        message: "Error in Follower Insert"
-            })})
-   
+                    .catch(err => {
+                        console.log(err)
+                        res.status(204).json({
+                            message: "Error in Follower Insert"
+                        })
+                    })
+            }
+        }
+        else{
+            res.status(200).json({
+                message: "You cannot follow more than once"
+            })
+        }
+    })
+
 })
+
+router.get('/followNumber', (req, res) => {
+    var qid = req.query.qid;
+    var query = { questionid: qid };
+    console.log("Your Question Id is ", qid);
+    Follower.find(query)
+        .exec()
+        .then(docs => {
+            console.log("Follow Number", docs);
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
+
+});
 
 
 module.exports = router;

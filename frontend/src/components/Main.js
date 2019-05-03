@@ -12,7 +12,7 @@ import ViewQuestions from './ViewQuestions/ViewQuestions';
 import Messages from './Messages/Messages';
 import AnswerDisplay from './AnswerDisplay/AnswerDisplay';
 import UserAnswerDisplay from './UserAnswerDisplay/UserAnswerDisplay';
-
+import Bookmarks from './Bookmarks/Bookmarks';
 
 
 
@@ -37,7 +37,7 @@ class Main extends Component {
                 <Route path='/messages' component={Messages}/>
 				<Route path='/questionCard' component={AnswerDisplay}/>
                 <Route path='/useranswerdisplay' component={UserAnswerDisplay}/>
-                
+                <Route path='/bookmarks' component={Bookmarks}/>
                
             </div>
          

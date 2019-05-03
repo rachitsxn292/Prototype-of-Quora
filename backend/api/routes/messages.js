@@ -40,6 +40,16 @@ router.get('/', (req, res) => {
          console.log(result);
          res.status(200).json(result);
      }).catch(err=>console.log(err));
- })
+})
+
+router.get('/sent', (req, res) => {
+    const {email} = req.query;
+    var query = {from: email};
+
+    Messages.find(query).exec().then(result=>{
+        console.log(result);
+        res.status(200).json(result);
+    }).catch(err=>console.log(err));
+})
 
 module.exports = router;
