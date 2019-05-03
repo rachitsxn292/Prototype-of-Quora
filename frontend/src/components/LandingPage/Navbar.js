@@ -136,7 +136,8 @@ class Navbar extends Component {
                         <div class="dropdown-menu">
 
                             <Link to="/profile" class="dropdown-item">Profile</Link>
-                            <a class="dropdown-item" href="#">Messages</a>
+                            {/* <a class="dropdown-item" href="#">Messages</a> */}
+                            <Link to="/messages" class="dropdown-item">Messages</Link>
                             <a class="dropdown-item" href="#"><Link to='/viewquestion'>Your Content</Link></a>
 
                             <Link to="/" onClick={this.handleLogout} class="dropdown-item">Logout</Link>

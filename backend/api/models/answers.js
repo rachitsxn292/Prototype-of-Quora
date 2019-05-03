@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Comments = require('./comments');
 
 const answerSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -9,6 +8,8 @@ const answerSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    fname: String,
+    lname: String,
     image: String,
     isAnonymous: Boolean,
     upVote: Number,

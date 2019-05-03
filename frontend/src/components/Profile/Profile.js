@@ -6,6 +6,7 @@ import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import url from "../Url/Url";
 import * as state from "./state";
+import { Link } from 'react-router-dom';
 
 class Profile extends Component {
   constructor() {
@@ -796,7 +797,8 @@ class Profile extends Component {
               <ul style={{ listStyleType: "none" }} >
                 <li><a onClick={() => { this.setState({ feeds: "Profile" }) }} class="a-hover">Profile</a></li>
                 <li><a onClick={() => { this.setState({ feeds: "Questions" }) }} class="a-hover">Questions</a></li>
-                <li><a onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</a></li>
+                {/* <li><a href="/questionCard" onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</a></li> */}
+                <li><Link to="/useranswerdisplay" onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</Link></li>
                 <li><a onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</a></li>
                 <li><a onClick={() => { this.setState({ feeds: "Followers" }) }} class="a-hover">Followers</a></li>
                 <li><a onClick={() => { this.setState({ feeds: "Following" }) }} class="a-hover">Following</a></li>
