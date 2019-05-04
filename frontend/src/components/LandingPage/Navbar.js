@@ -138,7 +138,7 @@ class Navbar extends Component {
                             <Link to="/profile" class="dropdown-item">Profile</Link>
                             {/* <a class="dropdown-item" href="#">Messages</a> */}
                             <Link to="/messages" class="dropdown-item">Messages</Link>
-                            <a class="dropdown-item" href="#"><Link to='/viewquestion'>Your Content</Link></a>
+                            <Link to="/yourcontent"  class="dropdown-item">Your Content</Link>
 
                             <Link to="/" onClick={this.handleLogout} class="dropdown-item">Logout</Link>
                         </div>
@@ -216,12 +216,10 @@ class Navbar extends Component {
                                     }
 
                                     {this.state.topic.map(res => {
-                                        return (
-                                            <div id="empty" class="dropdown-header"><small>Topic : </small> <Link to="/topicdisplay" class="dropdown-item" onClick={
-                                                () => {
-                                                    localStorage.setItem('topicdisplay', res._id);
-                                                }
-                                            }>{res.topic}</Link></div>
+                                           return (
+                                            <div id="empty" class="dropdown-header"><small>Topic : </small> <Link to="/topicfeed" class="dropdown-item" 
+                                             onClick={() => localStorage.setItem("topicFeed",res.topic) } 
+                                            >{res.topic}</Link></div>
                                         )
                                     })
                                     }

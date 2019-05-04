@@ -5,9 +5,9 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import url from '../Url/Url';
-import QACard from './QACard';
+import QACard from '../Home/QACard';
 
-class Home extends Component {
+class TopicFeed extends Component {
     constructor() {
         super();
         this.state = {
@@ -19,7 +19,9 @@ class Home extends Component {
             questionsLog: [],
             page: 0,
             limit: 5,
-            topics: []
+            topics: [],
+            followStatus: "Follow"
+
         }
         this.nxtHandler = this.nxtHandler.bind(this);
         this.prvHandler = this.prvHandler.bind(this);
@@ -51,7 +53,9 @@ class Home extends Component {
             this.paginate(-1);
         }
         const { limit } = this.state;
-        axios.get(url.url + 'questions/logQues', { params: { limit, t } }).then(result => {
+        let topic = localStorage.getItem("topicFeed");
+
+        axios.get(url.url + 'questions/logQues', { params: { limit, t, topic } }).then(result => {
             this.setState({
                 questionsLog: result.data
             })
@@ -62,7 +66,9 @@ class Home extends Component {
         this.paginate(1);
         let t = this.state.page + 1;
         const { limit } = this.state;
-        axios.get(url.url + 'questions/logQues', { params: { limit, t } }).then(result => {
+        let topic = localStorage.getItem("topicFeed");
+
+        axios.get(url.url + 'questions/logQues', { params: { limit, t, topic } }).then(result => {
             this.setState({
                 questionsLog: result.data
             })
@@ -77,7 +83,21 @@ class Home extends Component {
     componentDidMount() {
         this.loadTopics();
 
-        axios.get(url.url + 'questions/noLogQues').then(result => {
+        let topic = localStorage.getItem("topicFeed");
+        let follower = 'divistar72@gmail.com';
+
+        //check if the topic is followed
+
+        axios.get(url.url + 'topics/isfollowed', { params: { topic, follower } }).then(result => {
+            if (result.data.length > 0) {
+                this.setState({
+                    followStatus: "Followed"
+                })
+            } //that  means user follows this topic.
+        });
+
+
+        axios.get(url.url + 'questions/noLogQues', { params: { topic } }).then(result => {
             this.setState({
                 questions: this.state.questions.concat(result.data)
             })
@@ -92,18 +112,41 @@ class Home extends Component {
             this.paginate(-1);
         }
         const { limit } = this.state;
-        axios.get(url.url + 'questions/logQues', { params: { limit, t } }).then(result => {
+        axios.get(url.url + 'questions/logQues', { params: { limit, t, topic } }).then(result => {
             this.setState({
                 questionsLog: result.data
             })
         })
     }
 
+
+    FollowTopic() {
+
+        //if already followed then do nothing
+
+        if (this.state.followStatus != "Followed") {
+
+
+
+            var follower = 'divistar72@gmail.com';
+            var topic = localStorage.getItem('topicFeed');
+            axios.post(url.url + 'topics/follow', { topic, follower }).then(result => {
+                const data = result.data;
+                this.setState({
+                    followStatus: "Followed"
+                })
+                // alert(data.message);
+            })
+
+
+        }
+    }
+
     render() {
 
         let topics = this.state.topics.map(topic => {
             return (
-                <p><Link to="/topicfeed"   onClick={() => localStorage.setItem("topicFeed",topic.topic) }  ><img class="img-profile rounded" src={"/uploads/topic/" + topic.picture} height="25" width="25" /><small> {topic.topic}</small></Link></p>
+                <p><Link to="/topic"><img class="img-profile rounded" src={"/uploads/topic/" + topic.picture} height="25" width="25" /><small> {topic.topic}</small></Link></p>
             )
         })
         let home = null;
@@ -131,17 +174,18 @@ class Home extends Component {
                 <div class="row">
 
                     <div class="col-md-2">
-                        {topics}
-                        <p><Link to="/topic"><small>  Add new Topic</small></Link></p>
+
                     </div>
 
                     <div class="col-md-8">
 
+                        <a href="#"> {localStorage.getItem("topicFeed")} </a> |
+                        <a href="#" onClick={(e) => this.FollowTopic(e)}> {this.state.followStatus} </a>
                         {questionDisplay}
                     </div>
 
                     <div class="col-md-2">
-                        Improve your feed
+
                     </div>
                 </div>
                 <div id="myModal" class="modal fade" role="dialog">
@@ -173,11 +217,11 @@ class Home extends Component {
                     <div class="row">
 
                         <div class="col-md-2">
-                            {topics}
-                            <p><Link to="/topic"><small>  Add new Topic</small></Link></p>
                         </div>
 
                         <div class="col-md-8">
+                            <a href="#"> {localStorage.getItem("topicFeed")} </a>
+                            <a href="#" onClick={(e) => this.FollowTopic(e)}> {this.state.followStatus} </a>
 
                             {questionDisplayLog}
                             <button class="btn btn-sm btn-primary" onClick={this.prvHandler} name="prev" id="prev">&lt;</button>
@@ -186,8 +230,8 @@ class Home extends Component {
 
 
                         <div class="col-md-2">
-                            Improve your feed
-                </div>
+
+                        </div>
                     </div>
                     <div id="myModal" class="modal fade" role="dialog">
                         <div class="modal-dialog">
@@ -220,5 +264,4 @@ class Home extends Component {
 
     }
 }
-//export Home Component
-export default Home;
+export default TopicFeed;

@@ -57,7 +57,6 @@ class Home extends Component {
                 <div class="row">
 
                     <div class="col-md-2">
-                        <p><a href=""><img class="img-profile rounded" src="warfare.jpg" height="25" width="25" /><small> Warfare</small></a></p>
                     </div>
 
                     <div class="col-md-8">
