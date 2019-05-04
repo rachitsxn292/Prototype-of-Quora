@@ -17,7 +17,8 @@ const answerSchema = mongoose.Schema({
     upVote: Number,
     downVote: Number,
     views: Number,
-    posted: {type: Date, default: Date.now}
+    posted: {type: Date, default: Date.now},
+    question: String,
 })
 
 module.exports = mongoose.model('Answers', answerSchema);

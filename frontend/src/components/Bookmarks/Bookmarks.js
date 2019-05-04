@@ -80,7 +80,6 @@ class Bookmarks extends Component {
                     <div class="row">
 
                         <div class="col-md-2">
-                            <p><a href=""><img class="img-profile rounded" src="warfare.jpg" height="25" width="25" /><small> Warfare</small></a></p>
                             {topics}
                             <p><Link to="/topic"><small>  Add new Topic</small></Link></p>
                         </div>

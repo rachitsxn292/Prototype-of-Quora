@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 
-const followerSchema = mongoose.Schema({
+const topicfollowerSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    questionid: String,
     follower:String,
-    question:String,
+    topic:String,
     followed:{type:Date,
       default:Date.now}
   });
 
-module.exports = mongoose.model('Follower', followerSchema);
+module.exports = mongoose.model('Topicfollower', topicfollowerSchema);

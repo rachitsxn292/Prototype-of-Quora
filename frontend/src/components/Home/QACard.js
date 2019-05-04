@@ -320,7 +320,9 @@ class QACard extends Component {
                                             var fname = localStorage.getItem('fname');
                                             var lname = localStorage.getItem('lname');
                                             var image = localStorage.getItem('image');
-                                            Axios.post(url.url + 'answers', { _id, email, answer, anonymousStatus, fname, lname, image, commentable, votable }).then(result => {
+                                            var question = localStorage.getItem('question');
+
+                                            Axios.post(url.url + 'answers', { _id, email, answer, anonymousStatus, fname, lname, image, commentable, votable, question }).then(result => {
                                                 const data = result.data;
                                                 alert(data.message);
                                             })
@@ -346,7 +348,8 @@ class QACard extends Component {
 
                                 var qid = this.props.id;
                                 var follower = localStorage.getItem('email');
-                                Axios.post(url.url + 'questions/follow', { qid, follower })
+                                var question = localStorage.getItem('question');
+                                Axios.post(url.url + 'questions/follow', { qid, follower, question })
                                     .then(response => {
                                         if (response.data.success === true) {
                                             this.setState({

@@ -87,7 +87,8 @@ router.post('/', (req, res) => {
             views: 0,
             fname: req.body.fname,
             lname: req.body.lname,
-            image: req.body.image
+            image: req.body.image,     
+            question: req.body.question
         });
 
         if (req.body.answer) {
@@ -376,5 +377,24 @@ router.post('/views', (req, res) => {
     });
 
 })
+
+
+//get answers by user
+router.get('/answered', (req, res) => {
+    var owner=req.query.owner;
+    var query={owner:owner};
+    Answers.find(query)
+        .exec()
+        .then(docs => {
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
+
+});
 
 module.exports = router;

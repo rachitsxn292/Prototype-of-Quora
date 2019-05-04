@@ -13,10 +13,10 @@ import Messages from './Messages/Messages';
 import AnswerDisplay from './AnswerDisplay/AnswerDisplay';
 import UserAnswerDisplay from './UserAnswerDisplay/UserAnswerDisplay';
 import Bookmarks from './Bookmarks/Bookmarks';
-
-
-
 import Navbar from './LandingPage/Navbar';
+import TopicFeed from './TopicDisplay/TopicFeed';
+import YourContent from './User/YourContent';
+
 //Create a Main Component
 class Main extends Component {
     render(){
@@ -38,6 +38,8 @@ class Main extends Component {
 				<Route path='/questionCard' component={AnswerDisplay}/>
                 <Route path='/useranswerdisplay' component={UserAnswerDisplay}/>
                 <Route path='/bookmarks' component={Bookmarks}/>
+                <Route path='/topicfeed' component={TopicFeed}/>
+                <Route path="/yourcontent" component={YourContent}/>
                
             </div>
          

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Topic = require('../models/topic');
 var multer = require('multer');
 const path = require("path");
-
+const Topicfollower = require('../models/topicfollower');
 
 router.get('/', (req, res, next) => {
     Topic.find()
@@ -81,5 +81,40 @@ router.post('/', (req, res, next) => {
 //     });
 //     res.end("Topic Created");
 
+
+//follow a topic
+router.post('/follow', (req, res, next) => {
+    const param = req.body.topic;
+    const follower = req.body.follower;
+    var object = new Topicfollower({ _id: new mongoose.Types.ObjectId(), topic: param, follower: follower });
+    object
+        .save()
+        .then(result => {
+            console.log(result);
+        }).catch(err => console.log(err));
+    
+        res.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        res.end("Topic followed");
+    });
+
+//check if a topic is followed
+    
+    router.get('/isfollowed', (req, res, next) => {
+        var topic = req.query.topic;
+        var follower = req.query.follower;
+        Topicfollower.find({topic:topic, follower: follower})
+        .exec()
+        .then(docs => {
+    
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        })
+        });
 
 module.exports = router;
