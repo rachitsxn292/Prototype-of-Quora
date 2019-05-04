@@ -143,7 +143,7 @@ class Home extends Component {
 
                     <div class="col-md-2">
                         Improve your feed
-            </div>
+                    </div>
                 </div>
                 <div id="myModal" class="modal fade" role="dialog">
                     <div class="modal-dialog">

@@ -9,8 +9,8 @@ const questionSchema = mongoose.Schema({
     userimage:String,
     topic:String,
     posted:{type:Date,
-            default:Date.now}
-    
+            default:Date.now},
+    views: Number
     
    });
 

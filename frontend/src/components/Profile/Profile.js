@@ -910,7 +910,8 @@ class Profile extends Component {
                 <li><a onClick={() => { this.setState({ feeds: "Profile" }) }} class="a-hover">Profile</a></li>
                 <li><a onClick={() => { this.setState({ feeds: "Questions" }) }} class="a-hover">Questions</a></li>
                 <li><Link to="/useranswerdisplay" onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</Link></li>
-                <li><a onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</a></li>
+                {/* <li><a onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</a></li> */}
+                <li><Link to='/bookmarks' onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</Link></li>
                 <li><a onClick={() => { this.setState({ feeds: "Followers" }) }} class="a-hover">Followers</a></li>
                 <li><a onClick={() => { this.setState({ feeds: "Following" }) }} class="a-hover">Following</a></li>
               </ul>
