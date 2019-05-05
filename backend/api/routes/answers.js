@@ -383,9 +383,26 @@ router.post('/views', (req, res) => {
 router.get('/answered', (req, res) => {
     var owner=req.query.owner;
     var query={owner:owner};
+    var sort = req.query.sort == null ||  req.query.sort == "" ? -1 : req.query.sort; //for your content
+    var yearFilter = req.query.year == null ||  req.query.year == "" ? "" : req.query.year;//for your content
+
     Answers.find(query)
+    .sort({posted: sort})
         .exec()
         .then(docs => {
+
+            if(yearFilter != "")
+            {
+                
+                var original_docs = docs;
+                docs = [];
+                for(var i in original_docs){
+                    if(yearFilter == original_docs[i].posted.getFullYear())
+                    { docs.push(original_docs[i]);}            
+                 }
+                
+            }
+    
             res.status(200).json(docs);
         })
         .catch(err => {

@@ -20,7 +20,9 @@ class TopicFeed extends Component {
             page: 0,
             limit: 5,
             topics: [],
-            followStatus: "Follow"
+            followStatus: "Follow",
+            userEmail: localStorage.getItem("email"),
+
 
         }
         this.nxtHandler = this.nxtHandler.bind(this);
@@ -84,7 +86,7 @@ class TopicFeed extends Component {
         this.loadTopics();
 
         let topic = localStorage.getItem("topicFeed");
-        let follower = 'divistar72@gmail.com';
+        var follower = this.state.userEmail;
 
         //check if the topic is followed
 
@@ -119,7 +121,6 @@ class TopicFeed extends Component {
         })
     }
 
-
     FollowTopic() {
 
         //if already followed then do nothing
@@ -127,16 +128,24 @@ class TopicFeed extends Component {
         if (this.state.followStatus != "Followed") {
 
 
-
-            var follower = 'divistar72@gmail.com';
+            var follower = this.state.userEmail;
             var topic = localStorage.getItem('topicFeed');
-            axios.post(url.url + 'topics/follow', { topic, follower }).then(result => {
-                const data = result.data;
-                this.setState({
-                    followStatus: "Followed"
+
+            if(follower == null || follower == "")
+            {
+                alert("Please login first!");
+            }
+            else
+            {
+                axios.post(url.url + 'topics/follow', { topic, follower }).then(result => {
+                    const data = result.data;
+                    this.setState({
+                        followStatus: "Followed"
+                    })
+                    //alert(data.message);
                 })
-                // alert(data.message);
-            })
+            }
+        
 
 
         }
