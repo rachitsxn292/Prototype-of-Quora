@@ -16,11 +16,21 @@ class Home extends Component {
             answers: [],
             question: '',
             questions: [],
-            answerBox: ''
+            answerBox: '',
+            topics: []
         }
     }
 
-
+    loadTopics() {
+        //loads topics to show on left side of home screen
+        axios.get(url.url + 'topics')
+            .then((response) => {
+                //update the state with the response data
+                this.setState({
+                    topics: response.data
+                });
+            });
+    }
 
 
     uploadFile() {
@@ -28,6 +38,8 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        this.loadTopics();
+    
         axios.get(url.url + 'questions/logQues').then(result => {
             this.setState({
                 questions: this.state.questions.concat(result.data)
@@ -35,7 +47,14 @@ class Home extends Component {
         });
     }
 
+
     render() {
+
+        let topics = this.state.topics.map(topic => {
+            return (
+                <p><Link to="/topicfeed"   onClick={() => localStorage.setItem("topicFeed",topic.topic) }  ><img class="img-profile rounded" src={"/uploads/topic/" + topic.picture} height="25" width="25" /><small> {topic.topic}</small></Link></p>
+            )
+        })
         //if not logged in go to login page
         let redirectVar = null;
         if (!cookie.load('cookie')) {
@@ -56,7 +75,11 @@ class Home extends Component {
                 <br />
                 <div class="row">
 
+                    
                     <div class="col-md-2">
+                            {topics}
+                            <p><Link to="/topic"><small>  Add new Topic</small></Link></p>
+                        
                     </div>
 
                     <div class="col-md-8">

@@ -8,6 +8,7 @@ import url from "../Url/Url";
 import * as state from "./state";
 import Editprofile from "./EditProfile";
 import { Link } from 'react-router-dom';
+import AnswerEdit from '../UserAnswerDisplay/AnswerEdit';
 
 class Profile extends Component {
   constructor() {
@@ -17,6 +18,8 @@ class Profile extends Component {
       question: [],
       questionfollower:[],
       answer: [],
+      answers: [],
+      useranswers: [],
       followers: [],
       following: [],
       bookmarked: [],
@@ -180,6 +183,21 @@ class Profile extends Component {
           questionfollower: this.state.questionfollower.concat(response.data)
         });
     });
+
+
+    var email = localStorage.getItem('email');
+    axios.get(url.url + 'answers/bookmark', { params: { email } }).then(result => {
+      this.setState({
+        answers: result.data
+      })
+    })
+
+    axios.get(url.url + 'answers/useranswer', { params: { email: email } }).then(result => {
+      console.log('MY ANSWER ', result.data);
+      this.setState({
+        useranswers: this.state.useranswers.concat(result.data)
+      })
+    })
 
   }
 
@@ -939,7 +957,8 @@ class Profile extends Component {
               <hr />
               <ul style={{ listStyleType: "none" }} >
                 <li><a onClick={() => { this.setState({ feeds: "Profile" }) }} class="a-hover">Profile</a></li>
-                <li><a onClick={() => {
+                <li><a onClick={(e) => {
+                  e.preventDefault();
                   this.setState({
 
                     feeds: <div >
@@ -965,10 +984,83 @@ class Profile extends Component {
                   })
                 }} class="a-hover">Question Followed</a></li>
                 
-                <li><Link to="/useranswerdisplay" onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</Link></li>
-                {/* <li><a onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</a></li> */}
-                <li><Link to='/bookmarks' onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</Link></li>
-                <li><a onClick={() => {
+                <li><a onClick={(e) => {
+                  e.preventDefault();
+                  if (this.state.useranswers.length > 0) {
+                    this.setState({
+                      feeds: <div>
+                        <p>Answers</p>
+                        <hr />
+                        <div>
+                          {
+                            this.state.useranswers.map(answer => {
+                              return (
+                                <AnswerEdit key={answer._id} ansID={answer._id} id={answer.questionID} date={answer.posted} answer={answer.answer} />
+                              );
+                            })
+                          }
+                        </div>
+                      </div>
+                    })
+                  }
+                }} class="a-hover">Answers</a></li>
+                
+                <li><a onClick={(e) => {
+                  e.preventDefault();
+                  if (this.state.answers.length > 0) {
+                    this.setState({
+                      feeds: <div>
+                        <p>Bookmarks</p>
+                        <hr />
+                        <div>
+                          <div>
+                            {
+                              this.state.answers.map(answer => {
+                                return (
+                                  <div key={answer._id} class="card-body">
+
+                                    <p><strong>{answer.question}</strong></p>
+                                    <tr>
+                                      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                      <td><p><div dangerouslySetInnerHTML={{ __html: answer.answer }}></div></p></td>
+                                      <td>&nbsp;&nbsp;</td>
+                                      <td><p><a href="#" onClick={() => {
+                                        console.log(answer);
+                                        const email = localStorage.getItem('email');
+                                        const _id = answer.answerID;
+                                        axios.post(url.url + 'answers/bookmark', { _id, email }).then(result => {
+                                          if (result.data.bookmarked) {
+                                            alert('Added to Bookmarks');
+                                          }
+                                          else {
+                                            alert('Removed from Bookmarks');
+                                            // window.location.reload();
+                                          }
+                                        })
+                                      }}><i class="fa fa-bookmark"></i>&nbsp;&nbsp;Remove Bookmark</a></p></td>
+                                    </tr>
+                                  </div>
+                                );
+                              })
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    })
+
+                  }
+                  else {
+                    this.setState({
+                      feeds: <div>
+                        <p>Bookmarks</p>
+                        <hr />
+                      </div>
+                    })
+                  }
+
+                }} class="a-hover">Bookmarks</a></li>
+                <li><a onClick={(e) => {
+                  e.preventDefault();
                   this.setState({
 
                     feeds: <div >

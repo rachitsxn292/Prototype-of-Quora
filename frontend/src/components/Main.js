@@ -11,8 +11,6 @@ import Topic from './TopicDisplay/Topic';
 import ViewQuestions from './ViewQuestions/ViewQuestions';
 import Messages from './Messages/Messages';
 import AnswerDisplay from './AnswerDisplay/AnswerDisplay';
-import UserAnswerDisplay from './UserAnswerDisplay/UserAnswerDisplay';
-import Bookmarks from './Bookmarks/Bookmarks';
 import Navbar from './LandingPage/Navbar';
 import TopicFeed from './TopicDisplay/TopicFeed';
 import YourContent from './User/YourContent';
@@ -36,8 +34,6 @@ class Main extends Component {
                 <Route path="/viewquestion" component={ViewQuestions}/>
                 <Route path='/messages' component={Messages}/>
 				<Route path='/questionCard' component={AnswerDisplay}/>
-                <Route path='/useranswerdisplay' component={UserAnswerDisplay}/>
-                <Route path='/bookmarks' component={Bookmarks}/>
                 <Route path='/topicfeed' component={TopicFeed}/>
                 <Route path="/yourcontent" component={YourContent}/>
                

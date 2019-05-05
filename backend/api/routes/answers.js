@@ -126,7 +126,7 @@ router.post('/edit', (req, res) => {
     console.log('EMAIL', req.body.email);
     console.log('ANSWER ', req.body.answer);
     console.log('ANONYMITY ', req.body.anonymousStatus);
-    Answers.update({ _id: req.body._id, owner: req.body.email }, { $set: { answer: req.body.answer, isAnonymous: req.body.anonymousStatus } })
+    Answers.update({ _id: req.body._id, owner: req.body.email }, { $set: { answer: req.body.answer, isAnonymous: req.body.anonymousStatus, isCommentable: req.body.commentable, isVotable: req.body.votable} })
         .exec()
         .then(result => {
             console.log(result);
@@ -201,7 +201,7 @@ router.post('/downvote', (req, res) => {
                 .exec()
                 .then(result => {
                     console.log(result);
-                    const vote = new mongoose({
+                    const vote = new Votes({
                         _id: new mongoose.Types.ObjectId(),
                         answerID: req.body._id,
                         owner: req.body.email,
@@ -322,6 +322,8 @@ router.post('/bookmark', (req, res) => {
     var questionID = req.body.questionID;
     var answer = req.body.answer;
     var email = req.body.email;
+    var question = req.body.question;
+    var questionOwner = req.body.questionOwner;
     Bookmarks.find({ answerID: answerID, owner: email }).then(result => {
         if (result.length > 0) {
             Bookmarks.remove({ answerID: answerID, owner: email }).then(resultBook => {
@@ -336,7 +338,9 @@ router.post('/bookmark', (req, res) => {
                 questionID: questionID,
                 answerID: answerID,
                 owner: email,
-                answer: answer
+                answer: answer,
+                question: question,
+                questionOwner: questionOwner
             });
 
             bookmark.save().then(result => {
@@ -350,9 +354,8 @@ router.post('/bookmark', (req, res) => {
 })
 
 router.get('/bookmark', (req, res) => {
-    var questionID = req.query.questionID;
     var email = req.query.email;
-    Bookmarks.find({ questionID: questionID, owner: email }).then(result => {
+    Bookmarks.find({owner: email }).then(result => {
         if (result.length > 0) {
             res.status(200).json(result);
         }
