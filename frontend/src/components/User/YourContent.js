@@ -23,36 +23,68 @@ class YourContent extends Component {
             questionsAnsweredList: [],
             results: ["a"],
             contentType: "",
+            userEmail: localStorage.getItem("email"),
+            year: "",
+            sort: -1,  //newest
 
         }
         this.setContent = this.setContent.bind(this);
         this.loadAsked = this.loadAsked.bind(this);
         this.loadAnswered = this.loadAnswered.bind(this);
         this.loadFollowed = this.loadFollowed.bind(this);
-
+        this.ApplyYearFilter = this.ApplyYearFilter.bind(this);
+        this.ApplySortFilter = this.ApplySortFilter.bind(this);
     }
     componentWillMount() {
 
     }
+    componentDidMount() {
+      this.loadAnswered();
+      this.loadAsked();
+      this.loadFollowed();
+    }
+
+
+    ApplyYearFilter = (e) => {
+     
+        this.setState({
+            year: e
+          }, () => this.setContent(this.state.contentType))
+            ;
+    }
+
+    ApplySortFilter = (e) => {
+        this.setState({
+            sort: e
+        }, () => this.setContent(this.state.contentType))
+          ;
+    }
+
     setContent = (e) => {
     
 
         this.setState({
             contentType: e
           });
-          if (this.state.contentType == "asked") {
+       if (e == "asked") {
            this.loadAsked();
        }
-       else if (this.state.contentType == "followed") {
+       else if (e == "followed") {
         this.loadFollowed();
        }
-       else if (this.state.contentType == "answered") {
-        this.loadAnswered();       }
+       else if (e == "answered") {
+        this.loadAnswered();   
+        }
+
+
     }
 
     loadAsked(){
+        var email = this.state.userEmail;
         const params = {
-            createdby: "pspranjal443@gmail.com",
+            createdby: email,
+            year: this.state.year,
+            sort: this.state.sort
         };
         const options = {
             params,
@@ -73,8 +105,12 @@ class YourContent extends Component {
     }
 
     loadFollowed(){
+        var email = this.state.userEmail;
+
         const params = {
-            user: "rachitsxn292@aol.com",
+            user: email,
+            year: this.state.year,
+            sort: this.state.sort
         };
         const options = {
             params,
@@ -95,8 +131,12 @@ class YourContent extends Component {
     }
 
     loadAnswered(){
+        var email = this.state.userEmail;
+
         const params = {
-            owner: "pspranjal443@gmail.com",
+            owner: email,
+            year: this.state.year,
+            sort: this.state.sort
         };
         const options = {
             params,
@@ -117,10 +157,9 @@ class YourContent extends Component {
         });
     }
 
+
     render() {
-        var divStyle = {
-            margin: '30px'
-          };
+      
         let redirectVar = null;
         if (cookie.load('cookie')) {
             console.log("in Navbar redirectVar")
@@ -136,6 +175,9 @@ class YourContent extends Component {
                  <li class="list-group-item">   <Link to='/questionCard' onClick={() => {
                     localStorage.setItem('questionID', item._id);
                     localStorage.setItem('question', item.question);
+                    axios.post(url.url + 'answers/views', { questionID: item._id }).then(result => {
+                        alert(result.data.message);
+                    });
                 }}> {item.question} <br/> <p class="text-secondary"> asked {item.posted}</p></Link></li>
                 </div>
             )
@@ -145,9 +187,12 @@ class YourContent extends Component {
             return (
                 <div class="top7">
                 <li class="list-group-item">   <Link to='/questionCard' onClick={() => {
-                   localStorage.setItem('questionID', item._id);
+                   localStorage.setItem('questionID', item.questionid);
                    localStorage.setItem('question', item.question);
-               }}> {item.question} <br/> <p class="text-secondary"> followed {item.posted}</p></Link></li>
+                   axios.post(url.url + 'answers/views', { questionID: item.questionid }).then(result => {
+                    alert(result.data.message);
+                });
+               }}> {item.question} <br/> <p class="text-secondary"> followed {item.followed}</p></Link></li>
                </div>
             )
         })
@@ -156,20 +201,22 @@ class YourContent extends Component {
             return (
                 <div class="top7">
                 <li class="list-group-item">   <Link to='/questionCard' onClick={() => {
-                   localStorage.setItem('questionID', item._id);
+                   localStorage.setItem('questionID', item.questionID);
                    localStorage.setItem('question', item.question);
+                   axios.post(url.url + 'answers/views', { questionID: item.questionID }).then(result => {
+                    alert(result.data.message);
+                });
                }}> {item.question} <br/> <p class="text-secondary"> answered {item.posted}</p></Link></li>
                </div>
             )
         })
 
-        var contentType = localStorage.getItem("contentType");
 
         let display = this.state.results.map(questionsAnsweredList => {
             return (
-                <h6>
+                <p style={{margin : '20px'}}>
                         Hello! Select a filter.
-                </h6>
+                </p>
             )
         })
         if (this.state.contentType == "asked") {
@@ -192,12 +239,18 @@ class YourContent extends Component {
                         <p><Link to="/yourcontent" onClick={() => this.setContent( "answered") }   ><small> Answers </small></Link></p>
                         <br />
                         <h6>  By Year </h6>
-                        <p><Link to="/topic"><small>  2019 </small></Link></p>
-                        <p><Link to="/topic"><small>  2018</small></Link></p>
+                        <p><Link to="/yourcontent"
+                             ref={this.simulateClick}
+                             onClick={() => this.ApplyYearFilter("2019")}
+                        ><small>  2019 </small></Link></p>
+                        <p><Link to="/yourcontent"    onClick={() => this.ApplyYearFilter("2018")}
+                             ><small>  2018</small></Link></p>
+                               <p><Link to="/yourcontent"    onClick={() => this.ApplyYearFilter("")}
+                             ><small>  All</small></Link></p>
                         <br />
                         <h6>  Sort Order </h6>
-                        <p><Link to="/topic"><small>  Newest </small></Link></p>
-                        <p><Link to="/topic"><small>  Oldest</small></Link></p>
+                        <p><Link to="/yourcontent"  onClick={() => this.ApplySortFilter("-1")}   ><small>  Newest </small></Link></p>
+                        <p><Link to="/yourcontent"  onClick={() => this.ApplySortFilter("1")}     ><small>  Oldest</small></Link></p>
                     </div>
                     <div class="col-md-8">
                         <div class="card">

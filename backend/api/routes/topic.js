@@ -40,19 +40,23 @@ router.post('/', (req, res, next) => {
 
     upload(req, res, (err) => {
         const param = req.body.param;
-        var picName = req.file.originalname;
-        if(req.file.originalname == null || req.file.originalname == "")
+        var picName = "";
+        if(req.file == null || req.file.originalname == null || req.file.originalname == "")
         {
             picName = "default.jpg"; //if no pic was uploaded display default
+        }
+        else
+        {
+            var picName = req.file.originalname;
+            var filepath = req.file;   
+            var filepath = filepath.filename;
         }
         var data =  { topic: param, picture: picName};
         var query = { topic: param },
             options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
         //console.log("Request file ---", JSON.stringify(req.file));  //Here you get file.
-        var filepath = req.file;   
-        var filepath = filepath.filename;
-
+      
         // //first you wanna check if topic exists, then create else update
         Topic.findOneAndUpdate(query,    {  $set : data}, options, function (error, result) {
                 console.log("resiult", error)

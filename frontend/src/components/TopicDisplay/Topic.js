@@ -57,7 +57,7 @@ class Topic extends Component {
         console.log(formData);
         axios.post(url.url +"topics",formData,config)
             .then((response) => {
-                alert("The file is successfully uploaded");
+                alert("The topic is successfully created");
                 this.setState({file_upload_status:this.state.file_upload_status.concat(response.data.message) });
             }).catch((error) => {
         });

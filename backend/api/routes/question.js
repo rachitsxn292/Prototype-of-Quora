@@ -57,10 +57,30 @@ router.get('/created', (req, res) => {
     let limit = Number(req.query.limit);
     let skip = limit*Number(req.query.t);
     var createdby = req.query.createdby;
+
+    var sort = req.query.sort == null ||  req.query.sort == "" ? -1 : req.query.sort; //for your content
+    var yearFilter = req.query.year == null ||  req.query.year == "" ? "" : req.query.year;//for your content
+
     var query = null;
-    Question.find({owner: createdby}).limit(limit).skip(skip).exec().then(docs=>{
+    Question.find({owner: createdby})
+    .sort({posted: sort}).
+    limit(limit).skip(skip).exec().then(docs=>{
        
+        if(yearFilter != "")
+        {
+            
+            var original_docs = docs;
+            docs = [];
+            for(var i in original_docs){
+                if(yearFilter == original_docs[i].posted.getFullYear())
+                { docs.push(original_docs[i]);}            
+             }
+            
+        }
+
         res.status(200).json(docs);
+
+
     }).catch(err=>{
         console.log(err);
         res.status(500).json({
@@ -69,7 +89,6 @@ router.get('/created', (req, res) => {
     })
 })
 
-
 //For ComponentDidMount which will show all question prepopulated for particular user
 router.get('/', (req, res) => {
     var email=req.query.email;
@@ -77,7 +96,6 @@ router.get('/', (req, res) => {
     Question.find(query)
         .exec()
         .then(docs => {
-            console.log(docs);
             res.status(200).json(docs);
         })
         .catch(err => {
@@ -97,7 +115,6 @@ router.get('/search', (req, res) => {
     Question.find(query)
         .exec()
         .then(docs => {
-            console.log(docs);
             res.status(200).json(docs);
         })
         .catch(err => {
@@ -114,7 +131,6 @@ router.get('/topics', (req, res) => {
     Topics.find()
         .exec()
         .then(docs => {
-            console.log("Topics",docs);
             res.status(200).json(docs);
         })
         .catch(err => {
@@ -147,7 +163,6 @@ router.post('/create',(req,res)=>{
       {
             entry.save()
             .then(docs => {
-                    console.log("Question Insertion",docs);
                     res.status(200).json({
                         message:"Sucessfully Inserted"
                         })
@@ -180,39 +195,44 @@ router.post('/edit',(req,res)=>{
 
 //For inserting details of follower who has followed that particular question
 router.post('/follow', (req, res) => {
-   
-
-    const entry = new Follower({
-        _id: new mongoose.Types.ObjectId(),
-        questionid: req.body.qid,
-        follower: req.body.follower,
-        question: req.body.question,
-    })
-    Follower.find({ questionid: req.body.qid, follower: req.body.follower }).then(result => {
-        if ((result.length===0)) {
-            {
-                entry.save()
-                    .then(docs => {
-                        console.log("Details of Follower Insertion", docs);
-                        res.status(200).json({
-                            success: true,
-                            message: "Sucessfully Followed"
+    
+    //first find the question to the id
+    var question = "Question";
+    Question.find({ _id: req.body.qid }).then(result => {
+        question = result[0].question;
+        const entry = new Follower({
+            _id: new mongoose.Types.ObjectId(),
+            questionid: req.body.qid,
+            follower: req.body.follower,
+            question: question,
+        })
+        Follower.find({ questionid: req.body.qid, follower: req.body.follower }).then(result => {
+            if ((result.length===0)) {
+                {
+                    entry.save()
+                        .then(docs => {
+                            console.log("Details of Follower Insertion", docs);
+                            res.status(200).json({
+                                success: true,
+                                message: "Sucessfully Followed"
+                            })
                         })
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        res.status(204).json({
-                            message: "Error in Follower Insert"
+                        .catch(err => {
+                            console.log(err)
+                            res.status(204).json({
+                                message: "Error in Follower Insert"
+                            })
                         })
-                    })
+                }
             }
-        }
-        else{
-            res.status(200).json({
-                message: "You cannot follow more than once"
-            })
-        }
-    })
+            else{
+                res.status(200).json({
+                    message: "You cannot follow more than once"
+                })
+            }
+        })
+
+    });
 
 })
 
@@ -296,11 +316,26 @@ router.post('/createtest',(req,res)=>{
 router.get('/followedquestions',(req,res)=>{
 
     var user=req.query.user;
+    var sort = req.query.sort == null ||  req.query.sort == "" ? -1 : req.query.sort;
+    var yearFilter = req.query.year == null ||  req.query.year == "" ? "" : req.query.year;
     var query={follower:user};
+  
     Follower.find(query)
+    .sort({followed: sort})
         .exec()
-        .then(docs => {
-            console.log("ans",docs)
+        .then(docs => {   
+            if(yearFilter != "")
+            {
+                
+                var original_docs = docs;
+                docs = [];
+                for(var i in original_docs){
+                    if(yearFilter == original_docs[i].followed.getFullYear())
+                    { docs.push(original_docs[i]);}            
+                 }
+                
+            }
+       
             res.status(200).json(docs);
         })
         .catch(err => {
