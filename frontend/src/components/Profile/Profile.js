@@ -39,11 +39,12 @@ class Profile extends Component {
       educationend: "",
       state: "",
       zipcode: "",
-      edu:[],
-      comp:[],
-      followersData:[],
-      followCount:"",
-      profile_id:""
+      edu: [],
+      comp: [],
+      followersData: [],
+      followCount: "",
+      profile_id: "",
+      followingData: [],
 
     };
     //Bind the handlers to this class
@@ -104,8 +105,7 @@ class Profile extends Component {
     this.getProfile();
   }
   //get the books data from backend
-  getProfile()
-  {
+  getProfile() {
     var headers = new Headers();
     const params = {
       email: localStorage.email
@@ -141,35 +141,36 @@ class Profile extends Component {
           educationend: item.educationend,
           state: item.state,
           zipcode: item.zipcode,
-          edu:item.education,
-          comp:item.company,
-          profile_id:item._id
-          
+          edu: item.education,
+          comp: item.company,
+          profile_id: item._id
+
         });
 
       });
-      if (this.state.edu)
-      {
-      var edu=[...this.state.edu];
-      console.log("education",edu);}
-      if (this.state.comp)
-      {
-      var comp=[...this.state.comp];
-      console.log("company start",comp);}
-      
+
     });
   }
   componentDidMount() {
-     this.getProfile()
-     axios.get(url.url + 'profile/followercount', {params:{ useremail:  localStorage.email}}).then(response => {
-       console.log("response",response.data);
+    this.getProfile()
+    axios.get(url.url + 'profile/followercount', { params: { useremail: localStorage.email } }).then(response => {
+      console.log("response", response.data);
       // console.log('MY RESPONSESSSSSS', response);
       this.setState({
-          followersData: response.data,
-          followCount: response.data.length
+        followersData: response.data,
+        followCount: response.data.length
       });
-  })
-     
+    })
+
+    axios.get(url.url + 'profile/following', { params: { followeremail: localStorage.email } }).then(response => {
+      console.log("response other", response.data);
+      // console.log('MY RESPONSESSSSSS', response);
+      this.setState({
+        followingData: response.data,
+        
+      });
+    })
+
   }
 
   stateChangeHandler = e => {
@@ -278,7 +279,7 @@ class Profile extends Component {
       .post(url.url + "profile/imgupload", formData, config)
       .then(response => {
         alert("The file is successfully uploaded");
-        let image =  response.data.message;
+        let image = response.data.message;
         localStorage.setItem('image', image);
         this.setState({
           file_status: response.data.message
@@ -409,47 +410,48 @@ class Profile extends Component {
     //prevent page from refresh
     e.preventDefault();
 
-    if (!(this.state.companyname || this.state.position || this.state.startyear || this.state.endyear))
-    {alert(
-      "Please enter a valid value"
-    );}
-    else{
+    if (!(this.state.companyname || this.state.position || this.state.startyear || this.state.endyear)) {
+      alert(
+        "Please enter a valid value"
+      );
+    }
+    else {
 
-    const obj = {
-      companyname: this.state.companyname,
-      companyposition: this.state.position,
-      companystart: this.state.startyear,
-      companyend: this.state.endyear
-    };
+      const obj = {
+        companyname: this.state.companyname,
+        companyposition: this.state.position,
+        companystart: this.state.startyear,
+        companyend: this.state.endyear
+      };
 
-    const exp = this.state.comp.slice();
-    exp.push(obj);
+      const exp = this.state.comp.slice();
+      exp.push(obj);
 
-    const data = [
-      { propName: "email", value: localStorage.email },
-      { propName: "company", value: exp },
-    ];
-    //set the with credentials to true
-    axios.defaults.withCredentials = true;
-    //make a post request with the user data
-    axios.patch(url.url + "profile", data).then(response => {
-      console.log("Status Code : ", response.status);
-      if (response.status === 200) {
-     
-
-        this.setState({
-          authFlag: true,
-          status: response.data.message
-        });
-        this.getProfile();
-      } else {
+      const data = [
+        { propName: "email", value: localStorage.email },
+        { propName: "company", value: exp },
+      ];
+      //set the with credentials to true
+      axios.defaults.withCredentials = true;
+      //make a post request with the user data
+      axios.patch(url.url + "profile", data).then(response => {
         console.log("Status Code : ", response.status);
-        this.setState({
-          status: response.data
-        });
-      }
-    });
-  }
+        if (response.status === 200) {
+
+
+          this.setState({
+            authFlag: true,
+            status: response.data.message
+          });
+          this.getProfile();
+        } else {
+          console.log("Status Code : ", response.status);
+          this.setState({
+            status: response.data
+          });
+        }
+      });
+    }
   };
 
   updateEducationButton = e => {
@@ -496,52 +498,53 @@ class Profile extends Component {
     var headers = new Headers();
     //prevent page from refresh
     e.preventDefault();
-    if (!(this.state.school || this.state.educationdegree || this.state.educationstart || this.state.educationend))
-    {alert(
-      "Please enter a valid value"
-    );}
-    else{
-    const obj ={
-      educationschool:this.state.school,
-      educationdegree:this.state.educationdegree,
-      educationstart:this.state.educationstart,
-      educationend:this.state.educationend
+    if (!(this.state.school || this.state.educationdegree || this.state.educationstart || this.state.educationend)) {
+      alert(
+        "Please enter a valid value"
+      );
     }
-    const edu = this.state.edu.slice();
-    edu.push(obj);
-
-    const data = [
-      { propName: "email", value: localStorage.email },
-      { propName: "education", value: edu },
-    ];
-
-    const data1 = {
-      school: this.state.school,
-      educationdegree: this.state.educationdegree,
-      educationend: this.state.educationend,
-      educationstart: this.state.educationstart
-    };
-    //set the with credentials to true
-    axios.defaults.withCredentials = true;
-    //make a post request with the user data
-    axios.patch(url.url + "profile", data).then(response => {
-      console.log("Status Code : ", response.status);
-      if (response.status === 200) {
-        this.props.onProfileLoad(data1);
-
-        this.setState({
-          authFlag: true,
-          status: response.data.message
-        });
-        this.getProfile();
-      } else {
-        console.log("Status Code : ", response.status);
-        this.setState({
-          status: response.data
-        });
+    else {
+      const obj = {
+        educationschool: this.state.school,
+        educationdegree: this.state.educationdegree,
+        educationstart: this.state.educationstart,
+        educationend: this.state.educationend
       }
-    });
-  }
+      const edu = this.state.edu.slice();
+      edu.push(obj);
+
+      const data = [
+        { propName: "email", value: localStorage.email },
+        { propName: "education", value: edu },
+      ];
+
+      const data1 = {
+        school: this.state.school,
+        educationdegree: this.state.educationdegree,
+        educationend: this.state.educationend,
+        educationstart: this.state.educationstart
+      };
+      //set the with credentials to true
+      axios.defaults.withCredentials = true;
+      //make a post request with the user data
+      axios.patch(url.url + "profile", data).then(response => {
+        console.log("Status Code : ", response.status);
+        if (response.status === 200) {
+          this.props.onProfileLoad(data1);
+
+          this.setState({
+            authFlag: true,
+            status: response.data.message
+          });
+          this.getProfile();
+        } else {
+          console.log("Status Code : ", response.status);
+          this.setState({
+            status: response.data
+          });
+        }
+      });
+    }
   };
 
 
@@ -631,28 +634,24 @@ class Profile extends Component {
       credentialText = "Edit";
     }
     var experienceText = <p><a href="#employment"><i class="fas fa-briefcase" /> Add Employment credential</a></p>;
-    if ([...this.state.comp])
-    {
-      console.log("company", this.state.comp);
-      var comp=[...this.state.comp];
-      console.log("company", comp);
-      if(comp.length > 0)
-        experienceText =<p><i class="fas fa-briefcase" /> {comp[comp.length - 1].companyposition} at {comp[comp.length - 1].companyname}</p>;
+    if ([...this.state.comp]) {
+      
+      var comp = [...this.state.comp];
+      
+      if (comp.length > 0)
+        experienceText = <p><i class="fas fa-briefcase" /> {comp[comp.length - 1].companyposition} at {comp[comp.length - 1].companyname}</p>;
     }
-    var locationText ="Add Location credential";
-    if(this.state.city || this.state.state)
-    {
+    var locationText = "Add Location credential";
+    if (this.state.city || this.state.state) {
       locationText = <b>{this.state.city} {this.state.state}</b>;
     }
 
-    var educationText= <p><a href="#education"> <i class="fas fa-graduation-cap" /> Add education credential</a></p>;
-    if ([...this.state.edu])
-    {
-      console.log("education", this.state.edu);
-      var edu=[...this.state.edu];
-      console.log("education", edu);
-      if(edu.length > 0)
-        educationText =<p><i class="fas fa-graduation-cap" /> {edu[edu.length - 1].educationdegree} at {edu[edu.length - 1].educationschool}</p>;
+    var educationText = <p><a href="#education"> <i class="fas fa-graduation-cap" /> Add education credential</a></p>;
+    if ([...this.state.edu]) {
+      
+      var edu = [...this.state.edu];
+      if (edu.length > 0)
+        educationText = <p><i class="fas fa-graduation-cap" /> {edu[edu.length - 1].educationdegree} at {edu[edu.length - 1].educationschool}</p>;
     }
 
     return (
@@ -690,7 +689,7 @@ class Profile extends Component {
                 </div>
                 <p>
                   <div><a href="#image">Add image</a></div>
-                  
+
                 </p>
               </p>
 
@@ -768,8 +767,8 @@ class Profile extends Component {
                 </tr>
                 <tr>
                   <td>
-                  <p><i class="fas fa-user-plus"></i>  Follow  &nbsp;{this.state.followCount}</p>
-                      
+                    <p><i class="fas fa-user-plus"></i>  Follow  &nbsp;{this.state.followCount}</p>
+
                   </td>
 
                 </tr>
@@ -779,13 +778,13 @@ class Profile extends Component {
             </div>
             <div class="col-md-3">
               <table align="center" width="100%" cellpadding="0" cellspacing="0" border="0">
-             
 
-              <div id="edit" class="modalDialog">
-              <Editprofile  edu={this.state.edu} />
 
-              </div>
-              <p>Credentials and Highlights <a href="#edit"><i class="fas fa fa-edit" /> </a></p>
+                <div id="edit" class="modalDialog">
+                  <Editprofile edu={this.state.edu} />
+
+                </div>
+                <p>Credentials and Highlights <a href="#edit"><i class="fas fa fa-edit" /> </a></p>
 
                 <hr />
                 <tr />
@@ -934,17 +933,72 @@ class Profile extends Component {
                 <li><Link to="/useranswerdisplay" onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</Link></li>
                 {/* <li><a onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</a></li> */}
                 <li><Link to='/bookmarks' onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</Link></li>
-                <li><a onClick={() => { this.setState({ feeds: "Followers" }) }} class="a-hover">Followers</a></li>
-                <li><a onClick={() => { this.setState({ feeds: "Following" }) }} class="a-hover">Following</a></li>
+                <li><a onClick={() => {
+                  this.setState({
+
+                    feeds: <div >
+                      <p>Following</p>
+                      <hr />
+                      <div class="container">
+                          <div class="card-columns"> 
+                      {this.state.followingData.map(item => {
+                        return (
+                            <div class="card" style={{width:"150px"}}>
+                            <img class="card-img-top" src={item.userimage} alt="Card image" style={{width:"100%"}} />
+                              <div class="card-body">
+                                <h5 class="card-title">{item.userfname} {item.userlname}</h5>
+                                
+                                <Link to="/profiledisplay" class="btn btn-primary" onClick={
+                                                () => {
+                                                    localStorage.setItem('profiledisplay', item.userid);
+                                                }
+                                            }>See Profile</Link>
+                              </div>
+                            </div>                         
+                        )
+                      })}
+                       </div>
+                        </div>
+                    </div>
+
+                  })
+                }} class="a-hover">Following</a></li>
+                <li><a onClick={() => {
+                  this.setState({
+
+                    feeds: <div >
+                      <p>Followers</p>
+                      <hr />
+                      <div class="container">
+                          <div class="card-columns"> 
+                      {this.state.followersData.map(item => {
+                        return (
+                            <div class="card" style={{width:"150px"}}>
+                            <img class="card-img-top" src={item.followerimage} alt="Card image" style={{width:"100%"}} />
+                              <div class="card-body">
+                                <h5 class="card-title">{item.followerfname} {item.followerlname}</h5>
+                                
+                                <Link to="/profiledisplay" class="btn btn-primary" onClick={
+                                                () => {
+                                                    localStorage.setItem('profiledisplay', item.followerid);
+                                                }
+                                            }>See Profile</Link>
+                              </div>
+                            </div>                         
+                        )
+                      })}
+                       </div>
+                        </div>
+                    </div>
+
+                  })
+                }} class="a-hover">Followers</a></li>
               </ul>
 
             </div>
-            <div class="col-md-6">
+            <div class="col-md-9">
               <h6>{this.state.feeds}</h6>
-              <hr />
-            </div>
-            <div class="col-md-3">
-            </div>
+            </div>           
           </div>
           {/* end of Part */}
         </div>
