@@ -314,14 +314,12 @@ class EditProfile extends Component {
 
       var id = -1;
       var eduDetail = [...this.state.education];
-      console.log("education", [...this.state.education]);
     }
 
     if (this.state.comp) {
 
       var id_comp = -1;
       var compDetail = [...this.state.comp];
-      console.log("company", [...this.state.comp]);
     }
 
     var eduDetails =

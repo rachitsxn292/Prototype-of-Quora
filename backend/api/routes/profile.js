@@ -183,59 +183,59 @@ router.get('/education', (req, res, next) => {
 });
 
 router.post('/follow', (req, res) => {
-      
+
     Profile.findOne({ email: req.body.follower })
-    .exec()
-    .then(docs => {
-        
-        Userfollow.find({ userid: req.body.userid, followeremail: req.body.follower }).then(result => {
-            
-        if ((result.length===0)) {
-            {
-                const entry = new Userfollow({
-                    _id: new mongoose.Types.ObjectId(),
-                    userid: req.body.userid,
-                    followeremail: req.body.follower,
-                    userfname : req.body.userfname,
-                    userlname : req.body.userlname,
-                    userimage : req.body.userimage,
-                    followerfname:docs.fname,
-                    followerlname:docs.lname,
-                    followerimage:docs.image,
-                    followerid:docs._id
-                })
+        .exec()
+        .then(docs => {
 
-                entry.save()
-                    .then(docs => {
-                        console.log("Details of Follower Insertion", docs);
-                        res.status(200).json({
-                            success: true,
-                            message: "Sucessfully Followed"
+            Userfollow.find({ userid: req.body.userid, followeremail: req.body.follower }).then(result => {
+
+                if ((result.length === 0)) {
+                    {
+                        const entry = new Userfollow({
+                            _id: new mongoose.Types.ObjectId(),
+                            userid: req.body.userid,
+                            followeremail: req.body.follower,
+                            userfname: req.body.userfname,
+                            userlname: req.body.userlname,
+                            userimage: req.body.userimage,
+                            followerfname: docs.fname,
+                            followerlname: docs.lname,
+                            followerimage: docs.image,
+                            followerid: docs._id
                         })
+
+                        entry.save()
+                            .then(docs => {
+                                console.log("Details of Follower Insertion", docs);
+                                res.status(200).json({
+                                    success: true,
+                                    message: "Sucessfully Followed"
+                                })
+                            })
+                            .catch(err => {
+                                console.log(err)
+                                res.status(204).json({
+                                    message: "Error in Follower Insert"
+                                })
+                            })
+                    }
+                }
+                else {
+                    res.status(200).json({
+                        message: "You cannot follow more than once"
                     })
-                    .catch(err => {
-                        console.log(err)
-                        res.status(204).json({
-                            message: "Error in Follower Insert"
-                        })
-                    })
-            }
-        }
-        else{
-            res.status(200).json({
-                message: "You cannot follow more than once"
+                }
+
             })
-        }
-        
-    })
 
-})
-.catch(err => {
-    console.log(err)
-    res.status(204).json({
-        message: "Error in Follower Insert"
-    })
-})
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(204).json({
+                message: "Error in Follower Insert"
+            })
+        })
 })
 
 router.get('/followNumber', (req, res) => {
@@ -258,17 +258,41 @@ router.get('/followNumber', (req, res) => {
 
 router.get('/followercount', (req, res) => {
     var email = req.query.useremail;
-    console.log("email",email);
+    console.log("email", email);
     Profile.findOne({ email: email })
-    .exec()
-    .then(docs => {
-        console.log("docs",docs);
-        var query = { userid: docs._id  };
-        console.log("Your UserID is ", docs._id);
-        Userfollow.find(query)
         .exec()
         .then(docs => {
-            console.log("Follow Number", docs);
+            console.log("docs", docs);
+            var query = { userid: docs._id };
+            console.log("Your UserID is ", docs._id);
+            Userfollow.find(query)
+                .exec()
+                .then(docs => {
+                    console.log("Follow Number", docs);
+                    res.status(200).json(docs);
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json({
+                        error: err
+                    })
+                })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
+});
+
+router.get('/following', (req, res) => {
+    var email = req.query.followeremail;
+
+    Userfollow.find({followeremail:email})
+        .exec()
+        .then(docs => {
+            console.log("Following data", docs);
             res.status(200).json(docs);
         })
         .catch(err => {
@@ -277,14 +301,9 @@ router.get('/followercount', (req, res) => {
                 error: err
             })
         })
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
-        })
-    })
 });
+
+
 
 
 

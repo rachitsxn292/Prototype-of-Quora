@@ -78,14 +78,6 @@ class ProfileDisplay extends Component {
           });
   
         });
-        if (this.state.edu)
-        {
-        var edu=[...this.state.edu];
-        console.log("education",edu);}
-        if (this.state.comp)
-        {
-        var comp=[...this.state.comp];
-        console.log("company start",comp);}
         
       });
       };
@@ -112,9 +104,8 @@ class ProfileDisplay extends Component {
         var experienceText = "";
     if ([...this.state.comp])
     {
-      console.log("company", this.state.comp);
       var comp=[...this.state.comp];
-      console.log("company", comp);
+      
       if(comp.length > 0)
         experienceText =<p><i class="fas fa-briefcase" /> {comp[comp.length - 1].companyposition} at {comp[comp.length - 1].companyname}</p>;
     }
@@ -127,9 +118,9 @@ class ProfileDisplay extends Component {
     var educationText= "";
     if ([...this.state.edu])
     {
-      console.log("education", this.state.edu);
+      
       var edu=[...this.state.edu];
-      console.log("education", edu);
+      
       if(edu.length > 0)
         educationText =<p><i class="fas fa-graduation-cap" /> {edu[edu.length - 1].educationdegree} at {edu[edu.length - 1].educationschool}</p>;
     }
