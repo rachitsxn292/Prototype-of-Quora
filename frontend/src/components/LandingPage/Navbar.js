@@ -138,7 +138,7 @@ class Navbar extends Component {
                             <Link to="/profile" class="dropdown-item">Profile</Link>
                             {/* <a class="dropdown-item" href="#">Messages</a> */}
                             <Link to="/messages" class="dropdown-item">Messages</Link>
-                            <Link to="/yourcontent"  class="dropdown-item">Your Content</Link>
+                            <Link to="/yourcontent" class="dropdown-item">Your Content</Link>
 
                             <Link to="/" onClick={this.handleLogout} class="dropdown-item">Logout</Link>
                         </div>
@@ -216,9 +216,9 @@ class Navbar extends Component {
                                     }
 
                                     {this.state.topic.map(res => {
-                                           return (
-                                            <div id="empty" class="dropdown-header"><small>Topic : </small> <Link to="/topicfeed" class="dropdown-item" 
-                                             onClick={() => localStorage.setItem("topicFeed",res.topic) } 
+                                        return (
+                                            <div id="empty" class="dropdown-header"><small>Topic : </small> <Link to="/topicfeed" class="dropdown-item"
+                                                onClick={() => localStorage.setItem("topicFeed", res.topic)}
                                             >{res.topic}</Link></div>
                                         )
                                     })
@@ -226,11 +226,13 @@ class Navbar extends Component {
 
                                     {this.state.question.map(res => {
                                         return (
-                                            <div id="empty" class="dropdown-header"><small>Question : </small> <Link to="/questiondisplay" class="dropdown-item" onClick={
-                                                () => {
-                                                    localStorage.setItem('questiondisplay', res._id);
-                                                }
-                                            }><p class="plimit">{res.question}</p></Link></div>
+                                            <div id="empty" class="dropdown-header"><small>Question : </small> <Link to='/questionCard' onClick={() => {
+                                                localStorage.setItem('questionID', res._id);
+                                                localStorage.setItem('question', res.question);
+                                                axios.post(url.url + 'answers/views', { questionID: res._id }).then(result => {
+                                                    alert(result.data.message);
+                                                });
+                                            }}>{res.question}</Link></div>
                                         )
                                     })
                                     }
@@ -252,18 +254,49 @@ class Navbar extends Component {
 
                             <div class="modal-body">
                                 <div>
-                                    <textarea type="text" class="questionAdd" value={this.state.questions} onChange={this.questionAdd.bind(this)} placeholder="Optional: include a link that gives context" />
+                                    <textarea type="text" class="questionAdd" value={this.state.questions} onChange={this.questionAdd.bind(this)} placeholder="Optional: include a link that gives context" required />
                                 </div>
+                                <div class="row">
+                            <div class="col-md-9">
+                            <form onSubmit={this.answerSubmit.bind(this)}>
+                            <table>
+                            <tr>
+                            <td>
+                            <select name="topics" onChange={this.onSelect} value={this.state.value} class="form-control" required>
+                            <option value="">Select Topic</option>
+                            {details}
+                        </select>
+                            </td>
+                            <td>
+                            </td>
+
+                            <td>
+                            <button type="submit" class="btn btn-danger" >Submit</button>
+                            </td>
+                            </tr>
+                            </table>
+                           
+                            
+                           
+                            
+                            
+                            
+                            </form>
+                            
+                           
+                            </div>
+                            <div class="col-md-3">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                            </div>
+                            </div>
                             </div>
 
 
                             <div class="modal-footer">
-                                <select name="topics" onChange={this.onSelect} value={this.state.value} class="form-control">
-                                    {details}
-                                </select>
-                                <button type="button" class="btn btn-danger" onClick={this.answerSubmit.bind(this)} >Submit</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
+                            
+                               
+                               
                             </div>
                         </div>
 

@@ -274,6 +274,24 @@ router.get('/topicquestion', (req, res) => {
         })
 
 });
+//For getting list of questions followed by particular user
+router.get('/questionfollow', (req, res) => {
+    var follower =req.query.follower;
+    var query={follower:follower};
+    Follower.find(query)
+        .exec()
+        .then(docs => {
+            console.log("Data in Questions Followed",docs);
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
+
+});
 
 
 //For force Creation of Questions

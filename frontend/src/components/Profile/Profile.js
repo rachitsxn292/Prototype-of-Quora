@@ -15,6 +15,7 @@ class Profile extends Component {
     this.state = {
       feeds: "Profile",
       question: [],
+      questionfollower:[],
       answer: [],
       followers: [],
       following: [],
@@ -170,6 +171,15 @@ class Profile extends Component {
         
       });
     })
+
+      var follower = localStorage.getItem('email');
+      axios.get(url.url + 'questions/questionfollow', { params: { follower } })
+      .then((response) => {
+        console.log("Data in Question Followed",response.data);
+        this.setState({
+          questionfollower: this.state.questionfollower.concat(response.data)
+        });
+    });
 
   }
 
@@ -929,7 +939,32 @@ class Profile extends Component {
               <hr />
               <ul style={{ listStyleType: "none" }} >
                 <li><a onClick={() => { this.setState({ feeds: "Profile" }) }} class="a-hover">Profile</a></li>
-                <li><a onClick={() => { this.setState({ feeds: "Questions" }) }} class="a-hover">Questions</a></li>
+                <li><a onClick={() => {
+                  this.setState({
+
+                    feeds: <div >
+                      <p>Question Followed</p>
+                      <hr />
+                      <div class="container">
+                          <ol>
+                      {this.state.questionfollower.map(item => {
+                        return (
+                            
+                              <div >
+                               <h5 class="card-title"> <li>{item.question}</li></h5>
+                                
+                              </div>
+                                                   
+                        )
+                      })}
+                      </ol>
+                      <br/>
+                        </div>
+                    </div>
+
+                  })
+                }} class="a-hover">Question Followed</a></li>
+                
                 <li><Link to="/useranswerdisplay" onClick={() => { this.setState({ feeds: "Answers" }) }} class="a-hover">Answers</Link></li>
                 {/* <li><a onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</a></li> */}
                 <li><Link to='/bookmarks' onClick={() => { this.setState({ feeds: "Bookmarks" }) }} class="a-hover">Bookmarks</Link></li>
