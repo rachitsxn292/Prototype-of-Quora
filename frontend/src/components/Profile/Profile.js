@@ -40,7 +40,10 @@ class Profile extends Component {
       state: "",
       zipcode: "",
       edu:[],
-      comp:[]
+      comp:[],
+      followersData:[],
+      followCount:"",
+      profile_id:""
 
     };
     //Bind the handlers to this class
@@ -98,6 +101,7 @@ class Profile extends Component {
     //     profile: this.state.profile.concat(response.data)
     //   });
     // });
+    this.getProfile();
   }
   //get the books data from backend
   getProfile()
@@ -117,6 +121,7 @@ class Profile extends Component {
       this.setState({
         profile: this.state.profile.concat(response.data)
       });
+      console.log("data", response.data);
 
       this.state.profile.map(item => {
         this.setState({
@@ -138,7 +143,7 @@ class Profile extends Component {
           zipcode: item.zipcode,
           edu:item.education,
           comp:item.company,
-  
+          profile_id:item._id
           
         });
 
@@ -155,7 +160,16 @@ class Profile extends Component {
     });
   }
   componentDidMount() {
-     this.getProfile();
+     this.getProfile()
+     axios.get(url.url + 'profile/followercount', {params:{ useremail:  localStorage.email}}).then(response => {
+       console.log("response",response.data);
+      // console.log('MY RESPONSESSSSSS', response);
+      this.setState({
+          followersData: response.data,
+          followCount: response.data.length
+      });
+  })
+     
   }
 
   stateChangeHandler = e => {
@@ -752,6 +766,14 @@ class Profile extends Component {
                     </p>
                   </td>
                 </tr>
+                <tr>
+                  <td>
+                  <p><i class="fas fa-user-plus"></i>  Follow  &nbsp;{this.state.followCount}</p>
+                      
+                  </td>
+
+                </tr>
+
                 <tr />
               </table>
             </div>

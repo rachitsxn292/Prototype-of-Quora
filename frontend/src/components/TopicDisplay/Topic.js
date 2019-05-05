@@ -80,30 +80,33 @@ class Topic extends Component {
             <br/>
               <div>
                   <form onSubmit={this.onFormSubmit}>
-                    <div class="custom-file mb-3">
+                  <div class="row">
+                        <div class="col-md-6">
+                    
                       <input
                         type="file"
                         name="myImage"
                         onChange={this.onChange}
-                        class="custom-file-input"
+                       
                       />
-                      <label class="custom-file-label" for="customFile">
-                        Choose topic picture
-                      </label>
+                      </div>
+                     
                     </div>
-
-                    <div class="form-group row">
+                    
+                    <br/>
+                    <div class="row">
                         <label  class="col-sm-2 col-form-label">Topic Name</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-6">
                             <input type="text" onChange = {this.onChangeText}  class="form-control" required />
                         </div>
                     </div>
-                   
+                   <br/>
                     <button type="submit" class="btn btn-primary">
                       Create
                     </button>
-                  </form>
-                  <p>{this.state.file_status}</p>
+                    </form>
+                  
+                  <p>{this.state.file_upload_status}</p>
             </div>
         </div>
         )

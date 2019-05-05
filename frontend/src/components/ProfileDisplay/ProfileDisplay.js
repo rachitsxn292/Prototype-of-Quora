@@ -32,6 +32,8 @@ class ProfileDisplay extends Component {
             zipcode:"",
             profile:[],
             feeds: "Profile",
+            followerUp:0,
+            followersData:[]
 
         }
         this.getProfile = this.getProfile.bind(this);
@@ -90,6 +92,14 @@ class ProfileDisplay extends Component {
   
     componentDidMount() {
       this.getProfile();
+
+      axios.get(url.url + 'profile/followNumber', {params:{ userid:  localStorage.profiledisplay}}).then(response => {
+        // console.log('MY RESPONSESSSSSS', response);
+        this.setState({
+            followersData: response.data,
+            followCount: response.data.length
+        });
+    })
     }
 
     render() {
@@ -156,6 +166,36 @@ class ProfileDisplay extends Component {
                   <td><p>
                       <font size="4">{this.state.about} </font>{" "}
                     </p></td>
+                  </tr>
+                  <tr>
+                    <td>
+                    <p><a class="nav-link" href="#" onClick={(e) => {
+                            e.preventDefault();
+                            if (cookie.load('cookie')) {
+
+                                var follower = localStorage.getItem('email');
+                                var userid = localStorage.getItem('profiledisplay');
+                                var userfname = this.state.fname;
+                                var userlname = this.state.lname;
+                                var userimage = this.state.image;
+                                {console.log("follow", follower,userid,userfname,userlname,userimage);}
+                                axios.post(url.url + 'profile/follow', { follower, userid , userfname, userlname, userimage})
+                                    .then(response => {
+                                      {console.log("follow response", response.data)}
+                                        if (response.data.success === true) {
+                                            this.setState({
+                                                followerUp: 1
+                                            })
+                                        }
+                                        alert(response.data.message);
+                                    })
+                            }
+                            else {
+                                alert('Login First');
+                            }
+
+                        }}> <i class="fas fa-user-plus"></i>  Follow  &nbsp;{this.state.followCount + this.state.followerUp}</a></p>
+                      </td>
                   </tr>
                   </table>
                   </div>
