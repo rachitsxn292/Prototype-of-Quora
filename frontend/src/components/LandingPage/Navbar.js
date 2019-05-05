@@ -230,7 +230,7 @@ class Navbar extends Component {
                                                 localStorage.setItem('questionID', res._id);
                                                 localStorage.setItem('question', res.question);
                                                 axios.post(url.url + 'answers/views', { questionID: res._id }).then(result => {
-                                                    alert(result.data.message);
+                                                    console.log(result.data.message);
                                                 });
                                             }}>{res.question}</Link></div>
                                         )

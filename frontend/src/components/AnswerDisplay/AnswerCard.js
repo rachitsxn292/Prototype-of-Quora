@@ -30,6 +30,10 @@ class AnswerCard extends Component {
 
     //     // })
     // }
+    
+
+    
+
     onComment(event) {
         this.setState({
             comment: event.target.value
@@ -38,10 +42,10 @@ class AnswerCard extends Component {
 
     render() {
         var views = 0;
-        if(this.props.views != undefined){
+        if (this.props.views != undefined) {
             views = this.props.views;
         }
-        
+
         var prevComments = '';
         let ifCommentable = null;
         let ifVotable = null;
@@ -54,12 +58,16 @@ class AnswerCard extends Component {
                     <table>
                         <tr>
                             <td><textarea rows="1" cols="63" name="comment" id="comment" placeholder="Comment..." value={this.state.value} onChange={this.onComment}></textarea></td>
-                            <td><p><small><a class="nav-link" href="#" onClick={() => {
+                            <td><p><small><a class="nav-link" href="#" onClick={(e) => {
+                                e.preventDefault();
                                 if (cookie.load('cookie')) {
                                     const { comment } = this.state;
                                     const _id = this.props.id;
                                     Axios.post(url.url + 'answers/comment', { _id, comment }).then(result => {
-                                        alert(result.data);
+                                        alert(result.data.message);
+                                        this.setState({
+                                            comment: ''
+                                        })
                                     })
                                 }
                                 else {
@@ -113,8 +121,8 @@ class AnswerCard extends Component {
             if (this.props.isVotable) {
                 ifVotable = (
                     <div>
-                        <div class="card-footer">
-                            
+                        <div>
+
                             <p><a href="" onClick={(e) => {
 
                                 e.preventDefault();
@@ -156,7 +164,7 @@ class AnswerCard extends Component {
 
 
 
-                        </div><br /><br />
+                        </div>
                     </div>
                 )
             }
@@ -172,31 +180,42 @@ class AnswerCard extends Component {
 
             <div>
 
-                <div class="card-body">
+                <div class="card-body" style={{backgroundColor: '#DCDCDC'}}>
                     {/* <p><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /> {this.state.answerPar.fname} {this.state.answerPar.lname}, <small>{this.state.answerPar.date}</small></p> */}
-                    <p><img class="img-profile rounded-circle" src={this.props.image} height="40" width="40" /> {this.props.fname} {this.props.lname}, <small>{this.props.date.substr(0, 10)}, {this.props.date.substr(11, 5)}</small></p>
+                    <p><img class="img-profile rounded-circle" src={this.props.image} height="40" width="40" /> {this.props.fname} {this.props.lname}, <small>Answered on {this.props.date.substr(0, 10)}, {this.props.date.substr(11, 5)}</small></p>
                     <br />
                     <p>
-                        <p><a href="#" onClick={() => {
-                            const questionID = localStorage.getItem('questionID');
-                            const email = localStorage.getItem('email');
-                            const answer = this.props.answerDisp;
-                            const _id = this.props.id;
-                            Axios.post(url.url + 'answers/bookmark', { _id, questionID, answer, email }).then(result => {
-                                if (result.data.bookmarked) {
-                                    alert('Added to Bookmarks');
-                                }
-                                else {
-                                    alert('Removed from Bookmarks');
-                                }
-                            })
-                        }}><i class="fa fa-bookmark"></i></a></p>
+                        <p><a href="#" onClick={(e) => {
+                            e.preventDefault();
+                            if (cookie.load('cookie')) {
+                                const questionID = localStorage.getItem('questionID');
+                                const question = localStorage.getItem('question');
+                                const email = localStorage.getItem('email');
+                                const questionOwner = localStorage.getItem('questionOwner');
+                                const answer = this.props.answerDisp;
+                                const _id = this.props.id;
+                                Axios.post(url.url + 'answers/bookmark', { _id, question, questionID, questionOwner, answer, email }).then(result => {
+                                    if (result.data.bookmarked) {
+                                        alert('Added to Bookmarks');
+                                    }
+                                    else {
+                                        alert('Removed from Bookmarks');
+                                    }
+                                })
+                            }
+                            else{
+                                alert('Login First');
+                            }
+
+                        }}><i class="fa fa-bookmark"></i>&nbsp;&nbsp;Bookmark</a></p>
                         <div dangerouslySetInnerHTML={{ __html: this.props.answerDisp }}></div>
                     </p>
+                    <p><small>{views} views</small></p>
+                    {ifVotable}
+                    {ifCommentable}
                 </div>
-                <p><small>{views} views</small></p>
-                {ifVotable}
-                {ifCommentable}
+                
+                <br/><br/>
 
             </div>
 

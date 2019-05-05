@@ -13,12 +13,16 @@ class AnswerEdit extends Component {
             questionPar: '',
             answer: this.props.answer,
             anonymousStatus: 'true',
+            commentable: 'true',
+            votable: 'true',
             changeUp: 0,
             changeDown: 0
         }
         this.anonymousSelect = this.anonymousSelect.bind(this);
         this.onAnswer = this.onAnswer.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.commentable = this.commentable.bind(this);
+        this.votable = this.votable.bind(this);
     }
 
     modules = {
@@ -45,6 +49,18 @@ class AnswerEdit extends Component {
     onAnswer(event) {
         this.setState({
             answer: event.target.value
+        })
+    }
+
+    commentable(event) {
+        this.setState({
+            commentable: event.target.value
+        })
+    }
+
+    votable(event) {
+        this.setState({
+            votable: event.target.value
         })
     }
 
@@ -80,7 +96,7 @@ class AnswerEdit extends Component {
                         </h4>
                         <div class="card-body">
                             {/* <p><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /> {this.state.answerPar.fname} {this.state.answerPar.lname}, <small>{this.state.answerPar.date}</small></p> */}
-                            <p><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /> {localStorage.fname} {localStorage.lname}, <small>{this.props.date.substr(0,10)}, {this.props.date.substr(11,5)}</small></p>
+                            <p><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /> {localStorage.fname} {localStorage.lname}, <small>Answered on {this.props.date.substr(0,10)}, {this.props.date.substr(11,5)}</small></p>
                             <p><a class="nav-link" href="#" onClick={(e) => {
                                 e.preventDefault();
                                 localStorage.setItem('questionID', this.props.id);
@@ -92,6 +108,14 @@ class AnswerEdit extends Component {
                                                 <select name="anonymousStatus" onChange={this.anonymousSelect} value={this.state.value} class="form-control">
                                                     <option value="true">Anonymous</option>
                                                     <option value="false">Not Anonymous</option>
+                                                </select>
+                                                <select name="commentable" onChange={this.commentable} value={this.state.value} class="form-control">
+                                                    <option value="true">Commentable</option>
+                                                    <option value="false">Not Commentable</option>
+                                                </select>
+                                                <select name="votable" onChange={this.votable} value={this.state.value} class="form-control">
+                                                    <option value="true">Votable</option>
+                                                    <option value="false">Not Votable</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -107,8 +131,10 @@ class AnswerEdit extends Component {
                                             var _id = this.props.ansID;
                                             var email = localStorage.getItem('email');
                                             var answer = this.state.answer;
+                                            var { commentable } = this.state;
+                                            var { votable } = this.state;
                                             var { anonymousStatus } = this.state;
-                                            Axios.post(url.url + 'answers/edit', { _id, email, answer, anonymousStatus}).then(result => {
+                                            Axios.post(url.url + 'answers/edit', { _id, email, answer, anonymousStatus, commentable, votable}).then(result => {
                                                 const data = result.data;
                                                 alert(data.message);
                                             })

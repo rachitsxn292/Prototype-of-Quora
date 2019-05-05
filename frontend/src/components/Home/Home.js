@@ -110,14 +110,14 @@ class Home extends Component {
         var questionDisplay = this.state.questions.map(questionPar => {
             console.log('ID', questionPar._id);
             return (
-                <QACard key={questionPar._id} id={questionPar._id} question={questionPar.question} />
+                <QACard key={questionPar._id} id={questionPar._id} question={questionPar.question} owner={questionPar.owner}/>
             );
         })
 
         var questionDisplayLog = this.state.questionsLog.map(questionPar => {
             console.log('ID', questionPar._id);
             return (
-                <QACard key={questionPar._id} id={questionPar._id} question={questionPar.question} />
+                <QACard key={questionPar._id} id={questionPar._id} question={questionPar.question} owner={questionPar.owner}/>
             );
         })
 

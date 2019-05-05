@@ -114,12 +114,12 @@ class QACard extends Component {
             if (this.state.answerPar.answer) {
                 if (this.state.answerPar.isAnonymous) {
                     whoAnswered = (
-                        <p><img class="img-profile rounded-circle" src="http://www.clker.com/cliparts/l/4/M/i/d/X/turquoise-anonymous-man-md.png" height="40" width="40" /> {"Anonymous"}, <small>{this.state.answerPar.posted.substr(0, 10)}, {this.state.answerPar.posted.substr(11, 5)}</small></p>
+                        <p><img class="img-profile rounded-circle" src="http://www.clker.com/cliparts/l/4/M/i/d/X/turquoise-anonymous-man-md.png" height="40" width="40" /> {"Anonymous"}, <small>Answered on {this.state.answerPar.posted.substr(0, 10)}, {this.state.answerPar.posted.substr(11, 5)}</small></p>
                     );
                 }
                 else {
                     whoAnswered = (
-                        <p><img class="img-profile rounded-circle" src={this.state.answerPar.image} height="40" width="40" /> {this.state.answerPar.fname} {this.state.answerPar.lname}, <small>{this.state.answerPar.posted.substr(0, 10)}, {this.state.answerPar.posted.substr(11, 5)}</small></p>
+                        <p><img class="img-profile rounded-circle" src={this.state.answerPar.image} height="40" width="40" /> {this.state.answerPar.fname} {this.state.answerPar.lname}, <small>Answered on {this.state.answerPar.posted.substr(0, 10)}, {this.state.answerPar.posted.substr(11, 5)}</small></p>
                     );
                 }
             }
@@ -139,12 +139,13 @@ class QACard extends Component {
                     <table>
                         <tr>
                             <td><textarea rows="1" cols="63" name="comment" id="comment" placeholder="Comment..." value={this.state.value} onChange={this.onComment}></textarea></td>
-                            <td><p><small><a class="nav-link" href="#" onClick={() => {
+                            <td><p><small><a class="nav-link" href="#" onClick={(e) => {
+                                e.preventDefault();
                                 if (cookie.load('cookie')) {
                                     const { comment } = this.state;
                                     const _id = this.state.answerPar._id;
                                     Axios.post(url.url + 'answers/comment', { _id, comment }).then(result => {
-                                        alert(result.data);
+                                        alert(result.data.message);
                                     })
                                 }
                                 else {
@@ -194,7 +195,7 @@ class QACard extends Component {
 
         if (true) {
             if (this.state.answerPar.isVotable) {
-                ifVotable = (<div class="card-footer">
+                ifVotable = (<div>
 
                     <p><a href="" onClick={(e) => {
                         e.preventDefault();
@@ -267,8 +268,9 @@ class QACard extends Component {
                         <Link to='/questionCard' onClick={() => {
                             localStorage.setItem('questionID', this.props.id);
                             localStorage.setItem('question', this.props.question);
+                            localStorage.setItem('questionOwner', this.props.owner);
                             Axios.post(url.url + 'answers/views', { questionID: this.props.id }).then(result => {
-                                alert(result.data.message);
+                                console.log(result.data.message);
                             });
                         }}>{this.props.question}</Link>
                         {/* //Question Comes here */}
@@ -375,8 +377,9 @@ class QACard extends Component {
                         </p>
                         <p><small>{views} views</small></p>
                         {ifVotable}
+                        {ifCommentable}
                     </div>
-                    {ifCommentable}
+                    
                 </div>
                 <br />
             </div>
