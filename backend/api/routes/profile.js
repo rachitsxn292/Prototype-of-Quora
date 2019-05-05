@@ -5,6 +5,7 @@ const Profile = require('../models/profile');
 var multer = require('multer');
 const path = require("path");
 const ProfileView = require('../models/profileview');
+const Userfollow = require('../models/userfollow');
 
 router.get('/', (req, res, next) => {
     Profile.find()
@@ -156,9 +157,6 @@ router.post('/imgupload', (req, res, next) => {
                     error: err
                 });
             });
-
-
-
     });
 
 });
@@ -183,6 +181,111 @@ router.get('/education', (req, res, next) => {
         })
 
 });
+
+router.post('/follow', (req, res) => {
+      
+    Profile.findOne({ email: req.body.follower })
+    .exec()
+    .then(docs => {
+        
+        Userfollow.find({ userid: req.body.userid, followeremail: req.body.follower }).then(result => {
+            
+        if ((result.length===0)) {
+            {
+                const entry = new Userfollow({
+                    _id: new mongoose.Types.ObjectId(),
+                    userid: req.body.userid,
+                    followeremail: req.body.follower,
+                    userfname : req.body.userfname,
+                    userlname : req.body.userlname,
+                    userimage : req.body.userimage,
+                    followerfname:docs.fname,
+                    followerlname:docs.lname,
+                    followerimage:docs.image,
+                    followerid:docs._id
+                })
+
+                entry.save()
+                    .then(docs => {
+                        console.log("Details of Follower Insertion", docs);
+                        res.status(200).json({
+                            success: true,
+                            message: "Sucessfully Followed"
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.status(204).json({
+                            message: "Error in Follower Insert"
+                        })
+                    })
+            }
+        }
+        else{
+            res.status(200).json({
+                message: "You cannot follow more than once"
+            })
+        }
+        
+    })
+
+})
+.catch(err => {
+    console.log(err)
+    res.status(204).json({
+        message: "Error in Follower Insert"
+    })
+})
+})
+
+router.get('/followNumber', (req, res) => {
+    var userid = req.query.userid;
+    var query = { userid: userid };
+    console.log("Your UserID is ", userid);
+    Userfollow.find(query)
+        .exec()
+        .then(docs => {
+            console.log("Follow Number", docs);
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
+});
+
+router.get('/followercount', (req, res) => {
+    var email = req.query.useremail;
+    console.log("email",email);
+    Profile.findOne({ email: email })
+    .exec()
+    .then(docs => {
+        console.log("docs",docs);
+        var query = { userid: docs._id  };
+        console.log("Your UserID is ", docs._id);
+        Userfollow.find(query)
+        .exec()
+        .then(docs => {
+            console.log("Follow Number", docs);
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    })
+});
+
 
 
 
