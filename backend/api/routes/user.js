@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 const Profile = require('../models/profile');
 var kafka = require('../kafka/client');
+const fs = require('fs');
 
 router.get('/kafkaloadbalancer', (req, res, next)=>{
     kafka.make_request("quora", req, function(err, result){

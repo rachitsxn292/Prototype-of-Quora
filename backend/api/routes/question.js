@@ -5,6 +5,7 @@ const Question = require('../models/question');
 const Follower = require('../models/follower');
 const Topics =require('../models/topic');
 const Notifications = require('../models/notifications');
+const fs = require('fs');
 // var jwt = require('jsonwebtoken');
 // var crypto = require('crypto');
 
@@ -19,7 +20,10 @@ router.get('/noLogQues', (req, res) => {
         query = {topic:topic}
     }
     Question.find(query).limit(5).skip(r).exec().then(docs=>{
-       
+        fs.appendFile('logs.txt', 'Status 200, Sending 5 Questions  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(200).json(docs);
     }).catch(err=>{
         console.log(err);
@@ -42,7 +46,10 @@ router.get('/logQues', (req, res) => {
         query = {topic:topic}
     }
     Question.find(query).limit(limit).skip(skip).exec().then(docs=>{
-       
+        fs.appendFile('logs.txt', 'Status 200, Sending All Questions  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(200).json(docs);
     }).catch(err=>{
         console.log(err);
@@ -78,7 +85,10 @@ router.get('/created', (req, res) => {
              }
             
         }
-
+        fs.appendFile('logs.txt', 'Status 200, Returning Questions Created by User  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(200).json(docs);
 
 
@@ -97,10 +107,18 @@ router.get('/', (req, res) => {
     Question.find(query)
         .exec()
         .then(docs => {
+            fs.appendFile('logs.txt', 'Status 200, Returning Questions for a particular User  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
         })
         .catch(err => {
             console.log(err);
+            fs.appendFile('logs.txt', 'Status 500, Error  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(500).json({
                 error: err
             })
@@ -116,10 +134,18 @@ router.get('/search', (req, res) => {
     Question.find(query)
         .exec()
         .then(docs => {
+            fs.appendFile('logs.txt', 'Status 200, Returning Search Questions Result  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
         })
         .catch(err => {
             console.log(err);
+            fs.appendFile('logs.txt', 'Status 500, Error  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(500).json({
                 error: err
             })
@@ -132,6 +158,10 @@ router.get('/topics', (req, res) => {
     Topics.find()
         .exec()
         .then(docs => {
+            fs.appendFile('logs.txt', 'Status 200, Returning Topics  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
         })
         .catch(err => {
@@ -164,11 +194,19 @@ router.post('/create',(req,res)=>{
       {
             entry.save()
             .then(docs => {
+                fs.appendFile('logs.txt', 'Status 200, Creating Question  '+Date.now()+'\n', function (err) {
+                    if (err) throw err;
+                    console.log('Updated!');
+                  });
                     res.status(200).json({
                         message:"Sucessfully Inserted"
                         })
                     })
-                    .catch(err => {console.log(err)
+                    .catch(err => {console.log(err);
+                        fs.appendFile('logs.txt', 'Status 200, Error in Question Insert  '+Date.now()+'\n', function (err) {
+                            if (err) throw err;
+                            console.log('Updated!');
+                          });
                         res.status(204).json({
                             message: "Error in Question Insert"
                 })})
@@ -184,6 +222,10 @@ router.post('/edit',(req,res)=>{
     Question.update({_id:req.body.qid},query).exec()
     .then(docs => {
         console.log("Question Updated",docs);
+        fs.appendFile('logs.txt', 'Status 200, Question Updated  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(200).json({
             message:"Sucessfully Updated"
             })
@@ -220,6 +262,10 @@ router.post('/follow', (req, res) => {
                         .then(docs => {
                             console.log("Details of Follower Insertion", docs);
                             notify.save().then(resultN=>{
+                                fs.appendFile('logs.txt', 'Status 200, Question Followed  '+Date.now()+'\n', function (err) {
+                                    if (err) throw err;
+                                    console.log('Updated!');
+                                  });
                                 res.status(200).json({
                                     success: true,
                                     message: "Sucessfully Followed"
@@ -227,7 +273,11 @@ router.post('/follow', (req, res) => {
                             })
                         })
                         .catch(err => {
-                            console.log(err)
+                            console.log(err);
+                            fs.appendFile('logs.txt', 'Status 200, Question Not Added  '+Date.now()+'\n', function (err) {
+                                if (err) throw err;
+                                console.log('Updated!');
+                              });
                             res.status(204).json({
                                 message: "Error in Follower Insert"
                             })
