@@ -10,6 +10,7 @@ const Notifications = require('../models/notifications');
 const Followers = require('../models/follower');
 var multer = require('multer');
 const path = require("path");
+const fs = require('fs');
 
 //to get all answers for a particular question
 router.get('/', (req, res) => {
@@ -18,9 +19,18 @@ router.get('/', (req, res) => {
         .exec()
         .then(docs => {
             console.log(docs);
+            fs.appendFile('logs.txt', 'Status 200, All Answers Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
+
         }).catch(err => {
             console.log(err);
+            fs.appendFile('logs.txt', 'Status 500, Error: Answers could not be Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(500).json({
                 error: err
             })
@@ -37,14 +47,26 @@ router.get('/one', (req, res) => {
         .then(docs => {
             if (docs) {
                 console.log(docs);
+                fs.appendFile('logs.txt', 'Status 200, One Answer Returned  ' + Date.now() + '\n', function (err) {
+                    if (err) throw err;
+                    console.log('Updated!');
+                  });
                 res.status(200).json(docs);
             }
             else {
+                fs.appendFile('logs.txt', 'Status 200,  ' +Date.now()+'\n', function (err) {
+                    if (err) throw err;
+                    console.log('Updated!');
+                  });
                 res.status(200).send('');
             }
             // res.status(200).json(docs);
         }).catch(err => {
             console.log(err);
+            fs.appendFile('logs.txt', 'Status 500, Answer Not Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(500).json({
                 error: err
             })
@@ -97,8 +119,12 @@ router.post('/', (req, res) => {
         if (req.body.answer) {
             Answers.find({ owner: req.body.email, questionID: req.body._id }).exec().then(result => {
                 if (result.length > 0) {
+                    fs.appendFile('logs.txt', 'Status 200, Already Answered  '+Date.now()+'\n', function (err) {
+                        if (err) throw err;
+                        console.log('Updated!');
+                      });
                     res.status(200).json({
-                        message: "You have already answered this question"
+                        message: "You have already answered this question\n"
                     })
                 }
                 else {
@@ -108,6 +134,10 @@ router.post('/', (req, res) => {
 
                             Notifications.update({ questionID: req.body._id }, { $set: { answer: req.body.answer, view: true } }, { multi: true }).then(resultNew => {
                                 console.log(resultNew);
+                                fs.appendFile('logs.txt', 'Status 200, Successfully Answered  '+Date.now()+'\n', function (err) {
+                                    if (err) throw err;
+                                    console.log('Updated!');
+                                  });
                                 res.status(200).json({
                                     message: "Successfully Inserted!"
                                 })
@@ -115,6 +145,10 @@ router.post('/', (req, res) => {
 
 
                         }).catch(err => {
+                            fs.appendFile('logs.txt', 'Status 200, Unable to add answer  '+Date.now()+'\n', function (err) {
+                                if (err) throw err;
+                                console.log('Updated!');
+                              });
                             res.status(200).json({
                                 message: "Unable to add your answer"
                             })
@@ -138,13 +172,21 @@ router.post('/edit', (req, res) => {
         .exec()
         .then(result => {
             console.log(result);
+            fs.appendFile('logs.txt', 'Status 200, Successfully Edited  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({
                 message: "Successfully Edited"
             });
         }).catch(err => {
             console.log(err);
+            fs.appendFile('logs.txt', 'Status 200, Could not be Edited  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({
-                message: "Coul not be Edited"
+                message: "Could not be Edited"
             });
         });
 
@@ -156,6 +198,10 @@ router.post('/upvote', (req, res) => {
 
     Votes.find({ answerID: req.body._id, owner: req.body.email }).then(result => {
         if (result.length > 0) {
+            fs.appendFile('logs.txt', 'Status 200, You are not allowed to vote more than once  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({
                 flag: false,
                 message: "You are not allowed to vote more than once"
@@ -176,6 +222,10 @@ router.post('/upvote', (req, res) => {
 
                     vote.save().then(result => {
                         console.log(result);
+                        fs.appendFile('logs.txt', 'Status 200, Flag True, Successfully Upvoted  '+Date.now()+'\n', function (err) {
+                            if (err) throw err;
+                            console.log('Updated!');
+                          });
                         res.status(200).json({
                             flag: true,
                             message: "Successfully Upvoted"
@@ -199,6 +249,10 @@ router.post('/upvote', (req, res) => {
 router.post('/downvote', (req, res) => {
     Votes.find({ answerID: req.body._id, owner: req.body.email }).then(result => {
         if (result.length > 0) {
+            fs.appendFile('logs.txt', 'Status 200, Flag False, You are not allowed to vote more than once  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({
                 flag: false,
                 message: "You are not allowed to vote more than once"
@@ -219,6 +273,10 @@ router.post('/downvote', (req, res) => {
 
                     vote.save().then(result => {
                         console.log(result);
+                        fs.appendFile('logs.txt', 'Status 200, Flag True, Successfully Downvoted  '+Date.now()+'\n', function (err) {
+                            if (err) throw err;
+                            console.log('Updated!');
+                          });
                         res.status(200).json({
                             flag: true,
                             message: "Successfully Downvoted"
@@ -249,11 +307,19 @@ router.post('/comment', (req, res) => {
             if (req.body.comment) {
                 comment.save().then(result => {
                     console.log(result);
+                    fs.appendFile('logs.txt', 'Status 200, Flag True, Successfully Commented  '+Date.now()+'\n', function (err) {
+                        if (err) throw err;
+                        console.log('Updated!');
+                      });
                     res.status(200).json({
                         message: "Successfully Commented"
                     });
                 }).catch(err => {
                     console.log(err);
+                    fs.appendFile('logs.txt', 'Status 204, Flag True, Comment Unsuccessful  '+Date.now()+'\n', function (err) {
+                        if (err) throw err;
+                        console.log('Updated!');
+                      });
                     res.status(204).json({
                         message: "Comment Unsuccessful"
                     });
@@ -271,12 +337,24 @@ router.get('/comment', (req, res) => {
     Comments.find({ answerID: id }).exec().then(docs => {
         console.log.bind('COMMENTS', docs);
         if (docs.length > 0) {
+            fs.appendFile('logs.txt', 'Status 200, All Comments Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
         }
         else {
+            fs.appendFile('logs.txt', 'Status 200, No Comments for this answer  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({ message: "No Comments for this answer" })
         }
     }).catch(err => {
+        fs.appendFile('logs.txt', 'Status 200, Error  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(204).json({
             err: err
         })
@@ -288,15 +366,27 @@ router.get('/comment', (req, res) => {
 router.get('/useranswer', (req, res) => {
     Answers.find({ owner: req.query.email }).exec().then(result => {
         if (result.length > 0) {
+            fs.appendFile('logs.txt', 'Status 200, User Answer Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(result);
         }
         else {
+            fs.appendFile('logs.txt', 'Status 204, No Answers Found  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(204).json({
                 message: "No Answers found"
             });
         }
     }).catch(err => {
         console.log(err);
+        fs.appendFile('logs.txt', 'Status 200, Error  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(204).json({
             message: "Error"
         });
@@ -308,16 +398,28 @@ router.get('/useranswer', (req, res) => {
 router.get('/question', (req, res) => {
     Questions.find({ _id: req.query._id }).exec().then(docs => {
         if (docs.length > 0) {
-            console.log('MY QUESTION ', docs)
+            console.log('MY QUESTION ', docs);
+            fs.appendFile('logs.txt', 'Status 200, Question Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
         }
         else {
+            fs.appendFile('logs.txt', 'Status 200, No Questions Found  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(204).json({
                 message: "No Questions Found"
             })
         }
     }).catch(err => {
         console.log(err);
+        fs.appendFile('logs.txt', 'Status 200, Error  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(204).json({
             message: "Error"
         });
@@ -334,6 +436,10 @@ router.post('/bookmark', (req, res) => {
     var questionOwner = req.body.questionOwner;
     Bookmarks.find({ answerID: answerID, owner: email }).then(result => {
         if (result.length > 0) {
+            fs.appendFile('logs.txt', 'Status 200, Removed from Bookmarks  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             Bookmarks.remove({ answerID: answerID, owner: email }).then(resultBook => {
                 res.status(200).json({
                     bookmarked: false
@@ -353,6 +459,10 @@ router.post('/bookmark', (req, res) => {
 
             bookmark.save().then(result => {
                 console.log(result);
+                fs.appendFile('logs.txt', 'Status 200, Bookmark saved  '+Date.now()+'\n', function (err) {
+                    if (err) throw err;
+                    console.log('Updated!');
+                  });
                 res.status(200).json({
                     bookmarked: true
                 })
@@ -365,9 +475,17 @@ router.get('/bookmark', (req, res) => {
     var email = req.query.email;
     Bookmarks.find({ owner: email }).then(result => {
         if (result.length > 0) {
+            fs.appendFile('logs.txt', 'Status 200, All Bookmarks returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(result);
         }
         else {
+            fs.appendFile('logs.txt', 'Status 200, No Bookmarked answers found  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({
                 message: "No Bookmarked answers found"
             })
@@ -381,6 +499,10 @@ router.post('/views', (req, res) => {
         console.log(resultA);
         Questions.update({ _id: questionID }, { $inc: { views: 1 } }, { multi: true }).then(resultQ => {
             console.log(resultQ);
+            fs.appendFile('logs.txt', 'Status 200, View Incremented  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({
                 message: 'You view this answer'
             })
@@ -411,7 +533,10 @@ router.get('/answered', (req, res) => {
                 }
 
             }
-
+            fs.appendFile('logs.txt', 'Status 200, Returning Sorted  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
         })
         .catch(err => {
@@ -427,6 +552,10 @@ router.get('/answered', (req, res) => {
 router.get('/notify', (req, res) => {
     var email = req.query.email;
     Notifications.find({ follower: email, seen: false, view: true }).exec().then(result => {
+        fs.appendFile('logs.txt', 'Status 200, Return Notifications  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(200).json(result);
 
     })
@@ -436,6 +565,10 @@ router.post('/notify', (req, res) => {
     var email = req.body.email;
     Notifications.update({ follower: email, view: true }, {$set: {seen: true}}, {multi: true}).exec().then(result => {
         console.log(result);
+        fs.appendFile('logs.txt', 'Status 200, Removed from notification  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(200).json({
             message: "Removed from notification"
         });

@@ -7,6 +7,7 @@ var crypto = require('crypto');
 const Profile = require('../models/profile');
 const Question = require('../models/question');
 const Topic = require('../models/topic');
+const fs = require('fs');
 
 router.get('/profile', (req, res, next) => {
     const search = req.query.search;
@@ -14,7 +15,11 @@ router.get('/profile', (req, res, next) => {
         Profile.find({ 'fname': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(profile => {
-            console.log({ profile: profile })
+            console.log({ profile: profile });
+            fs.appendFile('logs.txt', 'Status 200, Profile Search Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({ profile: profile });
 
         })
@@ -36,7 +41,10 @@ router.get('/user', (req, res, next) => {
     User.find({ 'email': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(user => {
-
+            fs.appendFile('logs.txt', 'Status 200, User Search Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({ user: user });
 
         })
@@ -57,7 +65,10 @@ router.get('/question', (req, res, next) => {
     Question.find({ 'question': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(question => {
-
+            fs.appendFile('logs.txt', 'Status 200, Question Search Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({ question: question });
 
         })
@@ -78,7 +89,10 @@ router.get('/topic', (req, res, next) => {
         Topic.find({ 'topic': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(topic => {
-
+            fs.appendFile('logs.txt', 'Status 200, Topic Search Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json({ topic: topic });
 
         })

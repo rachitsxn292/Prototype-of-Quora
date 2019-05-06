@@ -5,12 +5,17 @@ const Topic = require('../models/topic');
 var multer = require('multer');
 const path = require("path");
 const Topicfollower = require('../models/topicfollower');
+const fs = require('fs');
 
 router.get('/', (req, res, next) => {
     Topic.find()
         .exec()
         .then(docs => {
             console.log(docs);
+            fs.appendFile('logs.txt', 'Status 200, Topics Returned  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
         })
         .catch(err => {
@@ -60,7 +65,11 @@ router.post('/', (req, res, next) => {
         // //first you wanna check if topic exists, then create else update
         Topic.findOneAndUpdate(query,    {  $set : data}, options, function (error, result) {
                 console.log("resiult", error)
-           console.log("inside")
+           console.log("inside");
+           fs.appendFile('logs.txt', 'Status 200, Topics Created  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
             res.writeHead(200, {
                 'Content-Type': 'text/plain'
             });
@@ -96,7 +105,10 @@ router.post('/follow', (req, res, next) => {
         .then(result => {
             console.log(result);
         }).catch(err => console.log(err));
-    
+        fs.appendFile('logs.txt', 'Status 200, Topics Followed  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.writeHead(200, {
             'Content-Type': 'text/plain'
         });

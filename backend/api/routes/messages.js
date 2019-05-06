@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Messages = require('../models/messages');
+const fs = require('fs');
 // const User = require('./models/user');
 
 
@@ -21,12 +22,20 @@ const Messages = require('../models/messages');
      })
      data.save().then(result=>{
          console.log(result);
+         fs.appendFile('logs.txt', 'Status 200, Message sent succesfully  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
          res.status(200).json
          ({
             message:"Message sent succesfully"
         });
      }).catch(err => {
         console.log(err);
+        fs.appendFile('logs.txt', 'Status 500, Error Sending Messages  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(500).json({ error: err });
     })
  });
@@ -38,6 +47,10 @@ router.get('/', (req, res) => {
 
      Messages.find(query).exec().then(result=>{
          console.log(result);
+         fs.appendFile('logs.txt', 'Status 200, Sending Received Messages  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
          res.status(200).json(result);
      }).catch(err=>console.log(err));
 })
@@ -48,6 +61,10 @@ router.get('/sent', (req, res) => {
 
     Messages.find(query).exec().then(result=>{
         console.log(result);
+        fs.appendFile('logs.txt', 'Status 200, Sending Sent Messages  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
         res.status(200).json(result);
     }).catch(err=>console.log(err));
 })

@@ -6,16 +6,25 @@ var multer = require('multer');
 const path = require("path");
 const ProfileView = require('../models/profileview');
 const Userfollow = require('../models/userfollow');
+const fs = require('fs');
 
 router.get('/', (req, res, next) => {
     Profile.find()
         .exec()
         .then(docs => {
             console.log(docs);
+            fs.appendFile('logs.txt', 'Status 200, Return Profile  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(200).json(docs);
         })
         .catch(err => {
             console.log(err);
+            fs.appendFile('logs.txt', 'Status 500, Error Returning Profile  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(500).json({
                 error: err
             })
@@ -30,15 +39,27 @@ router.get('/email', (req, res, next) => {
         .then(doc => {
             console.log("From database", doc);
             if (doc) {
+                fs.appendFile('logs.txt', 'Status 200, Returning Profle on basis of email  '+Date.now()+'\n', function (err) {
+                    if (err) throw err;
+                    console.log('Updated!');
+                  });
                 res.status(200).json(doc);
             }
             else {
+                fs.appendFile('logs.txt', 'Status 404, not a valid Email ID  '+Date.now()+'\n', function (err) {
+                    if (err) throw err;
+                    console.log('Updated!');
+                  });
                 res.status(404).json({ message: "not a valid Email ID" });
             }
 
         })
         .catch(err => {
             console.log(err);
+            fs.appendFile('logs.txt', 'Status 500, Error  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
             res.status(500).json({ error: err });
         })
 
@@ -59,7 +80,7 @@ router.get('/id', (req, res, next) => {
                     .exec()
                     .then(result => {
                         console.log(result);
-
+                        
                     })
                     .catch(err => {
                         console.log(err);
