@@ -269,9 +269,14 @@ class QACard extends Component {
                             localStorage.setItem('questionID', this.props.id);
                             localStorage.setItem('question', this.props.question);
                             localStorage.setItem('questionOwner', this.props.owner);
+                            var email = localStorage.getItem('email');
                             Axios.post(url.url + 'answers/views', { questionID: this.props.id }).then(result => {
                                 console.log(result.data.message);
                             });
+                            var question = localStorage.getItem('question');
+                            Axios.post(url.url + 'answers/notify', {questionID: this.props.id, email: email, question}).then(result=>{
+                                console.log(result.data.message);
+                            })
                         }}>{this.props.question}</Link>
                         {/* //Question Comes here */}
                         {/* {questionPar.question}  */}

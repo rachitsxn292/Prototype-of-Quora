@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Question = require('../models/question');
 const Follower = require('../models/follower');
 const Topics =require('../models/topic');
+const Notifications = require('../models/notifications');
 // var jwt = require('jsonwebtoken');
 // var crypto = require('crypto');
 
@@ -206,15 +207,23 @@ router.post('/follow', (req, res) => {
             follower: req.body.follower,
             question: question,
         })
+        const notify = new Notifications({
+            _id: new mongoose.Types.ObjectId(),
+            question: question,
+            questionID: req.body.qid,
+            follower: req.body.follower
+        });
         Follower.find({ questionid: req.body.qid, follower: req.body.follower }).then(result => {
             if ((result.length===0)) {
                 {
                     entry.save()
                         .then(docs => {
                             console.log("Details of Follower Insertion", docs);
-                            res.status(200).json({
-                                success: true,
-                                message: "Sucessfully Followed"
+                            notify.save().then(resultN=>{
+                                res.status(200).json({
+                                    success: true,
+                                    message: "Sucessfully Followed"
+                                })
                             })
                         })
                         .catch(err => {

@@ -18,9 +18,11 @@ class Navbar extends Component {
             profile: [],
             topic: [],
             question: [],
+            notifys: [],
             questions: "",
             topics: [],
-            topicselect: ''
+            topicselect: '',
+            count: ''
 
         }
         this.onSelect = this.onSelect.bind(this);
@@ -61,6 +63,24 @@ class Navbar extends Component {
                     topics: this.state.topics.concat(response.data)
                 });
             });
+
+        var email = localStorage.getItem('email');
+
+        axios.get(url.url + 'answers/notify', {params: {email: email}}).then(result=>{
+            var x = result.data;
+            if(x.length === 0){
+                this.setState({
+                    count: ''
+                })
+            }
+            else{
+                this.setState({
+                    count: x.length
+                })
+            }
+            
+        })
+
     }
 
     searchChangeHandler = (e) => {
@@ -111,6 +131,7 @@ class Navbar extends Component {
 
 
             });
+
     }
 
 
@@ -194,7 +215,13 @@ class Navbar extends Component {
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='fas fa-bell' style={{ fontSize: "25px" }}></i> Notifications</a>
+                                <a class="nav-link" href="#" onClick={() => {
+                                    this.setState({
+                                        count: ''
+                                    })
+                                    this.props.history.push('/notifications');
+                                    
+                                }}><i class='fas fa-bell' style={{ fontSize: "25px" }}></i> Notifications<span class="badge badge-light" style={{ color: 'red' }}>{this.state.count}</span></a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -257,46 +284,46 @@ class Navbar extends Component {
                                     <textarea type="text" class="questionAdd" value={this.state.questions} onChange={this.questionAdd.bind(this)} placeholder="Optional: include a link that gives context" required />
                                 </div>
                                 <div class="row">
-                            <div class="col-md-9">
-                            <form onSubmit={this.answerSubmit.bind(this)}>
-                            <table>
-                            <tr>
-                            <td>
-                            <select name="topics" onChange={this.onSelect} value={this.state.value} class="form-control" required>
-                            <option value="">Select Topic</option>
-                            {details}
-                        </select>
-                            </td>
-                            <td>
-                            </td>
+                                    <div class="col-md-9">
+                                        <form onSubmit={this.answerSubmit.bind(this)}>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <select name="topics" onChange={this.onSelect} value={this.state.value} class="form-control" required>
+                                                            <option value="">Select Topic</option>
+                                                            {details}
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                    </td>
 
-                            <td>
-                            <button type="submit" class="btn btn-danger" >Submit</button>
-                            </td>
-                            </tr>
-                            </table>
-                           
-                            
-                           
-                            
-                            
-                            
-                            </form>
-                            
-                           
-                            </div>
-                            <div class="col-md-3">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                    <td>
+                                                        <button type="submit" class="btn btn-danger" >Submit</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
 
-                            </div>
-                            </div>
+
+
+
+
+
+                                        </form>
+
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+
+                                    </div>
+                                </div>
                             </div>
 
 
                             <div class="modal-footer">
-                            
-                               
-                               
+
+
+
                             </div>
                         </div>
 
