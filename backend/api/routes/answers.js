@@ -6,6 +6,8 @@ const Comments = require('../models/comments');
 const Questions = require('../models/question');
 const Votes = require('../models/votes');
 const Bookmarks = require('../models/bookmarks');
+const Notifications = require('../models/notifications');
+const Followers = require('../models/follower');
 var multer = require('multer');
 const path = require("path");
 
@@ -87,9 +89,10 @@ router.post('/', (req, res) => {
             views: 0,
             fname: req.body.fname,
             lname: req.body.lname,
-            image: req.body.image,     
+            image: req.body.image,
             question: req.body.question
         });
+
 
         if (req.body.answer) {
             Answers.find({ owner: req.body.email, questionID: req.body._id }).exec().then(result => {
@@ -98,14 +101,19 @@ router.post('/', (req, res) => {
                         message: "You have already answered this question"
                     })
                 }
-
                 else {
                     answer.save()
                         .then(result => {
                             console.log(result);
-                            res.status(200).json({
-                                message: "Successfully Inserted!"
+
+                            Notifications.update({ questionID: req.body._id }, { $set: { answer: req.body.answer, view: true } }, { multi: true }).then(resultNew => {
+                                console.log(resultNew);
+                                res.status(200).json({
+                                    message: "Successfully Inserted!"
+                                })
                             })
+
+
                         }).catch(err => {
                             res.status(200).json({
                                 message: "Unable to add your answer"
@@ -126,7 +134,7 @@ router.post('/edit', (req, res) => {
     console.log('EMAIL', req.body.email);
     console.log('ANSWER ', req.body.answer);
     console.log('ANONYMITY ', req.body.anonymousStatus);
-    Answers.update({ _id: req.body._id, owner: req.body.email }, { $set: { answer: req.body.answer, isAnonymous: req.body.anonymousStatus, isCommentable: req.body.commentable, isVotable: req.body.votable} })
+    Answers.update({ _id: req.body._id, owner: req.body.email }, { $set: { answer: req.body.answer, isAnonymous: req.body.anonymousStatus, isCommentable: req.body.commentable, isVotable: req.body.votable } })
         .exec()
         .then(result => {
             console.log(result);
@@ -355,7 +363,7 @@ router.post('/bookmark', (req, res) => {
 
 router.get('/bookmark', (req, res) => {
     var email = req.query.email;
-    Bookmarks.find({owner: email }).then(result => {
+    Bookmarks.find({ owner: email }).then(result => {
         if (result.length > 0) {
             res.status(200).json(result);
         }
@@ -384,28 +392,26 @@ router.post('/views', (req, res) => {
 
 //get answers by user
 router.get('/answered', (req, res) => {
-    var owner=req.query.owner;
-    var query={owner:owner};
-    var sort = req.query.sort == null ||  req.query.sort == "" ? -1 : req.query.sort; //for your content
-    var yearFilter = req.query.year == null ||  req.query.year == "" ? "" : req.query.year;//for your content
+    var owner = req.query.owner;
+    var query = { owner: owner };
+    var sort = req.query.sort == null || req.query.sort == "" ? -1 : req.query.sort; //for your content
+    var yearFilter = req.query.year == null || req.query.year == "" ? "" : req.query.year;//for your content
 
     Answers.find(query)
-    .sort({posted: sort})
+        .sort({ posted: sort })
         .exec()
         .then(docs => {
 
-            if(yearFilter != "")
-            {
-                
+            if (yearFilter != "") {
+
                 var original_docs = docs;
                 docs = [];
-                for(var i in original_docs){
-                    if(yearFilter == original_docs[i].posted.getFullYear())
-                    { docs.push(original_docs[i]);}            
-                 }
-                
+                for (var i in original_docs) {
+                    if (yearFilter == original_docs[i].posted.getFullYear()) { docs.push(original_docs[i]); }
+                }
+
             }
-    
+
             res.status(200).json(docs);
         })
         .catch(err => {
@@ -416,5 +422,25 @@ router.get('/answered', (req, res) => {
         })
 
 });
+
+
+router.get('/notify', (req, res) => {
+    var email = req.query.email;
+    Notifications.find({ follower: email, seen: false, view: true }).exec().then(result => {
+        res.status(200).json(result);
+
+    })
+})
+
+router.post('/notify', (req, res) => {
+    var email = req.body.email;
+    Notifications.update({ follower: email, view: true }, {$set: {seen: true}}, {multi: true}).exec().then(result => {
+        console.log(result);
+        res.status(200).json({
+            message: "Removed from notification"
+        });
+
+    })
+})
 
 module.exports = router;
