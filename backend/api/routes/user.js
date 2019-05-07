@@ -382,4 +382,35 @@ router.post('/all', (req, res, next) => {
     }
 });
 
+router.post('/delete', (req, res, next) => {
+    console.log("req.body", req.body.params.email)
+    User.deleteOne({ email: req.body.params.email })
+        .exec()
+        .then(doc => {
+            if (doc) {
+                console.log("From database", doc);
+                Profile.updateOne({ email: req.body.params.email }, { $set: { active: 0 } })
+                    .exec()
+                    .then(result => {
+                        console.log(result);
+                        res.status(200).json({ message: "User Deleted" ,
+                        result:result});
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({ error: err });
+                    })
+
+            }
+            else {
+                res.status(202).json({ message: "Invalid User" });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+
+});
+
 module.exports = router;

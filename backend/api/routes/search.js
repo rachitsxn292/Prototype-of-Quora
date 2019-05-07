@@ -12,7 +12,7 @@ const fs = require('fs');
 router.get('/profile', (req, res, next) => {
     const search = req.query.search;
     if(search){
-        Profile.find({ 'fname': { '$regex': search, '$options': 'i' } }).limit(3)
+        Profile.find({ 'active':1,'fname': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(profile => {
             console.log({ profile: profile });

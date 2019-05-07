@@ -25,6 +25,10 @@ const profileSchema = mongoose.Schema({
     views:{
         type: Number, 
         default: 0
+    },
+    active:{
+        type: Number, 
+        default: 1
     }
   
    });
