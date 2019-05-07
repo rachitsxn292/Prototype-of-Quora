@@ -12,61 +12,43 @@ const fs = require('fs');
 
 //sending messages
  router.post('/', (req, res) => {
-     const {to, from, content, date} = req.body;
-     const data = new Messages({
-         _id: new mongoose.Types.ObjectId(),
-         to: to,
-         from: from,
-         content: content,
-         date: new Date(),
-     })
-     data.save().then(result=>{
-         console.log(result);
-         fs.appendFile('logs.txt', 'Status 200 - POST, Message sent succesfully  '+from+'  '+Date.now()+'\n', function (err) {
-            if (err) throw err;
-            console.log('Updated!');
-          });
-         res.status(200).json
-         ({
-            message:"Message sent succesfully"
-        });
-     }).catch(err => {
-        console.log(err);
-        fs.appendFile('logs.txt', 'Status 500 - POST, Error Sending Messages  '+from+'  '+Date.now()+'\n', function (err) {
-            if (err) throw err;
-            console.log('Updated!');
-          });
-        res.status(500).json({ error: err });
-    })
+     kafka.make_request("quora", {"type":'messages/post',req:req}, function (err, result) {
+        if (err) {       
+            res.status(500).json({
+                error: err
+            })
+        }
+        else {
+            res.status(200).send(result);
+        }
+    });
  });
 
  //receiving messages
 router.get('/', (req, res) => {
-     const {email} = req.query;
-     var query = {to: email};
-
-     Messages.find(query).exec().then(result=>{
-         console.log(result);
-         fs.appendFile('logs.txt', 'Status 200 - GET, Sending Received Messages  '+email+'  '+Date.now()+'\n', function (err) {
-            if (err) throw err;
-            console.log('Updated!');
-          });
-         res.status(200).json(result);
-     }).catch(err=>console.log(err));
+     kafka.make_request("quora", {"type":'messages/get',req:req}, function (err, result) {
+        if (err) {       
+            res.status(500).json({
+                error: err
+            })
+        }
+        else {
+            res.status(200).send(result);
+        }
+    });
 })
 
 router.get('/sent', (req, res) => {
-    const {email} = req.query;
-    var query = {from: email};
-
-    Messages.find(query).exec().then(result=>{
-        console.log(result);
-        fs.appendFile('logs.txt', 'Status 200 - GET/sent, Sending Sent Messages  '+email+'  '+Date.now()+'\n', function (err) {
-            if (err) throw err;
-            console.log('Updated!');
-          });
-        res.status(200).json(result);
-    }).catch(err=>console.log(err));
+    kafka.make_request("quora", {"type":'messages/sent',req:req}, function (err, result) {
+        if (err) {       
+            res.status(500).json({
+                error: err
+            })
+        }
+        else {
+            res.status(200).send(result);
+        }
+    });
 })
 
 module.exports = router;
