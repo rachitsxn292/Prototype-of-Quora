@@ -11,6 +11,7 @@ const questionRoutes = require('./api/routes/question');
 const answerRoutes = require('./api/routes/answers');
 const messageRoutes = require('./api/routes/messages');
 const topicRoutes = require('./api/routes/topic');
+const graphRoutes = require('./api/routes/graph');
 
 var passport = require("passport");
 var passportJWT = require("passport-jwt");
@@ -52,6 +53,7 @@ app.use('/questions', questionRoutes);
 app.use('/answers', answerRoutes);
 app.use('/messages', messageRoutes);
 app.use('/topics', topicRoutes);
+app.use('/graph', graphRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Api not found');

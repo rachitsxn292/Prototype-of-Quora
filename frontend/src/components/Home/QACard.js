@@ -114,12 +114,12 @@ class QACard extends Component {
             if (this.state.answerPar.answer) {
                 if (this.state.answerPar.isAnonymous) {
                     whoAnswered = (
-                        <p><img class="img-profile rounded-circle" src="http://www.clker.com/cliparts/l/4/M/i/d/X/turquoise-anonymous-man-md.png" height="40" width="40" /> {"Anonymous"}, <small>Answered on {this.state.answerPar.posted.substr(0, 10)}, {this.state.answerPar.posted.substr(11, 5)}</small></p>
+                        <p><img class="img-profile rounded-circle" src="http://www.clker.com/cliparts/l/4/M/i/d/X/turquoise-anonymous-man-md.png" height="40" width="40" /> {"Anonymous"}, <small>{this.state.answerPar.posted.substr(0, 10)}, {this.state.answerPar.posted.substr(11, 5)}</small></p>
                     );
                 }
                 else {
                     whoAnswered = (
-                        <p><img class="img-profile rounded-circle" src={this.state.answerPar.image} height="40" width="40" /> {this.state.answerPar.fname} {this.state.answerPar.lname}, <small>Answered on {this.state.answerPar.posted.substr(0, 10)}, {this.state.answerPar.posted.substr(11, 5)}</small></p>
+                        <p><img class="img-profile rounded-circle" src={this.state.answerPar.image} height="40" width="40" /> {this.state.answerPar.fname} {this.state.answerPar.lname}, <small>{this.state.answerPar.posted.substr(0, 10)}, {this.state.answerPar.posted.substr(11, 5)}</small></p>
                     );
                 }
             }
@@ -139,13 +139,12 @@ class QACard extends Component {
                     <table>
                         <tr>
                             <td><textarea rows="1" cols="63" name="comment" id="comment" placeholder="Comment..." value={this.state.value} onChange={this.onComment}></textarea></td>
-                            <td><p><small><a class="nav-link" href="#" onClick={(e) => {
-                                e.preventDefault();
+                            <td><p><small><a class="nav-link" href="#" onClick={() => {
                                 if (cookie.load('cookie')) {
                                     const { comment } = this.state;
                                     const _id = this.state.answerPar._id;
                                     Axios.post(url.url + 'answers/comment', { _id, comment }).then(result => {
-                                        alert(result.data.message);
+                                        alert(result.data);
                                     })
                                 }
                                 else {
@@ -195,7 +194,7 @@ class QACard extends Component {
 
         if (true) {
             if (this.state.answerPar.isVotable) {
-                ifVotable = (<div>
+                ifVotable = (<div class="card-footer">
 
                     <p><a href="" onClick={(e) => {
                         e.preventDefault();
@@ -244,7 +243,7 @@ class QACard extends Component {
                             alert('Login First');
                         }
 
-                    }}><i class="fa fa-arrow-down custom"></i> Downvote&nbsp;    {this.state.answerPar.downVote + this.state.changeDown}</a></p><br />
+                    }}><i class="fa fa-arrow-down custom"></i> Downvote&nbsp;    {this.state.answerPar.downVote + this.state.changeDown}</a></p>
 
                 </div>);
             }
@@ -297,18 +296,23 @@ class QACard extends Component {
                                                     <option value="true">Anonymous</option>
                                                     <option value="false">Not Anonymous</option>
                                                 </select>
+                                                </div>
+                                                <div class="col-md-4">
                                                 <select name="commentable" onChange={this.commentable} value={this.state.value} class="form-control">
                                                     <option value="true">Commentable</option>
                                                     <option value="false">Not Commentable</option>
                                                 </select>
+                                                </div>
+                                                <div class="col-md-4">
                                                 <select name="votable" onChange={this.votable} value={this.state.value} class="form-control">
                                                     <option value="true">Votable</option>
                                                     <option value="false">Not Votable</option>
                                                 </select>
-                                            </div>
+                                                </div>
+                                           
                                         </div>
                                         <br />
-                                        <div class="container">
+                                        
                                             <div className="text-editor">
                                                 <ReactQuill theme="snow"
                                                     modules={this.modules}
@@ -316,7 +320,7 @@ class QACard extends Component {
                                                     onChange={this.handleChange}>
                                                 </ReactQuill>
                                             </div>
-                                        </div>
+                                       <br/>
                                         <button class="btn btn-sm btn-primary" type="submit" onClick={() => {
                                             var _id = localStorage.getItem('questionID');
                                             var email = localStorage.getItem('email');
@@ -330,7 +334,7 @@ class QACard extends Component {
                                             var question = localStorage.getItem('question');
 
                                             Axios.post(url.url + 'answers', { _id, email, answer, anonymousStatus, fname, lname, image, commentable, votable, question }).then(result => {
-                                                const data = result.data;
+                                                                                          const data = result.data;
                                                 alert(data.message);
                                             })
                                         }}>Submit</button>&nbsp;
@@ -357,7 +361,7 @@ class QACard extends Component {
                                 var follower = localStorage.getItem('email');
                                 var question = localStorage.getItem('question');
                                 Axios.post(url.url + 'questions/follow', { qid, follower, question })
-                                    .then(response => {
+                                                                   .then(response => {
                                         if (response.data.success === true) {
                                             this.setState({
                                                 followerUp: 1
@@ -382,9 +386,8 @@ class QACard extends Component {
                         </p>
                         <p><small>{views} views</small></p>
                         {ifVotable}
-                        {ifCommentable}
                     </div>
-                    
+                    {ifCommentable}
                 </div>
                 <br />
             </div>

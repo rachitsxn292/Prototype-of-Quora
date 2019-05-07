@@ -191,7 +191,7 @@ class AnswerCard extends Component {
                                 const questionID = localStorage.getItem('questionID');
                                 const question = localStorage.getItem('question');
                                 const email = localStorage.getItem('email');
-                                const questionOwner = localStorage.getItem('questionOwner');
+                                const questionOwner = this.props.owner
                                 const answer = this.props.answerDisp;
                                 const _id = this.props.id;
                                 Axios.post(url.url + 'answers/bookmark', { _id, question, questionID, questionOwner, answer, email }).then(result => {

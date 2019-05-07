@@ -15,6 +15,7 @@ import Navbar from './LandingPage/Navbar';
 import TopicFeed from './TopicDisplay/TopicFeed';
 import YourContent from './User/YourContent';
 import Notifications from './Notifications/Notifications';
+import Graph from './Graph/Graph';
 
 //Create a Main Component
 class Main extends Component {
@@ -38,6 +39,7 @@ class Main extends Component {
                 <Route path='/topicfeed' component={TopicFeed}/>
                 <Route path="/yourcontent" component={YourContent}/>
                 <Route path='/notifications' component={Notifications}/>
+                <Route path="/graph" component={Graph}/>
             </div>
          
         )

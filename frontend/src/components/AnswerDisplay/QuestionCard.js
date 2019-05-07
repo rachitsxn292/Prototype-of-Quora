@@ -28,13 +28,13 @@ class QuestionCard extends Component {
             console.log('IS ANAIDIDI', answer.isAnonymous);
             if (answer.isAnonymous === false) {
                 return (
-                    <AnswerCard key={answer._id} image={answer.image} id={answer._id} answerDisp={answer.answer} fname={answer.fname} lname={answer.lname} date={answer.posted} upVote={answer.upVote} downVote={answer.downVote} isCommentable={answer.isCommentable} isVotable={answer.isVotable} views={answer.views}/>
+                    <AnswerCard key={answer._id} image={answer.image} id={answer._id} answerDisp={answer.answer} fname={answer.fname} lname={answer.lname} date={answer.posted} upVote={answer.upVote} downVote={answer.downVote} isCommentable={answer.isCommentable} isVotable={answer.isVotable} views={answer.views} owner={answer.owner}/>
                 );
             }
 
             else {
                 return (
-                    <AnswerCard key={answer._id} image="http://www.clker.com/cliparts/l/4/M/i/d/X/turquoise-anonymous-man-md.png" id={answer._id} answerDisp={answer.answer} fname="Anonymous" lname="" date={answer.posted} upVote={answer.upVote} downVote={answer.downVote} isCommentable={answer.isCommentable} isVotable={answer.isVotable} views={answer.views} />
+                    <AnswerCard key={answer._id} image="http://www.clker.com/cliparts/l/4/M/i/d/X/turquoise-anonymous-man-md.png" id={answer._id} answerDisp={answer.answer} fname="Anonymous" lname="" date={answer.posted} upVote={answer.upVote} downVote={answer.downVote} isCommentable={answer.isCommentable} isVotable={answer.isVotable} views={answer.views} answer={answer.owner}/>
                 );
             }
         })

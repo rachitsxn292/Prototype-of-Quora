@@ -180,14 +180,29 @@ class Home extends Component {
                         <div class="col-md-8">
 
                             {questionDisplayLog}
-                            <button class="btn btn-sm btn-primary" onClick={this.prvHandler} name="prev" id="prev">&lt;</button>
-                            <button class="btn btn-sm btn-primary" onClick={this.nxtHandler} name="next" id="next">&gt;</button>
+                            <div class="row">
+                            <div class="col-md-1">
+                            <button class="btn btn-sm btn-primary" onClick={this.prvHandler} name="prev" id="prev">&lt; </button>Previous
+                            </div>
+                            <div class="col-md-10">
+                            
+                            </div>
+                            <div class="col-md-1">
+                            <button class="btn btn-sm btn-primary" onClick={this.nxtHandler} name="next" id="next"> &gt; </button>Next
+                            </div>
+                            </div>
+                            
+                            
+                            
                         </div>
 
 
                         <div class="col-md-2">
                             Improve your feed
                 </div>
+                    </div>
+                    <div>
+                        <p>Privacy Policy.</p>
                     </div>
                     <div id="myModal" class="modal fade" role="dialog">
                         <div class="modal-dialog">

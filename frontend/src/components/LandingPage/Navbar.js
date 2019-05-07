@@ -149,25 +149,55 @@ class Navbar extends Component {
         if (cookie.load('cookie')) {
             console.log("Able to read cookie");
             navLogin = (
-                <ul class="nav navbar-nav navbar-right">
-                    <li></li>
+                <ul class="navbar-nav">
+                <li class="nav-item">
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /></a>
-                        <div class="dropdown-menu">
+                    <Link to="/home" class="nav-link"><i class='far fa-file-alt' style={{ fontSize: "25px" }}></i> Home</Link>
+                </li>
+                {/* <li class="nav-item">
+                <Link to="/useranswerdisplay" class="nav-link"><i class='far fa-edit' style={{ fontSize: "25px" }}></i> Answers</Link>
+                </li> */}
 
-                            <Link to="/profile" class="dropdown-item">Profile</Link>
-                            {/* <a class="dropdown-item" href="#">Messages</a> */}
-                            <Link to="/messages" class="dropdown-item">Messages</Link>
-                            <Link to="/yourcontent" class="dropdown-item">Your Content</Link>
+                <li class="nav-item">
+                                <a class="nav-link" href="#" onClick={() => {
+                                    this.setState({
+                                        count: ''
+                                    })
+                                    this.props.history.push('/notifications');
+                                    
+                                }}><i class='fas fa-bell' style={{ fontSize: "25px" }}></i><span class="badge badge-light" style={{ color: 'red' }}><b>{this.state.count}</b></span></a>
+                            </li>
 
-                            <Link to="/" onClick={this.handleLogout} class="dropdown-item">Logout</Link>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><button class="btn btn-danger" data-toggle="modal" data-target="#questionModal" type="submit">Add Question or Link</button></a>
-                    </li>
-                </ul>
+
+                <li class="nav-item">
+                    <Link to='/messages' class="nav-link"><i class='fas fa-envelope' style={{ fontSize: "25px" }}></i> Mails</Link>
+                </li>
+                <li class="nav-item">
+                    <Link to='/graph' class="nav-link"><i class='fas fa-chart-line' style={{ fontSize: "25px" }}></i> Graphs</Link>
+                </li>
+                
+
+               
+
+
+
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"><img class="img-profile rounded-circle" src={localStorage.image} height="40" width="40" /></a>
+                    <div class="dropdown-menu">
+
+                        <Link to="/profile" class="dropdown-item">Profile</Link>
+                        {/* <a class="dropdown-item" href="#">Messages</a> */}
+                        <Link to="/messages" class="dropdown-item">Messages</Link>
+                        <Link to='/viewquestion' class="dropdown-item">Your Content</Link>
+                        <Link to='/graph' class="dropdown-item">Your Stats</Link>
+                        <Link to="/" onClick={this.handleLogout} class="dropdown-item">Logout</Link>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><button class="btn btn-danger" data-toggle="modal" data-target="#questionModal" type="submit">Add Question or Link</button></a>
+                </li>
+            </ul>
             );
         } else {
             //Else display login button
@@ -206,24 +236,9 @@ class Navbar extends Component {
                         </div>
 
                         <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='far fa-file-alt' style={{ fontSize: "25px" }}></i> Home</a>
-                            </li>
+                           
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class='far fa-edit' style={{ fontSize: "25px" }}></i> Answers</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" onClick={() => {
-                                    this.setState({
-                                        count: ''
-                                    })
-                                    this.props.history.push('/notifications');
-                                    
-                                }}><i class='fas fa-bell' style={{ fontSize: "25px" }}></i> Notifications<span class="badge badge-light" style={{ color: 'red' }}>{this.state.count}</span></a>
-                            </li>
-
+                           
                             <li class="nav-item dropdown">
 
                                 <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"><button type="button" class="btn btn-danger"><i class="fa fa-search"></i>   Search Quora</button></a>

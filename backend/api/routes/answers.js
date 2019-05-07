@@ -561,6 +561,20 @@ router.get('/notify', (req, res) => {
     })
 })
 
+router.get('/notifycount', (req, res) => {
+    var email = req.query.email;
+    Notifications.find({ follower: email, seen: false, view: true }).count()
+        .exec().then(result => {
+        fs.appendFile('logs.txt', 'Status 200, user:'+email+',  Return Notifications  '+Date.now()+'\n', function (err) {
+            if (err) throw err;
+            console.log('Updated!');
+          });
+        res.status(200).json(result);
+
+    })
+})
+
+
 router.post('/notify', (req, res) => {
     var email = req.body.email;
     Notifications.update({ follower: email, view: true }, {$set: {seen: true}}, {multi: true}).exec().then(result => {
