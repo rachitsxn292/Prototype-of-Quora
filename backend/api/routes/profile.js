@@ -7,6 +7,11 @@ const path = require("path");
 const ProfileView = require('../models/profileview');
 const Userfollow = require('../models/userfollow');
 const fs = require('fs');
+const redis = require('redis');
+const client = redis.createClient();
+client.on('error', (err) => {
+    console.log("Error " + err);
+  });
 
 router.get('/', (req, res, next) => {
     Profile.find()
@@ -32,13 +37,46 @@ router.get('/', (req, res, next) => {
 
 });
 
+router.get('/', (req, res, next) => {
+    Profile.find()
+        .exec()
+        .then(docs => {
+            console.log(docs);
+            fs.appendFile('logs.txt', 'Status 200 - GET, Return Profile  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            fs.appendFile('logs.txt', 'Status 500 - GET, Error Returning Profile  '+Date.now()+'\n', function (err) {
+                if (err) throw err;
+                console.log('Updated!');
+              });
+            res.status(500).json({
+                error: err
+            })
+        })
+
+});
+
+
 router.get('/email', (req, res, next) => {
-    const email = req.query.email;
+    const query = (req.query.email).trim();
+    return client.get(`getProfile:${query}`, (err, result) => {
+    const email = query;
+    if (result) {
+        const resultJSON = JSON.stringify(result);
+        console.log("in redis");
+        return res.status(200).json(resultJSON);
+      } else {
     Profile.findOne({ email: email })
         .exec()
         .then(doc => {
             console.log("From database", doc);
             if (doc) {
+                client.setex(`getProfile:${query}`, 3600, JSON.stringify(doc));
                 fs.appendFile('logs.txt', 'Status 200 - GET/email, Returning Profle on basis of email  '+email+'  '+Date.now()+'\n', function (err) {
                     if (err) throw err;
                     console.log('Updated!');
@@ -62,6 +100,8 @@ router.get('/email', (req, res, next) => {
               });
             res.status(500).json({ error: err });
         })
+    }
+});
 
 });
 
