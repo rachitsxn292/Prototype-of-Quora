@@ -33,3 +33,6 @@ Take one approval from anyone of team mates.
 This will check the conflict. 
 
 >>> then it will get merged to master.
+
+Two folders are there: a) Frontend: Goto-> frontend->Quora and run run npm install ( it will install all dependency for this application) then start npm in cmd. your server will start at port 3000 b) Backend: Goto ->backend -> and run run npm install ( it will install all dependency for this application) then npm start. your server will start at port 3001
+
