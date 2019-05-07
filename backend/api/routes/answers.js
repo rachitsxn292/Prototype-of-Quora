@@ -87,6 +87,12 @@ const upload = multer({
 
 //to create a new answer for a particular question
 router.post('/', (req, res) => {
+
+    //first find the question to the id
+    var question = "Question";
+    Questions.find({ _id: req.body._id }).then(result => {
+        console.log("res",result)
+        question = result[0].question;
     upload(req, res, (err) => {
         console.log("Request ---", req.body);
 
@@ -112,7 +118,8 @@ router.post('/', (req, res) => {
             fname: req.body.fname,
             lname: req.body.lname,
             image: req.body.image,
-            question: req.body.question
+            question: question
+
         });
 
 
@@ -158,7 +165,7 @@ router.post('/', (req, res) => {
         }
     });
 });
-
+});
 
 
 

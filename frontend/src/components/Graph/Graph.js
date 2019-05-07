@@ -17,7 +17,7 @@ class Graph extends Component {
             upvote: [],
             downvote: [],
             bookmark: [],
-            bookmark_ans:[]
+            bookmark_ans: []
 
         }
 
@@ -88,6 +88,7 @@ class Graph extends Component {
 
 
     render() {
+        let myVar = '';
         var countb = {};
         var output_b = [["Answers", "No of times Bookmarked"]];
         var y;
@@ -100,7 +101,23 @@ class Graph extends Component {
         }
         console.log("output_b", output_b);
 
+        // if (this.state.bookmark_ans != null && this.state.bookmark_ans != undefined &&  this.state.bookmark_ans >= 1) {
+            myVar = this.state.bookmark_ans.map(item => {
+                if(item!=undefined){
+                    return (
 
+                        <tr><td>{item.questionID}:</td><td> => </td><td><div dangerouslySetInnerHTML={{ __html: item.answer }}></div></td></tr>
+    
+                    )
+                }
+                else{
+                    return(
+                        <div></div>
+                    );
+                }
+                
+            })
+        // }
 
 
         var counts = {};
@@ -257,16 +274,7 @@ class Graph extends Component {
                             />
                         </div>
 
-                        <div className={"my-pretty-chart-container"}>
-
-                            <Chart
-                                chartType="BarChart"
-                                width="100%"
-                                height="400px"
-                                data={output_b}
-                                options={options_b}
-                            />
-                        </div>
+                       
 
 
                         <div className={"my-pretty-chart-container"}>
@@ -289,15 +297,12 @@ class Graph extends Component {
                                 data={output_b}
                                 options={options_b}
                             />
-                                <table>
-                                    <tr><th>Answer ID</th><th>Answer</th></tr>
-                            <p>{this.state.bookmark_ans.map(item => {
-                                return(
+                            <table>
+                                <tr><th>Answer ID</th><th>Answer</th></tr>
+                                <p>{
+                                    myVar
                                     
-                                        <tr><td>{item.questionID}:</td><td> => </td><td>{item.answer}</td></tr>
-                                    
-                                )
-                            })}</p></table>
+                                }</p></table>
                         </div>
 
 

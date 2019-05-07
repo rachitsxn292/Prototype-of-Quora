@@ -991,7 +991,7 @@ class Profile extends Component {
                       feeds: <div>
                         <p>Answers</p>
                         <hr />
-                        <div>
+                        <div style={{height: '500px', overflowY: 'scroll'}}>
                           {
                             this.state.useranswers.map(answer => {
                               return (
