@@ -49,6 +49,7 @@ class Profile extends Component {
       followCount: "",
       profile_id: "",
       followingData: [],
+      userInactive:false,
 
     };
     //Bind the handlers to this class
@@ -86,6 +87,7 @@ class Profile extends Component {
     this.updateAboutButton = this.updateAboutButton.bind(this);
     this.updateEducationButton = this.updateEducationButton.bind(this);
     this.getProfile = this.getProfile.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
   }
 
   componentWillMount() {
@@ -642,9 +644,50 @@ class Profile extends Component {
       );
     }
   };
+  deleteUser = e => {
+    
+    var headers = new Headers();
+
+    //prevent page from refresh
+    e.preventDefault();
+
+    console.log("user delete");
+    var headers = new Headers();
+    const params = {
+      email: localStorage.email
+    };
+    
+    const options = {
+      params,
+      headers: {
+        Authorization: localStorage.jwt
+      }
+    };
+    
+    //set the with credentials to true
+    axios.defaults.withCredentials = true;
+    //make a post request with the user data
+    axios.post(url.url + "user/delete", options).then(response => {
+      console.log("Status Code : ", response.status);
+      if (response.status === 200) {
+        console.log("deletion", response.data);
+        cookie.remove('cookie', { path: '/' })
+        this.props.onLogout();
+        this.setState({
+          userInactive: true
+        });
+        console.log(this.state.userInactive);
+      } 
+    });
+  };
+
 
   render() {
     let redirectVar = null;
+    if (this.state.userInactive)
+    {     
+      redirectVar = <Redirect to="/home" />;
+    }
     if (!cookie.load("cookie")) {
       redirectVar = <Redirect to="/login" />;
     }
@@ -684,6 +727,7 @@ class Profile extends Component {
 
     return (
       <div class="container">
+      {redirectVar}
         <div class="body-div">
           <br />
           <div class="row">
@@ -1120,7 +1164,23 @@ class Profile extends Component {
 
                   })
                 }} class="a-hover">Followers</a></li>
-              </ul>
+              
+              <li><a onClick={(e) => {
+                  e.preventDefault();
+                  this.setState({
+
+                    feeds: <div >
+                      <p>Delete User</p>
+                      <hr />
+                      <div class="container">
+                      <button onClick={this.deleteUser} class="btn btn-primary">Delete</button>
+                      <br/>
+                        </div>
+                    </div>
+
+                  })
+                }} class="a-hover">Delete</a></li>
+                </ul>
 
             </div>
             <div class="col-md-9">
@@ -1154,7 +1214,11 @@ const mapDispachToProps = dispatch => {
         hometown: data.hometown,
         languages: data.languages,
         gender: data.gender
-      })
+      }),
+      onLogout: () => dispatch({
+        type: "LOGOUT",
+
+    }),
   };
 };
 
