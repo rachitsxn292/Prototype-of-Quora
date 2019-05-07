@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
         .exec()
         .then(docs => {
             console.log(docs);
-            fs.appendFile('logs.txt', 'Status 200, Topics Returned  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET, Topics Returned  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -66,7 +66,7 @@ router.post('/', (req, res, next) => {
         Topic.findOneAndUpdate(query,    {  $set : data}, options, function (error, result) {
                 console.log("resiult", error)
            console.log("inside");
-           fs.appendFile('logs.txt', 'Status 200, Topics Created  '+Date.now()+'\n', function (err) {
+           fs.appendFile('logs.txt', 'Status 200 - POST, Topics Created  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });
@@ -105,7 +105,7 @@ router.post('/follow', (req, res, next) => {
         .then(result => {
             console.log(result);
         }).catch(err => console.log(err));
-        fs.appendFile('logs.txt', 'Status 200, Topics Followed  '+Date.now()+'\n', function (err) {
+        fs.appendFile('logs.txt', 'Status 200 - POST/follow, Topics Followed  '+follower+'  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });

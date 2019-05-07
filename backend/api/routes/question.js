@@ -20,7 +20,7 @@ router.get('/noLogQues', (req, res) => {
         query = {topic:topic}
     }
     Question.find(query).limit(5).skip(r).exec().then(docs=>{
-        fs.appendFile('logs.txt', 'Status 200, Sending 5 Questions  '+Date.now()+'\n', function (err) {
+        fs.appendFile('logs.txt', 'Status 200 - GET/noLogQues, Sending 5 Questions  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });
@@ -46,7 +46,7 @@ router.get('/logQues', (req, res) => {
         query = {topic:topic}
     }
     Question.find(query).limit(limit).skip(skip).exec().then(docs=>{
-        fs.appendFile('logs.txt', 'Status 200, Sending All Questions  '+Date.now()+'\n', function (err) {
+        fs.appendFile('logs.txt', 'Status 200 - GET/logQues, Sending All Questions  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });
@@ -85,7 +85,7 @@ router.get('/created', (req, res) => {
              }
             
         }
-        fs.appendFile('logs.txt', 'Status 200, Returning Questions Created by User  '+Date.now()+'\n', function (err) {
+        fs.appendFile('logs.txt', 'Status 200 - GET/created, Returning Questions Created by User  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });
@@ -107,7 +107,7 @@ router.get('/', (req, res) => {
     Question.find(query)
         .exec()
         .then(docs => {
-            fs.appendFile('logs.txt', 'Status 200, Returning Questions for a particular User  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET, Returning Questions for a particular User  '+email+'  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -115,7 +115,7 @@ router.get('/', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            fs.appendFile('logs.txt', 'Status 500, Error  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 500 - GET, Error  '+email+'  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -134,7 +134,7 @@ router.get('/search', (req, res) => {
     Question.find(query)
         .exec()
         .then(docs => {
-            fs.appendFile('logs.txt', 'Status 200, Returning Search Questions Result  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET/search, Returning Search Questions Result  '+email+'  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -142,7 +142,7 @@ router.get('/search', (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            fs.appendFile('logs.txt', 'Status 500, Error  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 500 - GET/search, Error  '+email+'  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -158,7 +158,7 @@ router.get('/topics', (req, res) => {
     Topics.find()
         .exec()
         .then(docs => {
-            fs.appendFile('logs.txt', 'Status 200, Returning Topics  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET/topics, Returning Topics  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -194,7 +194,7 @@ router.post('/create',(req,res)=>{
       {
             entry.save()
             .then(docs => {
-                fs.appendFile('logs.txt', 'Status 200, Creating Question  '+Date.now()+'\n', function (err) {
+                fs.appendFile('logs.txt', 'Status 200 - POST/create, Creating Question  '+owner+'  '+Date.now()+'\n', function (err) {
                     if (err) throw err;
                     console.log('Updated!');
                   });
@@ -203,7 +203,7 @@ router.post('/create',(req,res)=>{
                         })
                     })
                     .catch(err => {console.log(err);
-                        fs.appendFile('logs.txt', 'Status 200, Error in Question Insert  '+Date.now()+'\n', function (err) {
+                        fs.appendFile('logs.txt', 'Status 200 - POST/create, Error in Question Insert  '+owner+'  '+Date.now()+'\n', function (err) {
                             if (err) throw err;
                             console.log('Updated!');
                           });
@@ -222,7 +222,7 @@ router.post('/edit',(req,res)=>{
     Question.update({_id:req.body.qid},query).exec()
     .then(docs => {
         console.log("Question Updated",docs);
-        fs.appendFile('logs.txt', 'Status 200, Question Updated  '+Date.now()+'\n', function (err) {
+        fs.appendFile('logs.txt', 'Status 200 - POST/edit, Question Updated  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });
@@ -262,7 +262,7 @@ router.post('/follow', (req, res) => {
                         .then(docs => {
                             console.log("Details of Follower Insertion", docs);
                             notify.save().then(resultN=>{
-                                fs.appendFile('logs.txt', 'Status 200, Question Followed  '+Date.now()+'\n', function (err) {
+                                fs.appendFile('logs.txt', 'Status 200 - POST/follow, Question Followed  '+Date.now()+'\n', function (err) {
                                     if (err) throw err;
                                     console.log('Updated!');
                                   });
@@ -274,7 +274,7 @@ router.post('/follow', (req, res) => {
                         })
                         .catch(err => {
                             console.log(err);
-                            fs.appendFile('logs.txt', 'Status 200, Question Not Added  '+Date.now()+'\n', function (err) {
+                            fs.appendFile('logs.txt', 'Status 200 - POST/follow, Question Not Added  '+Date.now()+'\n', function (err) {
                                 if (err) throw err;
                                 console.log('Updated!');
                               });
