@@ -133,7 +133,7 @@ class QACard extends Component {
 
         if (true) {
             if (this.state.answerPar.isCommentable) {
-                ifCommentable = (<div>
+                ifCommentable = (<div class="card-body">
                     <p><small>Comment</small></p>
 
                     <table>
@@ -194,7 +194,7 @@ class QACard extends Component {
 
         if (true) {
             if (this.state.answerPar.isVotable) {
-                ifVotable = (<div class="card-footer">
+                ifVotable = (<div class="card-body">
 
                     <p><a href="" onClick={(e) => {
                         e.preventDefault();
@@ -386,10 +386,11 @@ class QACard extends Component {
                         </p>
                         <p><small>{views} views</small></p>
                         {ifVotable}
+                        
                     </div>
                     {ifCommentable}
                 </div>
-                <br />
+                <br/>
             </div>
         );
     }

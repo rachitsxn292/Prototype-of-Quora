@@ -22,7 +22,7 @@ const fs = require('fs');
      })
      data.save().then(result=>{
          console.log(result);
-         fs.appendFile('logs.txt', 'Status 200, Message sent succesfully  '+Date.now()+'\n', function (err) {
+         fs.appendFile('logs.txt', 'Status 200 - POST, Message sent succesfully  '+from+'  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });
@@ -32,7 +32,7 @@ const fs = require('fs');
         });
      }).catch(err => {
         console.log(err);
-        fs.appendFile('logs.txt', 'Status 500, Error Sending Messages  '+Date.now()+'\n', function (err) {
+        fs.appendFile('logs.txt', 'Status 500 - POST, Error Sending Messages  '+from+'  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });
@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
 
      Messages.find(query).exec().then(result=>{
          console.log(result);
-         fs.appendFile('logs.txt', 'Status 200, Sending Received Messages  '+Date.now()+'\n', function (err) {
+         fs.appendFile('logs.txt', 'Status 200 - GET, Sending Received Messages  '+email+'  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });
@@ -61,7 +61,7 @@ router.get('/sent', (req, res) => {
 
     Messages.find(query).exec().then(result=>{
         console.log(result);
-        fs.appendFile('logs.txt', 'Status 200, Sending Sent Messages  '+Date.now()+'\n', function (err) {
+        fs.appendFile('logs.txt', 'Status 200 - GET/sent, Sending Sent Messages  '+email+'  '+Date.now()+'\n', function (err) {
             if (err) throw err;
             console.log('Updated!');
           });

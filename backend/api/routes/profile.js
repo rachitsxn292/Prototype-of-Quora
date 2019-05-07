@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
         .exec()
         .then(docs => {
             console.log(docs);
-            fs.appendFile('logs.txt', 'Status 200, Return Profile  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET, Return Profile  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
         })
         .catch(err => {
             console.log(err);
-            fs.appendFile('logs.txt', 'Status 500, Error Returning Profile  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 500 - GET, Error Returning Profile  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -39,14 +39,14 @@ router.get('/email', (req, res, next) => {
         .then(doc => {
             console.log("From database", doc);
             if (doc) {
-                fs.appendFile('logs.txt', 'Status 200, Returning Profle on basis of email  '+Date.now()+'\n', function (err) {
+                fs.appendFile('logs.txt', 'Status 200 - GET/email, Returning Profle on basis of email  '+email+'  '+Date.now()+'\n', function (err) {
                     if (err) throw err;
                     console.log('Updated!');
                   });
                 res.status(200).json(doc);
             }
             else {
-                fs.appendFile('logs.txt', 'Status 404, not a valid Email ID  '+Date.now()+'\n', function (err) {
+                fs.appendFile('logs.txt', 'Status 404 - GET/email, not a valid Email ID  '+email+'  '+Date.now()+'\n', function (err) {
                     if (err) throw err;
                     console.log('Updated!');
                   });
@@ -56,7 +56,7 @@ router.get('/email', (req, res, next) => {
         })
         .catch(err => {
             console.log(err);
-            fs.appendFile('logs.txt', 'Status 500, Error  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 500 - GET/email, Error  '+email+'  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });

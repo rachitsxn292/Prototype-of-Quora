@@ -16,7 +16,7 @@ router.get('/profile', (req, res, next) => {
         .exec()
         .then(profile => {
             console.log({ profile: profile });
-            fs.appendFile('logs.txt', 'Status 200, Profile Search Returned  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET/profile, Profile Search Returned  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -41,7 +41,7 @@ router.get('/user', (req, res, next) => {
     User.find({ 'email': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(user => {
-            fs.appendFile('logs.txt', 'Status 200, User Search Returned  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET/user, User Search Returned  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -65,7 +65,7 @@ router.get('/question', (req, res, next) => {
     Question.find({ 'question': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(question => {
-            fs.appendFile('logs.txt', 'Status 200, Question Search Returned  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET/question, Question Search Returned  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
@@ -89,7 +89,7 @@ router.get('/topic', (req, res, next) => {
         Topic.find({ 'topic': { '$regex': search, '$options': 'i' } }).limit(3)
         .exec()
         .then(topic => {
-            fs.appendFile('logs.txt', 'Status 200, Topic Search Returned  '+Date.now()+'\n', function (err) {
+            fs.appendFile('logs.txt', 'Status 200 - GET/topic, Topic Search Returned  '+Date.now()+'\n', function (err) {
                 if (err) throw err;
                 console.log('Updated!');
               });
