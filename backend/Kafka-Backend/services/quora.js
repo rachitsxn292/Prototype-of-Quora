@@ -182,7 +182,7 @@ function handle_request(message, callback) {
                     });
             }
 		
-		case answers / one:
+		case 'answers/one':
             try {
                 const id = req.query._id;
                 console.log(id);
@@ -215,7 +215,7 @@ function handle_request(message, callback) {
                     });
             }
 		
-		case answers / post:
+		case 'answers/post':
             try {
                 var question = "Question";
                 Questions.find({ _id: req.body._id }).then(result => {
@@ -288,7 +288,7 @@ function handle_request(message, callback) {
                     });
                 }
 		
-		case answers / edit:
+		case 'answers/edit':
             try {
                 console.log('ID: ', req.body._id);
                 console.log('EMAIL', req.body.email);
@@ -314,7 +314,7 @@ function handle_request(message, callback) {
             }
 		
 		
-		case answers / upvote:
+		case 'answers/upvote':
             try {
                 Votes.find({ answerID: req.body._id, owner: req.body.email }).then(result => {
                     if (result.length > 0) {
@@ -360,7 +360,7 @@ function handle_request(message, callback) {
 
             }
 		
-		case answers / downvote:
+		case 'answers/downvote':
             try {
                 Votes.find({ answerID: req.body._id, owner: req.body.email }).then(result => {
                     if (result.length > 0) {
@@ -408,7 +408,7 @@ function handle_request(message, callback) {
     }
 	
                 
-    case answers / comment / post:
+    case 'answers/comment/post':
     try {
         Answers.find({ _id: req.body._id }).exec().then(result => {
             if (result.length > 0) {
@@ -439,7 +439,7 @@ function handle_request(message, callback) {
         })
     }
 
-   case answers / comment / get:
+   case 'answers/comment/get':
     try {
         const id = req.query._id;
         console.log('COMMENTS', id);
@@ -468,7 +468,7 @@ function handle_request(message, callback) {
         });
     }
    
-   case answers / useranswer:
+   case 'answers/useranswer':
     try {
         Answers.find({ owner: req.query.email }).exec().then(result => {
             if (result.length > 0) {
@@ -495,7 +495,7 @@ function handle_request(message, callback) {
         });
     }
    
-   case answers / question:
+   case 'answers/question':
     try {
         Questions.find({ _id: req.query._id }).exec().then(docs => {
             if (docs.length > 0) {
@@ -523,7 +523,7 @@ function handle_request(message, callback) {
         })
     }
    
-   case answers / bookmark:
+   case 'answers/bookmark':
     try {
         var answerID = req.body._id;
         var questionID = req.body.questionID;
@@ -564,7 +564,7 @@ function handle_request(message, callback) {
         })
     }
    
-   case answers / bookmark:
+   case 'answers/bookmark':
     try {
         var email = req.query.email;
         Bookmarks.find({ owner: email }).then(result => {
@@ -585,7 +585,7 @@ function handle_request(message, callback) {
         })
     }
    
-   case answers / view:
+   case 'answers/view':
     try {
         var questionID = req.body.questionID;
         Answers.update({ questionID: questionID }, { $inc: { views: 1 } }, { multi: true }).then(resultA => {
@@ -601,7 +601,7 @@ function handle_request(message, callback) {
         });
     }
    
-   case answers / answered:
+   case 'answers/answered':
     try {
         var owner = req.query.owner;
         var query = { owner: owner };
@@ -634,7 +634,7 @@ function handle_request(message, callback) {
             })
     }
    
-   case answers / notify:
+   case 'answers/notify/get':
     try {
         var email = req.query.email;
         Notifications.find({ follower: email, seen: false, view: true }).exec().then(result => {
@@ -647,7 +647,7 @@ function handle_request(message, callback) {
         })
     }
    
-   case answers / notifycount:
+   case 'answers/notifycount':
     try {
         var email = req.query.email;
         Notifications.find({ follower: email, seen: false, view: true }).count()
@@ -661,7 +661,7 @@ function handle_request(message, callback) {
             })
     }
    
-   case answers / notify / post:
+   case 'answers/notify/post':
     try {
         var email = req.body.email;
         Notifications.update({ follower: email, view: true }, { $set: { seen: true } }, { multi: true }).exec().then(result => {
@@ -675,7 +675,7 @@ function handle_request(message, callback) {
         })
     }
    
-   case messages / post:
+   case 'messages/post':
     try {
         const { to, from, content, date } = req.body;
         const data = new Messages({
@@ -702,7 +702,7 @@ function handle_request(message, callback) {
         })
     }
    
-   case messages / get:
+   case 'messages/get':
     try {
         const { email } = req.query;
         var query = { to: email };
@@ -717,7 +717,7 @@ function handle_request(message, callback) {
         }).catch(err => console.log(err));
     }
    
-   case messages / sent:
+   case 'messages/sent':
     try {
         const { email } = req.query;
         var query = { from: email };
